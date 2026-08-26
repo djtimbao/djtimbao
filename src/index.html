@@ -4,9 +4,9 @@
  * • Responsabilidades:
  *   1. Establecer la estructura base del documento HTML5 y las metaetiquetas esenciales para SEO y accesibilidad.
  *   2. Vincular la hoja de estilos compilada (output.css) de forma no bloqueante.
- *   3. Proveer el esqueleto del DOM donde el motor de Vanilla JS inyectará las interfaces dinámicas (Loader, Cursor magnético).
- *   4. Definir las secciones estáticas de contenido (Hero, Bio, Eventos, etc.).
- *   5. Importar el script principal (main.js) al final del body para garantizar que el DOM esté listo antes de ejecutar la lógica interactiva.
+ *   3. Proveer el esqueleto del DOM donde el motor de Vanilla JS inyectará las interfaces dinámicas (Loader, Cursor, Globo 3D).
+ *   4. Definir las secciones estáticas de contenido (Hero, Eventos/Giras, etc.).
+ *   5. Importar el script principal (main.js) al final del body para inicializar los módulos interactivos.
 -->
 
 <!DOCTYPE html>
@@ -19,9 +19,9 @@
     <!-- Tipografía Montserrat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     
-    <!-- Nuestro CSS compilado por Tailwind -->
+    <!-- Hoja de estilos compilada por Tailwind v4 -->
     <link href="/css/output.css" rel="stylesheet">
     
     <style>
@@ -29,12 +29,12 @@
         body { font-family: 'Montserrat', sans-serif; }
     </style>
 </head>
-<body class="bg-zinc-950 text-white selection:bg-[#e3bb3e] selection:text-black">
+<body class="bg-zinc-950 text-white selection:bg-[#e3bb3e] selection:text-black antialiased overflow-x-hidden">
 
     <!-- HERO SECTION -->
     <section id="hero" class="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden">
         
-        <!-- Layer 0: Fondo Multimedia (Video o Imagen) -->
+        <!-- Layer 0: Fondo Multimedia -->
         <div class="absolute inset-0 w-full h-full z-0 pointer-events-none">
             <!-- Overlay oscuro para contraste tipográfico (Mantiene el diseño minimalista) -->
             <div class="absolute inset-0 bg-zinc-950/75 z-10"></div>
@@ -46,7 +46,7 @@
             </video>
         </div>
 
-        <!-- Layer 1: Tipografía Principal (Parallax inverso) -->
+        <!-- Layer 1: Tipografía Principal -->
         <div class="relative z-20 text-center flex flex-col items-center select-none">
             <h1 class="hero-title clip-hidden text-[12vw] md:text-[9vw] leading-none font-black tracking-tighter uppercase mb-2 md:mb-4 will-change-transform">
                 DJ Timbao
@@ -56,12 +56,48 @@
             </p>
         </div>
 
-        <!-- Layer 2: Indicador de Scroll Dinámico -->
+        <!-- Layer 2: Indicador de Scroll -->
         <div class="hero-scroll opacity-0 absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center transition-opacity duration-1000 z-20">
             <span class="text-[10px] tracking-widest mb-3 uppercase text-zinc-400 font-bold">Scroll</span>
             <div class="w-[2px] h-12 bg-zinc-800 relative overflow-hidden rounded-full">
                 <div class="absolute top-0 left-0 w-full h-full bg-[#e3bb3e] animate-scroll-line"></div>
             </div>
+        </div>
+
+    </section>
+
+    <!-- SECCIÓN: EVENTOS, FESTIVALES Y CONGRESOS -->
+    <section id="events" class="relative w-full min-h-screen py-24 px-4 md:px-12 flex flex-col items-center justify-center bg-zinc-950 overflow-hidden">
+        
+        <!-- Título de la Sección -->
+        <div class="text-center mb-16 z-10">
+            <h2 class="text-2xl md:text-4xl font-black tracking-wider text-[#e3bb3e] uppercase">
+                Eventos, Festivales y Congresos
+            </h2>
+            <p class="text-xs md:text-sm text-zinc-500 uppercase tracking-widest mt-2">
+                Trayectoria y Giras Internacionales
+            </p>
+        </div>
+
+        <!-- Contenedor Principal: 2 Columnas de Eventos + Globo 3D Central -->
+        <div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center z-10">
+            
+            <!-- Columna Izquierda de Eventos -->
+            <div id="events-left" class="lg:col-span-4 flex flex-col gap-6 text-center lg:text-right order-2 lg:order-1">
+                <!-- Se inyecta dinámicamente desde events.js -->
+            </div>
+
+            <!-- Columna Central: Globo 3D Interactivo -->
+            <div class="lg:col-span-4 flex items-center justify-center order-1 lg:order-2">
+                <div id="globe-container" class="w-[320px] h-[320px] sm:w-[400px] sm:h-[400px] md:w-[450px] md:h-[450px] cursor-grab active:cursor-grabbing relative flex items-center justify-center">
+                </div>
+            </div>
+
+            <!-- Columna Derecha de Eventos -->
+            <div id="events-right" class="lg:col-span-4 flex flex-col gap-6 text-center lg:text-left order-3">
+                <!-- Se inyecta dinámicamente desde events.js -->
+            </div>
+
         </div>
 
     </section>
