@@ -40,12 +40,13 @@ class TimbaoEngine {
     renderEvents() {
         const leftContainer = document.getElementById('events-left');
         const rightContainer = document.getElementById('events-right');
+        const isDesktop = window.innerWidth >= 1024;
         
         // CONFIGURACIÓN DE LA CURVATURA MATEMÁTICA
         const curveSettings = {
             rotationIntensity: 6.5, // Grados de inclinación (Ajusta si quieres más o menos rotación)
             depthIntensity: 14,     // Fuerza de la curva (Hace el paréntesis más profundo)
-            basePush: 70            // Distancia general hacia el centro del globo
+            basePush: 35            // Distancia general hacia el centro del globo
         };
         
         // COLUMNA IZQUIERDA (Ahora renderiza VENEZUELA, ESPAÑA, etc.)
@@ -55,20 +56,27 @@ class TimbaoEngine {
             const midLeft = (dataLeft.length - 1) / 2;
             
             leftContainer.innerHTML = dataLeft.map((item, i) => {
-                const offset = i - midLeft;
-                const rotate = offset * -curveSettings.rotationIntensity; 
-                // Sumamos la distancia para crear la curva cóncava '<' que abraza la esfera
-                const distance = Math.pow(Math.abs(offset), 1.6) * curveSettings.depthIntensity;
-                const transX = curveSettings.basePush + distance; 
+                let transformStyle = '';
+                let originClass = '';
+
+                if (isDesktop) {
+                    const offset = i - midLeft;
+                    const rotate = offset * -curveSettings.rotationIntensity; 
+                    // Sumamos la distancia para crear la curva cóncava '<' que abraza la esfera
+                    const distance = Math.pow(Math.abs(offset), 1.6) * curveSettings.depthIntensity;
+                    const transX = curveSettings.basePush + distance; 
+                    transformStyle = `transform: rotate(${rotate}deg) translateX(${transX}px);`;
+                    originClass = 'origin-right';
+                }
                 
                 return `
                 <a href="${item.url}" target="_blank" rel="noopener noreferrer" 
-                   class="group block transition-all duration-300 hover:scale-[1.05] origin-right"
-                   style="transform: rotate(${rotate}deg) translateX(${transX}px);">
-                    <div class="text-sm md:text-[15px] font-bold text-zinc-300 group-hover:text-[#e3bb3e] transition-colors text-right">
+                   class="group block transition-all duration-300 hover:scale-[1.03] ${originClass} py-1 px-2 rounded-md hover:bg-zinc-900/40"
+                   style="${transformStyle}">
+                    <div class="text-sm md:text-[15px] font-bold text-zinc-300 group-hover:text-[#e3bb3e] transition-colors text-center lg:text-right">
                         <span class="text-zinc-500 font-medium">${item.years} |</span> ${item.event} <span class="text-[#e3bb3e]">:${item.country}</span>
                     </div>
-                    <div class="text-xs text-zinc-500 italic text-right">
+                    <div class="text-xs text-zinc-500 italic text-center lg:text-right mt-0.5">
                         ${item.role} | ${item.location}
                     </div>
                 </a>
@@ -82,20 +90,27 @@ class TimbaoEngine {
             const midRight = (dataRight.length - 1) / 2;
             
             rightContainer.innerHTML = dataRight.map((item, i) => {
-                const offset = i - midRight;
-                const rotate = offset * curveSettings.rotationIntensity; 
-                // Restamos la distancia para crear la curva cóncava '>' que abraza la esfera
-                const distance = Math.pow(Math.abs(offset), 1.6) * curveSettings.depthIntensity;
-                const transX = -curveSettings.basePush - distance; 
+                let transformStyle = '';
+                let originClass = '';
+
+                if (isDesktop) {
+                    const offset = i - midRight;
+                    const rotate = offset * curveSettings.rotationIntensity; 
+                    // Restamos la distancia para crear la curva cóncava '>' que abraza la esfera
+                    const distance = Math.pow(Math.abs(offset), 1.6) * curveSettings.depthIntensity;
+                    const transX = -curveSettings.basePush - distance; 
+                    transformStyle = `transform: rotate(${rotate}deg) translateX(${transX}px);`;
+                    originClass = 'origin-left';
+                }
                 
                 return `
                 <a href="${item.url}" target="_blank" rel="noopener noreferrer" 
-                   class="group block transition-all duration-300 hover:scale-[1.05] origin-left"
-                   style="transform: rotate(${rotate}deg) translateX(${transX}px);">
-                    <div class="text-sm md:text-[15px] font-bold text-zinc-300 group-hover:text-[#e3bb3e] transition-colors text-left">
+                   class="group block transition-all duration-300 hover:scale-[1.03] ${originClass} py-1 px-2 rounded-md hover:bg-zinc-900/40"
+                   style="${transformStyle}">
+                    <div class="text-sm md:text-[15px] font-bold text-zinc-300 group-hover:text-[#e3bb3e] transition-colors text-center lg:text-left">
                         <span class="text-[#e3bb3e]">${item.country}:</span> ${item.event} <span class="text-zinc-500 font-medium">| ${item.years}</span>
                     </div>
-                    <div class="text-xs text-zinc-500 italic text-left">
+                    <div class="text-xs text-zinc-500 italic text-center lg:text-left mt-0.5">
                         ${item.role} | ${item.location}
                     </div>
                 </a>
@@ -107,6 +122,13 @@ class TimbaoEngine {
         window.addEventListener('mousemove', (e) => {
             this.cursor.targetX = e.clientX;
             this.cursor.targetY = e.clientY;
+        });
+
+        // Recalcular la disposición de eventos cuando cambie el tamaño de la pantalla
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => this.renderEvents(), 150);
         });
 
         // Usamos closest() para asegurar que detecte el hover incluso si hay elementos dentro del botón/enlace
@@ -135,18 +157,20 @@ class TimbaoEngine {
     }
 
     render() {
-        // Interpolación para posición (Velocidad ágil)
-        this.cursor.x += (this.cursor.targetX - this.cursor.x) * 0.25;
-        this.cursor.y += (this.cursor.targetY - this.cursor.y) * 0.25;
-        
-        // Interpolación para escala (Suavidad)
-        this.cursor.scale += (this.cursor.targetScale - this.cursor.scale) * 0.15;
+        if (window.innerWidth >= 768) {
+            // Interpolación para posición (Velocidad ágil)
+            this.cursor.x += (this.cursor.targetX - this.cursor.x) * 0.25;
+            this.cursor.y += (this.cursor.targetY - this.cursor.y) * 0.25;
+            
+            // Interpolación para escala (Suavidad)
+            this.cursor.scale += (this.cursor.targetScale - this.cursor.scale) * 0.15;
 
-        // Inyectamos todo directamente al transform (0 conflictos con CSS)
-        this.cursorEl.style.transform = `translate(${this.cursor.x}px, ${this.cursor.y}px) translate(-50%, -50%) scale(${this.cursor.scale})`;
+            // Inyectamos todo directamente al transform (0 conflictos con CSS)
+            this.cursorEl.style.transform = `translate(${this.cursor.x}px, ${this.cursor.y}px) translate(-50%, -50%) scale(${this.cursor.scale})`;
 
-        // Le pasamos las coordenadas suavizadas al Hero para el Parallax
-        this.hero.render(this.cursor.x, this.cursor.y);
+            // Le pasamos las coordenadas suavizadas al Hero para el Parallax
+            this.hero.render(this.cursor.x, this.cursor.y);
+        }
 
         requestAnimationFrame(() => this.render());
     }

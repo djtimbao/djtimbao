@@ -1,14 +1,3 @@
-<!--
- * • Ruta: src/index.html
- * • Que es: Archivo de marcado principal (Punto de entrada) que define la estructura semántica del sitio web de DJ Timbao.
- * • Responsabilidades:
- *   1. Establecer la estructura base del documento HTML5 y las metaetiquetas esenciales para SEO y accesibilidad.
- *   2. Vincular la hoja de estilos compilada (output.css) de forma no bloqueante.
- *   3. Proveer el esqueleto del DOM donde el motor de Vanilla JS inyectará las interfaces dinámicas (Loader, Cursor, Globo 3D).
- *   4. Definir las secciones estáticas de contenido (Hero, Eventos/Giras, etc.).
- *   5. Importar el script principal (main.js) al final del body para inicializar los módulos interactivos.
--->
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,12 +9,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
-    
-    <!-- Hoja de estilos compilada por Tailwind v4 -->
     <link href="/css/output.css" rel="stylesheet">
     
+    <!-- Bloqueo estricto de esquema de color y tematización de la barra del navegador -->
+    <meta name="color-scheme" content="dark only">
+    <meta name="theme-color" content="#09090b">
+
     <style>
-        /* Forzamos la fuente globalmente */
         body { font-family: 'Montserrat', sans-serif; }
     </style>
 </head>
@@ -36,12 +26,11 @@
         
         <!-- Layer 0: Fondo Multimedia -->
         <div class="absolute inset-0 w-full h-full z-0 pointer-events-none">
-            <!-- Overlay oscuro para contraste tipográfico (Mantiene el diseño minimalista) -->
+            <!-- Overlay oscuro para contraste tipográfico -->
             <div class="absolute inset-0 bg-zinc-950/75 z-10"></div>
             
             <!-- Elemento de fondo: Escala inicial a 110% para tener margen de movimiento en el parallax -->
             <video id="hero-media" class="absolute inset-0 w-full h-full object-cover scale-110 will-change-transform" autoplay loop muted playsinline>
-                <!-- Temporalmente puedes poner un enlace directo a un .mp4, luego usaremos tu R2 -->
                 <source src="https://cdn.coverr.co/videos/coverr-dj-mixing-music-in-a-club-5183/1080p.mp4" type="video/mp4">
             </video>
         </div>
@@ -67,40 +56,40 @@
     </section>
 
     <!-- SECCIÓN: EVENTOS, FESTIVALES Y CONGRESOS -->
-    <section id="events" class="relative w-full min-h-screen py-24 px-4 md:px-12 flex flex-col items-center justify-center bg-zinc-950 overflow-hidden">
+    <section id="events" class="relative w-full min-h-screen py-16 sm:py-24 px-4 sm:px-6 md:px-12 flex flex-col items-center justify-center bg-zinc-950 overflow-hidden">
         
         <!-- Título de la Sección -->
-        <div class="text-center mb-16 z-10">
-            <h2 class="text-2xl md:text-4xl font-black tracking-wider text-[#e3bb3e] uppercase">
+        <div class="text-center mb-10 sm:mb-16 z-10">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-wider text-[#e3bb3e] uppercase">
                 Eventos, Festivales y Congresos
             </h2>
-            <p class="text-xs md:text-sm text-zinc-500 uppercase tracking-widest mt-2">
+            <p class="text-xs sm:text-sm text-zinc-500 uppercase tracking-widest mt-2">
                 Trayectoria y Giras Internacionales
             </p>
         </div>
 
         <!-- Contenedor Principal: 2 Columnas de Eventos + Globo 3D Central -->
-        <div class="w-full max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center z-10">
+        <div class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-2 items-center z-10">
             
             <!-- Columna Izquierda de Eventos -->
-            <div id="events-left" class="lg:col-span-4 flex flex-col gap-6 text-center lg:text-right order-2 lg:order-1">
+            <div id="events-left" class="lg:col-span-4 flex flex-col gap-4 sm:gap-2 text-center lg:text-right order-2 lg:order-1 w-full">
                 <!-- Se inyecta dinámicamente desde events.js -->
             </div>
 
-            <!-- Columna Central: Globo 3D Interactivo con Glow Nativo -->
-            <div class="lg:col-span-4 flex items-center justify-center order-1 lg:order-2 z-10">
+            <!-- Columna Central: Globo 3D Interactivo con Glow -->
+            <div class="lg:col-span-4 flex items-center justify-center order-1 lg:order-2 z-10 w-full">
                 <!-- 
-                  TUTORIAL PARA MODIFICAR EL GLOW:
-                  - before:w-[75%] before:h-[75%] -> Define el tamaño inicial del círculo luminoso. Redúcelo a 60% si lo quieres más pequeño.
-                  - before:bg-[#e3bb3e]/40       -> El /40 es la opacidad (0 a 100). Súbelo a /60 si lo quieres más brillante.
-                  - before:blur-[40px]           -> Controla la dispersión. Bájalo a [20px] para un borde más duro y pegado.
+                TUTORIAL PARA MODIFICAR EL GLOW:
+                - before:w-[75%] before:h-[75%] -> Define el tamaño inicial del círculo luminoso. Redúcelo a 60% si lo quieres más pequeño.
+                - before:bg-[#e3bb3e]/40         -> El /40 es la opacidad (0 a 100). Súbelo a /60 si lo quieres más brillante.
+                - before:blur-[40px]           -> Controla la dispersión. Bájalo a [20px] para un borde más duro y pegado.
                 -->
-                <div id="globe-container" class="relative w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] md:w-[420px] md:h-[420px] cursor-grab active:cursor-grabbing flex items-center justify-center before:absolute before:w-[65%] before:h-[65%] before:bg-[#e3bb3e]/80 before:blur-[15px] before:rounded-full before:-z-10 shrink-0">
+                <div id="globe-container" class="relative w-[260px] h-[260px] sm:w-[320px] sm:h-[320px] lg:w-[420px] lg:h-[420px] cursor-grab active:cursor-grabbing flex items-center justify-center before:absolute before:w-[85%] before:h-[85%] before:bg-black/90 before:blur-[15px] before:rounded-full before:-z-10 shrink-0">
                 </div>
             </div>
 
             <!-- Columna Derecha de Eventos -->
-            <div id="events-right" class="lg:col-span-4 flex flex-col gap-6 text-center lg:text-left order-3">
+            <div id="events-right" class="lg:col-span-4 flex flex-col gap-4 sm:gap-2 text-center lg:text-left order-3 w-full">
                 <!-- Se inyecta dinámicamente desde events.js -->
             </div>
 
@@ -108,7 +97,6 @@
 
     </section>
 
-    <!-- Motor nativo de animaciones orquestado mediante Módulos ES6 -->
     <script type="module" src="/js/main.js"></script>
 </body>
 </html>

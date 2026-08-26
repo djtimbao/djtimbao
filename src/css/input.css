@@ -9,6 +9,12 @@
 
 @import "tailwindcss";
 
+:root {
+    color-scheme: dark;
+    forced-color-adjust: none;
+    -webkit-text-size-adjust: 100%;
+}
+
 /* Ocultar el cursor nativo en toda la página */
 *, *::before, *::after {
     cursor: none !important;
