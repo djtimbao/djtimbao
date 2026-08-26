@@ -40,31 +40,66 @@ class TimbaoEngine {
     renderEvents() {
         const leftContainer = document.getElementById('events-left');
         const rightContainer = document.getElementById('events-right');
-
-        if (leftContainer) {
-            leftContainer.innerHTML = EVENTS_DATA.leftColumn.map(item => `
-                <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="group block transition-transform duration-300 hover:scale-[1.02]">
-                    <div class="text-sm md:text-base font-bold text-zinc-300 group-hover:text-[#e3bb3e] transition-colors">
+        
+        // CONFIGURACIÓN DE LA CURVATURA MATEMÁTICA
+        const curveSettings = {
+            rotationIntensity: 6.5, // Grados de inclinación (Ajusta si quieres más o menos rotación)
+            depthIntensity: 14,     // Fuerza de la curva (Hace el paréntesis más profundo)
+            basePush: 20            // Distancia general hacia el centro del globo
+        };
+        
+        // COLUMNA IZQUIERDA (Ahora renderiza VENEZUELA, ESPAÑA, etc.)
+        if (leftContainer && typeof EVENTS_DATA !== 'undefined') {
+            // Inyectamos la data de la columna derecha
+            const dataLeft = EVENTS_DATA.rightColumn; 
+            const midLeft = (dataLeft.length - 1) / 2;
+            
+            leftContainer.innerHTML = dataLeft.map((item, i) => {
+                const offset = i - midLeft;
+                const rotate = offset * -curveSettings.rotationIntensity; 
+                // Sumamos la distancia para crear la curva cóncava '<' que abraza la esfera
+                const distance = Math.pow(Math.abs(offset), 1.6) * curveSettings.depthIntensity;
+                const transX = curveSettings.basePush + distance; 
+                
+                return `
+                <a href="${item.url}" target="_blank" rel="noopener noreferrer" 
+                   class="group block transition-all duration-300 hover:scale-[1.05] origin-right"
+                   style="transform: rotate(${rotate}deg) translateX(${transX}px);">
+                    <div class="text-sm md:text-[15px] font-bold text-zinc-300 group-hover:text-[#e3bb3e] transition-colors text-right">
                         <span class="text-zinc-500 font-medium">${item.years} |</span> ${item.event} <span class="text-[#e3bb3e]">:${item.country}</span>
                     </div>
-                    <div class="text-xs text-zinc-500 italic">
+                    <div class="text-xs text-zinc-500 italic text-right">
                         ${item.role} | ${item.location}
                     </div>
                 </a>
-            `).join('');
+            `}).join('');
         }
 
-        if (rightContainer) {
-            rightContainer.innerHTML = EVENTS_DATA.rightColumn.map(item => `
-                <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="group block transition-transform duration-300 hover:scale-[1.02]">
-                    <div class="text-sm md:text-base font-bold text-zinc-300 group-hover:text-[#e3bb3e] transition-colors">
+        // COLUMNA DERECHA (Ahora renderiza ARGENTINA, CHILE, etc.)
+        if (rightContainer && typeof EVENTS_DATA !== 'undefined') {
+            // Inyectamos la data de la columna izquierda
+            const dataRight = EVENTS_DATA.leftColumn; 
+            const midRight = (dataRight.length - 1) / 2;
+            
+            rightContainer.innerHTML = dataRight.map((item, i) => {
+                const offset = i - midRight;
+                const rotate = offset * curveSettings.rotationIntensity; 
+                // Restamos la distancia para crear la curva cóncava '>' que abraza la esfera
+                const distance = Math.pow(Math.abs(offset), 1.6) * curveSettings.depthIntensity;
+                const transX = -curveSettings.basePush - distance; 
+                
+                return `
+                <a href="${item.url}" target="_blank" rel="noopener noreferrer" 
+                   class="group block transition-all duration-300 hover:scale-[1.05] origin-left"
+                   style="transform: rotate(${rotate}deg) translateX(${transX}px);">
+                    <div class="text-sm md:text-[15px] font-bold text-zinc-300 group-hover:text-[#e3bb3e] transition-colors text-left">
                         <span class="text-[#e3bb3e]">${item.country}:</span> ${item.event} <span class="text-zinc-500 font-medium">| ${item.years}</span>
                     </div>
-                    <div class="text-xs text-zinc-500 italic">
+                    <div class="text-xs text-zinc-500 italic text-left">
                         ${item.role} | ${item.location}
                     </div>
                 </a>
-            `).join('');
+            `}).join('');
         }
     }
 

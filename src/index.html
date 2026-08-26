@@ -87,9 +87,15 @@
                 <!-- Se inyecta dinámicamente desde events.js -->
             </div>
 
-            <!-- Columna Central: Globo 3D Interactivo -->
-            <div class="lg:col-span-4 flex items-center justify-center order-1 lg:order-2">
-                <div id="globe-container" class="w-[320px] h-[320px] sm:w-[400px] sm:h-[400px] md:w-[450px] md:h-[450px] cursor-grab active:cursor-grabbing relative flex items-center justify-center">
+            <!-- Columna Central: Globo 3D Interactivo con Glow Nativo -->
+            <div class="lg:col-span-4 flex items-center justify-center order-1 lg:order-2 z-10">
+                <!-- 
+                  TUTORIAL PARA MODIFICAR EL GLOW:
+                  - before:w-[75%] before:h-[75%] -> Define el tamaño inicial del círculo luminoso. Redúcelo a 60% si lo quieres más pequeño.
+                  - before:bg-[#e3bb3e]/40       -> El /40 es la opacidad (0 a 100). Súbelo a /60 si lo quieres más brillante.
+                  - before:blur-[40px]           -> Controla la dispersión. Bájalo a [20px] para un borde más duro y pegado.
+                -->
+                <div id="globe-container" class="relative w-[300px] h-[300px] sm:w-[380px] sm:h-[380px] md:w-[420px] md:h-[420px] cursor-grab active:cursor-grabbing flex items-center justify-center before:absolute before:w-[65%] before:h-[65%] before:bg-[#e3bb3e]/60 before:blur-[25px] before:rounded-full before:-z-10 shrink-0">
                 </div>
             </div>
 
