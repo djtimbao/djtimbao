@@ -14,15 +14,15 @@ export const EVENTS_DATA = {
             country: "ARGENTINA",
             role: "Dj Invitado",
             location: "Buenos Aires - CABA",
-            url: "https://instagram.com"
+            url: "https://www.facebook.com/photo/?fbid=10202389243309060&set=a.1333636217615"
         },
         {
             years: "2016",
-            event: "Club Latino",
+            event: "Latino Salsa Club",
             country: "PERÚ",
             role: "Dj Invitado",
             location: "Arequipa - Arequipa",
-            url: "https://instagram.com"
+            url: "https://www.facebook.com/photo?fbid=1602202323409704&set=a.478307810974143"
         },
         {
             years: "2016",
@@ -30,7 +30,7 @@ export const EVENTS_DATA = {
             country: "CHILE",
             role: "Dj Invitado",
             location: "Santiago de Chile",
-            url: "https://instagram.com"
+            url: "https://www.facebook.com/photo?fbid=1296479460363394&set=a.560955552742735"
         },
         {
             years: "2016",
@@ -38,7 +38,7 @@ export const EVENTS_DATA = {
             country: "ECUADOR",
             role: "Dj Invitado",
             location: "Pichincha - Quito",
-            url: "https://instagram.com"
+            url: "https://www.facebook.com/photo?fbid=1244478592268956&set=a.557596386402299"
         },
         {
             years: "2016",
@@ -46,7 +46,7 @@ export const EVENTS_DATA = {
             country: "URUGUAY",
             role: "Dj Oficial",
             location: "Montevideo",
-            url: "https://instagram.com"
+            url: "https://www.instagram.com/p/C5mGIgnpK_L"
         },
         {
             years: "2023 - 2026",
@@ -54,7 +54,7 @@ export const EVENTS_DATA = {
             country: "ARGENTINA",
             role: "Dj Oficial",
             location: "Buenos Aires",
-            url: "https://instagram.com"
+            url: "https://www.instagram.com/p/DLf9impObxy"
         }
     ],
     rightColumn: [
@@ -72,7 +72,7 @@ export const EVENTS_DATA = {
             years: "2007 - 2016",
             role: "Dj Oficial",
             location: "Caracas - D.C",
-            url: "https://instagram.com"
+            url: "https://www.facebook.com/permalink.php?story_fbid=pfbid02wiNv4ZHYr8Zem7P7RHrX5UBgQznQRed531Fsn1HrNzQWQHZNodVUBGXq7MLjZyWZl&id=100008781732311"
         },
         {
             country: "VENEZUELA",
@@ -80,7 +80,7 @@ export const EVENTS_DATA = {
             years: "2011 - 2014",
             role: "Dj Oficial",
             location: "Zulia - Maracaibo",
-            url: "https://instagram.com"
+            url: "https://www.facebook.com/photo?fbid=342479335843842&set=a.342479279177181"
         },
         {
             country: "ESPAÑA",
@@ -88,7 +88,7 @@ export const EVENTS_DATA = {
             years: "2012",
             role: "Dj Invitado 2da edicion",
             location: "Malaga - Benalmadena",
-            url: "https://instagram.com"
+            url: "https://www.facebook.com/photo?fbid=403326016393356&set=a.415617463994188"
         },
         {
             country: "USA",
@@ -96,7 +96,7 @@ export const EVENTS_DATA = {
             years: "2013",
             role: "Dj Invitado 5ta edicion",
             location: "St. Francisco - California",
-            url: "https://instagram.com"
+            url: "https://www.facebook.com/events/298470440267394"
         },
         {
             country: "CUBA",
@@ -104,7 +104,7 @@ export const EVENTS_DATA = {
             years: "2016",
             role: "Dj Oficial 14ta edicion",
             location: "La Habana",
-            url: "https://instagram.com"
+            url: "https://www.facebook.com/fiestadeltambor"
         },
         {
             country: "COLOMBIA",
@@ -112,7 +112,7 @@ export const EVENTS_DATA = {
             years: "2016",
             role: "Dj Invitado 2da edicion",
             location: "Cundinamarca - Bogotá",
-            url: "https://instagram.com"
+            url: "https://www.facebook.com/photo/?fbid=1101609859928448&set=a.136633971799582"
         }
     ]
 };
