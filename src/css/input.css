@@ -10,8 +10,8 @@
 @import "tailwindcss";
 
 /* Ocultar el cursor nativo en toda la página */
-body {
-    cursor: none;
+*, *::before, *::after {
+    cursor: none !important;
 }
 
 /* Animación nativa de llenado para el Loader */
