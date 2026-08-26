@@ -45,7 +45,7 @@ class TimbaoEngine {
         const curveSettings = {
             rotationIntensity: 6.5, // Grados de inclinación (Ajusta si quieres más o menos rotación)
             depthIntensity: 14,     // Fuerza de la curva (Hace el paréntesis más profundo)
-            basePush: 20            // Distancia general hacia el centro del globo
+            basePush: 70            // Distancia general hacia el centro del globo
         };
         
         // COLUMNA IZQUIERDA (Ahora renderiza VENEZUELA, ESPAÑA, etc.)

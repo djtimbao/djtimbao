@@ -31,7 +31,9 @@ export class GlobeViewer {
 
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-        this.camera.position.z = 3.6;
+        
+        // 1. AUMENTAMOS LA DISTANCIA DE LA CÁMARA PARA EVITAR CORTES (de 2.8 a 3.6)
+        this.camera.position.z = 3.6; 
 
         this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
         this.renderer.setSize(width, height);
@@ -69,6 +71,7 @@ export class GlobeViewer {
         textureLoader.load(
             ASSETS.GLOBE_TEXTURE,
             (texture) => {
+                texture.colorSpace = THREE.SRGBColorSpace;
                 material.map = texture;
                 // Utilizamos la misma imagen como mapa de rugosidad/relieve para ahorrar peticiones
                 material.bumpMap = texture;

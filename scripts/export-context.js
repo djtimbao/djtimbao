@@ -22,6 +22,8 @@ const IGNORED_PATHS = [
     'contexto_djtimbao.md',
     'export-context.js',
     'scripts/export-context.js',
+    'earth-timbao.webp',
+    'img/earth-timbao.webp',
     OUTPUT_FILE
 ];
 

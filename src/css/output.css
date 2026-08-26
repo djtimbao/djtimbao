@@ -569,6 +569,10 @@
     content: var(--tw-content);
     z-index: calc(10 * -1);
   }
+  .before\:h-\[60\%\]::before {
+    content: var(--tw-content);
+    height: 60%;
+  }
   .before\:h-\[65\%\]::before {
     content: var(--tw-content);
     height: 65%;
@@ -576,6 +580,10 @@
   .before\:h-\[75\%\]::before {
     content: var(--tw-content);
     height: 75%;
+  }
+  .before\:w-\[60\%\]::before {
+    content: var(--tw-content);
+    width: 60%;
   }
   .before\:w-\[65\%\]::before {
     content: var(--tw-content);
@@ -596,6 +604,15 @@
   .before\:bg-\[\#e3bb3e\]\/60::before {
     content: var(--tw-content);
     background-color: color-mix(in oklab, #e3bb3e 60%, transparent);
+  }
+  .before\:bg-\[\#e3bb3e\]\/80::before {
+    content: var(--tw-content);
+    background-color: color-mix(in oklab, #e3bb3e 80%, transparent);
+  }
+  .before\:blur-\[15px\]::before {
+    content: var(--tw-content);
+    --tw-blur: blur(15px);
+    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
   }
   .before\:blur-\[25px\]::before {
     content: var(--tw-content);
