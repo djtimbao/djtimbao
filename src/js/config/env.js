@@ -3,7 +3,7 @@
  * • Que es: El "Cerebro Central" para la detección de entornos y asignación de infraestructura.
  * • Responsabilidades:
  *   1. Detectar automáticamente el entorno de ejecución (Dev, Test, Prod) basado en el hostname.
- *   2. Centralizar las URLs de servicios externos (ej. Cloudflare R2 Buckets).
+ *   2. Centralizar las URLs de servicios externos (Cloudflare R2 Buckets).
  *   3. Aplicar el principio Fail-Fast frontend para configuraciones críticas.
  */
 
@@ -20,8 +20,8 @@ export function getCurrentEnvironment() {
     if (hostname.includes('localhost') || hostname.includes('127.0.0.1')) {
         return ENV.DEV;
     }
-    // Cloudflare Pages asigna el sufijo .pages.dev a la rama test
-    if (hostname.includes('.pages.dev')) {
+    // Detección de ramas de previsualización en Cloudflare Pages
+    if (hostname.includes('.pages.dev') || hostname.startsWith('test.')) {
         return ENV.TEST;
     }
     
@@ -37,21 +37,20 @@ export function requireConfig(name, value) {
     return value;
 }
 
-// 3. Obtener la URL del proyecto automáticamente
+// 3. Obtener la URL base del proyecto
 export function getBaseUrl() {
     return window.location.origin;
 }
 
-// 4. Centralizar la infraestructura externa (Ej: Tus dos buckets de R2)
+// 4. Centralizar la infraestructura externa (Buckets de R2)
 export function getBucketUrl() {
     const currentEnv = getCurrentEnvironment();
 
     if (currentEnv === ENV.PROD) {
-        // Bucket de producción (Custom Domain)
-        return requireConfig('R2_PROD_BUCKET', 'https://cdn.djtimbao.com');
+        // Bucket de producción
+        return requireConfig('R2_PROD_BUCKET', 'https://assets.djtimbao.com');
     }
     
-    // Bucket de desarrollo/pruebas (URL genérica de Cloudflare)
-    // REEMPLAZA ESTO CON LA URL DE TU BUCKET DE DESARROLLO
-    return requireConfig('R2_TEST_BUCKET', 'https://pub-tu-bucket-test.r2.dev');
+    // Entorno de desarrollo local y rama test
+    return requireConfig('R2_TEST_BUCKET', 'https://assets-test.djtimbao.com');
 }

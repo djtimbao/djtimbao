@@ -5,7 +5,8 @@
   "main": "src/js/main.js",
   "scripts": {
     "dev": "tailwindcss -i ./src/css/input.css -o ./src/css/output.css --watch",
-    "build": "tailwindcss -i ./src/css/input.css -o ./src/css/output.css --minify"
+    "build": "tailwindcss -i ./src/css/input.css -o ./src/css/output.css --minify",
+    "export:context": "node scripts/export-context.js"
   },
   "repository": {
     "type": "git",

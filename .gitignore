@@ -1,3 +1,24 @@
+# Dependencias de Node
 node_modules/
+
+# Entornos y compilación local de Wrangler / Cloudflare
 .wrangler/
+.mf/
+
+# Archivos compilados localmente (Cloudflare los genera en build)
 src/css/output.css
+
+# Logs y depuración
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Archivo de contexto del proyecto (solo para uso local con IA)
+contexto_djtimbao.md
+
+# Archivos del sistema operativo y editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
