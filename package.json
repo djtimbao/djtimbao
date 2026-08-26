@@ -1,0 +1,21 @@
+{
+  "name": "djtimbao",
+  "version": "2.0.0",
+  "description": "DJ Timbao | Baila y Goza",
+  "main": "src/js/main.js",
+  "scripts": {
+    "dev": "tailwindcss -i ./src/css/input.css -o ./src/css/output.css --watch",
+    "build": "tailwindcss -i ./src/css/input.css -o ./src/css/output.css --minify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/djtimbao/djtimbao.git"
+  },
+  "author": "DJ Timbao",
+  "license": "ISC",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.0.0",
+    "tailwindcss": "^4.0.0",
+    "wrangler": "^3.0.0"
+  }
+}

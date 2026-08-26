@@ -1,0 +1,72 @@
+<!--
+ * • Ruta: src/index.html
+ * • Que es: Archivo de marcado principal (Punto de entrada) que define la estructura semántica del sitio web de DJ Timbao.
+ * • Responsabilidades:
+ *   1. Establecer la estructura base del documento HTML5 y las metaetiquetas esenciales para SEO y accesibilidad.
+ *   2. Vincular la hoja de estilos compilada (output.css) de forma no bloqueante.
+ *   3. Proveer el esqueleto del DOM donde el motor de Vanilla JS inyectará las interfaces dinámicas (Loader, Cursor magnético).
+ *   4. Definir las secciones estáticas de contenido (Hero, Bio, Eventos, etc.).
+ *   5. Importar el script principal (main.js) al final del body para garantizar que el DOM esté listo antes de ejecutar la lógica interactiva.
+-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DJ Timbao | Timba, Salsa y Son</title>
+    
+    <!-- Tipografía Montserrat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Nuestro CSS compilado por Tailwind -->
+    <link href="/css/output.css" rel="stylesheet">
+    
+    <style>
+        /* Forzamos la fuente globalmente */
+        body { font-family: 'Montserrat', sans-serif; }
+    </style>
+</head>
+<body class="bg-zinc-950 text-white selection:bg-[#e3bb3e] selection:text-black">
+
+    <!-- HERO SECTION -->
+    <section id="hero" class="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden">
+        
+        <!-- Layer 0: Fondo Multimedia (Video o Imagen) -->
+        <div class="absolute inset-0 w-full h-full z-0 pointer-events-none">
+            <!-- Overlay oscuro para contraste tipográfico (Mantiene el diseño minimalista) -->
+            <div class="absolute inset-0 bg-zinc-950/75 z-10"></div>
+            
+            <!-- Elemento de fondo: Escala inicial a 110% para tener margen de movimiento en el parallax -->
+            <video id="hero-media" class="absolute inset-0 w-full h-full object-cover scale-110 will-change-transform" autoplay loop muted playsinline>
+                <!-- Temporalmente puedes poner un enlace directo a un .mp4, luego usaremos tu R2 -->
+                <source src="https://cdn.coverr.co/videos/coverr-dj-mixing-music-in-a-club-5183/1080p.mp4" type="video/mp4">
+            </video>
+        </div>
+
+        <!-- Layer 1: Tipografía Principal (Parallax inverso) -->
+        <div class="relative z-20 text-center flex flex-col items-center select-none">
+            <h1 class="hero-title clip-hidden text-[12vw] md:text-[9vw] leading-none font-black tracking-tighter uppercase mb-2 md:mb-4 will-change-transform">
+                DJ Timbao
+            </h1>
+            <p class="hero-subtitle clip-hidden text-lg md:text-3xl font-bold tracking-widest text-[#e3bb3e] uppercase will-change-transform">
+                Timba, Salsa y Son
+            </p>
+        </div>
+
+        <!-- Layer 2: Indicador de Scroll Dinámico -->
+        <div class="hero-scroll opacity-0 absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center transition-opacity duration-1000 z-20">
+            <span class="text-[10px] tracking-widest mb-3 uppercase text-zinc-400 font-bold">Scroll</span>
+            <div class="w-[2px] h-12 bg-zinc-800 relative overflow-hidden rounded-full">
+                <div class="absolute top-0 left-0 w-full h-full bg-[#e3bb3e] animate-scroll-line"></div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Motor nativo de animaciones orquestado mediante Módulos ES6 -->
+    <script type="module" src="/js/main.js"></script>
+</body>
+</html>

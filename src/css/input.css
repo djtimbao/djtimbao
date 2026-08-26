@@ -1,0 +1,64 @@
+/*
+ * • La ruta: src/css/input.css
+ * • Que es: Archivo principal y único de estilos donde se importa el motor de Tailwind v4 y se declaran las animaciones nativas personalizadas.
+ * • Responsabilidades:
+ *   1. Importar las utilidades de Tailwind CSS v4.
+ *   2. Definir estilos globales básicos (como ocultar el cursor nativo).
+ *   3. Declarar los fotogramas clave (@keyframes) y clases para las animaciones puras (loader, fill, scale).
+ */
+
+@import "tailwindcss";
+
+/* Ocultar el cursor nativo en toda la página */
+body {
+    cursor: none;
+}
+
+/* Animación nativa de llenado para el Loader */
+.logo-fill {
+    clip-path: inset(0 100% 0 0); /* Oculta todo hacia la izquierda al inicio */
+    animation: fillLogo 1.5s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+    animation-delay: 0.3s;
+}
+
+/* Animación nativa de escala (Desde el centro hacia afuera) */
+.logo-scale {
+    transform: scale(0.7);
+    animation: scaleUp 1.8s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+}
+
+@keyframes fillLogo {
+    to { clip-path: inset(0 0 0 0); } /* Revela el logo completo */
+}
+
+@keyframes scaleUp {
+    to { transform: scale(1); }
+}
+
+/* =========================================
+   ANIMACIONES HERO SECTION
+   ========================================= */
+
+/* Estado inicial oculto y animación de revelado fluido */
+.clip-hidden {
+    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+}
+
+.reveal-text {
+    animation: textReveal 1.2s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+}
+
+@keyframes textReveal {
+    to { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+}
+
+/* Indicador animado de scroll infinito */
+@keyframes scrollLine {
+    0% { transform: translateY(-100%); }
+    50% { transform: translateY(0); }
+    100% { transform: translateY(100%); }
+}
+
+.animate-scroll-line {
+    animation: scrollLine 2s cubic-bezier(0.85, 0, 0.15, 1) infinite;
+}
