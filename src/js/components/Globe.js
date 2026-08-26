@@ -2,9 +2,10 @@
  * • La ruta: src/js/components/Globe.js
  * • Que es: Controlador 3D WebGL del Globo Terráqueo interactivo.
  * • Responsabilidades:
- *   1. Generar la geometría esférica, texturas de relieve (bump maps) y países destacados en #e3bb3e.
- *   2. Gestionar la interacción de rotación 360° mediante arrastre con inercia (damping).
- *   3. Optimizar el ciclo de renderizado ejecutándolo solo cuando la sección es visible en el viewport.
+ *   1. Generar la geometría esférica con material base para evitar esferas invisibles.
+ *   2. Cargar texturas remotas con crossOrigin 'anonymous' y manejo de estado asíncrono.
+ *   3. Gestionar la interacción de rotación 360° mediante arrastre con inercia (damping).
+ *   4. Optimizar el ciclo de renderizado ejecutándolo solo cuando la sección es visible en el viewport.
  */
 
 import * as THREE from 'https://esm.sh/three@0.160.0';
@@ -30,9 +31,7 @@ export class GlobeViewer {
 
         this.scene = new THREE.Scene();
         this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-        
-        // 1. AUMENTAMOS LA DISTANCIA DE LA CÁMARA PARA EVITAR CORTES (de 2.8 a 3.6)
-        this.camera.position.z = 3.6; 
+        this.camera.position.z = 3.6;
 
         this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
         this.renderer.setSize(width, height);
@@ -56,19 +55,30 @@ export class GlobeViewer {
     createGlobeMesh() {
         const geometry = new THREE.SphereGeometry(1, 64, 64);
         const textureLoader = new THREE.TextureLoader();
-        
-        // Cargamos tu textura de alta compresión desde Cloudflare R2
-        const colorMap = textureLoader.load(ASSETS.GLOBE_TEXTURE);
+        textureLoader.setCrossOrigin('anonymous');
 
         const material = new THREE.MeshStandardMaterial({
-            map: colorMap,
-            // Utilizamos la misma imagen como mapa de rugosidad/relieve para ahorrar peticiones
-            bumpMap: colorMap,
+            color: 0xf4f4f5,
             bumpScale: 0.05, 
             roughness: 0.7,
             metalness: 0.1,
             transparent: true // Permite que los océanos blancos/grises se fundan mejor
         });
+
+        // Cargamos tu textura de alta compresión desde Cloudflare R2
+        textureLoader.load(
+            ASSETS.GLOBE_TEXTURE,
+            (texture) => {
+                material.map = texture;
+                // Utilizamos la misma imagen como mapa de rugosidad/relieve para ahorrar peticiones
+                material.bumpMap = texture;
+                material.needsUpdate = true;
+            },
+            undefined,
+            (error) => {
+                console.error('🔥 Error cargando la textura desde R2:', error);
+            }
+        );
 
         this.globe = new THREE.Mesh(geometry, material);
         this.scene.add(this.globe);
