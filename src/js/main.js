@@ -16,6 +16,8 @@ class TimbaoEngine {
     constructor() {
         // Añadimos scale y targetScale para la animación nativa del hover
         this.cursor = { x: 0, y: 0, targetX: 0, targetY: 0, scale: 1, targetScale: 1 };
+        // Motor de inercia para la progresión del scroll
+        this.scrollProgress = 0; 
         this.globalLoader = new GlobalLoader();
         this.hero = new HeroParallax();
         this.init();
@@ -40,39 +42,18 @@ class TimbaoEngine {
     renderEvents() {
         const leftContainer = document.getElementById('events-left');
         const rightContainer = document.getElementById('events-right');
-        const isDesktop = window.innerWidth >= 1024;
         
-        // CONFIGURACIÓN DE LA CURVATURA MATEMÁTICA
-        const curveSettings = {
-            rotationIntensity: 6.5, // Grados de inclinación (Ajusta si quieres más o menos rotación)
-            depthIntensity: 14,     // Fuerza de la curva (Hace el paréntesis más profundo)
-            basePush: 35            // Distancia general hacia el centro del globo
-        };
-        
-        // COLUMNA IZQUIERDA (Ahora renderiza VENEZUELA, ESPAÑA, etc.)
+        // COLUMNA IZQUIERDA (VENEZUELA, ESPAÑA, etc.)
         if (leftContainer && typeof EVENTS_DATA !== 'undefined') {
-            // Inyectamos la data de la columna derecha
             const dataLeft = EVENTS_DATA.rightColumn; 
             const midLeft = (dataLeft.length - 1) / 2;
             
             leftContainer.innerHTML = dataLeft.map((item, i) => {
-                let transformStyle = '';
-                let originClass = '';
-
-                if (isDesktop) {
-                    const offset = i - midLeft;
-                    const rotate = offset * -curveSettings.rotationIntensity; 
-                    // Sumamos la distancia para crear la curva cóncava '<' que abraza la esfera
-                    const distance = Math.pow(Math.abs(offset), 1.6) * curveSettings.depthIntensity;
-                    const transX = curveSettings.basePush + distance; 
-                    transformStyle = `transform: rotate(${rotate}deg) translateX(${transX}px);`;
-                    originClass = 'origin-right';
-                }
-                
+                const offset = i - midLeft;
                 return `
                 <a href="${item.url}" target="_blank" rel="noopener noreferrer" 
-                   class="group block transition-all duration-300 hover:scale-[1.03] ${originClass} py-1 px-2 rounded-md hover:bg-zinc-900/40"
-                   style="${transformStyle}">
+                   class="event-card group block transition-colors duration-300 py-1 px-2 rounded-md hover:bg-zinc-900/40 opacity-0 will-change-transform origin-right"
+                   data-offset="${offset}" data-side="left">
                     <div class="text-sm md:text-[15px] font-bold text-zinc-300 group-hover:text-[#e3bb3e] transition-colors text-center lg:text-right">
                         <span class="text-zinc-500 font-medium">${item.years} |</span> ${item.event} <span class="text-[#e3bb3e]">:${item.country}</span>
                     </div>
@@ -83,30 +64,17 @@ class TimbaoEngine {
             `}).join('');
         }
 
-        // COLUMNA DERECHA (Ahora renderiza ARGENTINA, CHILE, etc.)
+        // COLUMNA DERECHA (ARGENTINA, CHILE, etc.)
         if (rightContainer && typeof EVENTS_DATA !== 'undefined') {
-            // Inyectamos la data de la columna izquierda
             const dataRight = EVENTS_DATA.leftColumn; 
             const midRight = (dataRight.length - 1) / 2;
             
             rightContainer.innerHTML = dataRight.map((item, i) => {
-                let transformStyle = '';
-                let originClass = '';
-
-                if (isDesktop) {
-                    const offset = i - midRight;
-                    const rotate = offset * curveSettings.rotationIntensity; 
-                    // Restamos la distancia para crear la curva cóncava '>' que abraza la esfera
-                    const distance = Math.pow(Math.abs(offset), 1.6) * curveSettings.depthIntensity;
-                    const transX = -curveSettings.basePush - distance; 
-                    transformStyle = `transform: rotate(${rotate}deg) translateX(${transX}px);`;
-                    originClass = 'origin-left';
-                }
-                
+                const offset = i - midRight;
                 return `
                 <a href="${item.url}" target="_blank" rel="noopener noreferrer" 
-                   class="group block transition-all duration-300 hover:scale-[1.03] ${originClass} py-1 px-2 rounded-md hover:bg-zinc-900/40"
-                   style="${transformStyle}">
+                   class="event-card group block transition-colors duration-300 py-1 px-2 rounded-md hover:bg-zinc-900/40 opacity-0 will-change-transform origin-left"
+                   data-offset="${offset}" data-side="right">
                     <div class="text-sm md:text-[15px] font-bold text-zinc-300 group-hover:text-[#e3bb3e] transition-colors text-center lg:text-left">
                         <span class="text-[#e3bb3e]">${item.country}:</span> ${item.event} <span class="text-zinc-500 font-medium">| ${item.years}</span>
                     </div>
@@ -116,19 +84,19 @@ class TimbaoEngine {
                 </a>
             `}).join('');
         }
+
+        // Guardar referencias y asignar eventos de hover (separado del renderizado 3D para evitar lag)
+        this.eventNodes = document.querySelectorAll('.event-card');
+        this.eventNodes.forEach(node => {
+            node.addEventListener('mouseenter', () => node.dataset.hover = 'true');
+            node.addEventListener('mouseleave', () => node.dataset.hover = 'false');
+        });
     }
 
     bindEvents() {
         window.addEventListener('mousemove', (e) => {
             this.cursor.targetX = e.clientX;
             this.cursor.targetY = e.clientY;
-        });
-
-        // Recalcular la disposición de eventos cuando cambie el tamaño de la pantalla
-        let resizeTimeout;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => this.renderEvents(), 150);
         });
 
         // Usamos closest() para asegurar que detecte el hover incluso si hay elementos dentro del botón/enlace
@@ -157,6 +125,7 @@ class TimbaoEngine {
     }
 
     render() {
+        // --- 1. LÓGICA DE CURSOR HERO ---
         if (window.innerWidth >= 768) {
             // Interpolación para posición (Velocidad ágil)
             this.cursor.x += (this.cursor.targetX - this.cursor.x) * 0.25;
@@ -170,6 +139,84 @@ class TimbaoEngine {
 
             // Le pasamos las coordenadas suavizadas al Hero para el Parallax
             this.hero.render(this.cursor.x, this.cursor.y);
+        }
+
+        // --- 2. LÓGICA MAGNÉTICA Y ONDA DOPPLER DE EVENTOS ---
+        const eventsSec = document.getElementById('events');
+        if (eventsSec) {
+            const rect = eventsSec.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+            const sectionCenter = rect.top + rect.height / 2;
+            const viewCenter = windowHeight / 2;
+
+            // Progreso de visibilidad (0 = Fuera de pantalla, 1 = Centro exacto)
+            const distance = Math.abs(sectionCenter - viewCenter);
+            let rawProgress = 1 - (distance / (windowHeight * 0.75)); 
+            rawProgress = Math.max(0, Math.min(1, rawProgress));
+
+            // Aplicar inercia para evitar tirones (Damping)
+            this.scrollProgress += (rawProgress - this.scrollProgress) * 0.08;
+
+            // FASE 1 (0.0 -> 0.5): Implosión Espacial (Zoom de Globo y Opacidad)
+            const globeProgress = Math.min(this.scrollProgress / 0.5, 1);
+            if (this.globe) {
+                this.globe.updateScroll(globeProgress);
+            }
+
+            // Glow: Sincronizado a escala y expulsa el "Pulso" Doppler
+            const glowContainer = document.getElementById('globe-container');
+            if (glowContainer) {
+                const pulse = Math.sin(globeProgress * Math.PI) * 0.15;
+                const glowScale = 0.3 + (0.7 * globeProgress) + pulse;
+                glowContainer.style.setProperty('--glow-scale', glowScale);
+                glowContainer.style.setProperty('--glow-op', globeProgress);
+            }
+
+            // FASE 2 (0.5 -> 1.0): Onda Expansiva de Textos
+            const textProgress = Math.max(0, (this.scrollProgress - 0.5) / 0.5);
+            const isDesktop = window.innerWidth >= 1024;
+            
+            // CONFIGURACIÓN DE LA CURVATURA MATEMÁTICA
+            const curveSettings = {
+                rotationIntensity: 4, // Grados de inclinación (Ajusta si quieres más o menos rotación)
+                depthIntensity: 14,     // Fuerza de la curva (Hace el paréntesis más profundo)
+                basePush: 35            // Distancia general hacia el centro del globo
+            };
+
+            // Animación coreografiada
+            if (this.eventNodes) {
+                this.eventNodes.forEach(node => {
+                    const offset = parseFloat(node.dataset.offset);
+                    const side = node.dataset.side;
+                    // Mantenemos el hover tailwind vivo interpolándolo por JS
+                    const hoverScale = node.dataset.hover === 'true' ? 1.03 : 1; 
+                    
+                    node.style.opacity = textProgress;
+
+                    if (isDesktop) {
+                        // Desplazamiento desde el Ecuador (0) hacia los polos (offset real) guiado por textProgress
+                        const currentOffset = offset * textProgress;
+                        let rotate = 0;
+                        let transX = 0;
+
+                        if (side === 'left') {
+                            rotate = currentOffset * -curveSettings.rotationIntensity;
+                            const distance = Math.pow(Math.abs(currentOffset), 1.6) * curveSettings.depthIntensity;
+                            transX = curveSettings.basePush + distance;
+                        } else {
+                            rotate = currentOffset * curveSettings.rotationIntensity;
+                            const distance = Math.pow(Math.abs(currentOffset), 1.6) * curveSettings.depthIntensity;
+                            transX = -curveSettings.basePush - distance;
+                        }
+
+                        node.style.transform = `rotate(${rotate}deg) translateX(${transX}px) scale(${hoverScale})`;
+                    } else {
+                        // En móviles: Caída suave vertical hacia su punto de origen sin desbordamiento
+                        const transY = (1 - textProgress) * 40;
+                        node.style.transform = `translateY(${transY}px) scale(${hoverScale})`;
+                    }
+                });
+            }
         }
 
         requestAnimationFrame(() => this.render());

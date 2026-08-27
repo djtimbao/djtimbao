@@ -73,7 +73,7 @@
             
             <!-- Columna Izquierda de Eventos -->
             <div id="events-left" class="lg:col-span-4 flex flex-col gap-4 sm:gap-2 text-center lg:text-right order-2 lg:order-1 w-full">
-                <!-- Se inyecta dinámicamente desde events.js -->
+                <!-- Se inyecta dinámicamente desde main.js -->
             </div>
 
             <!-- Columna Central: Globo 3D Interactivo con Glow -->
@@ -84,13 +84,13 @@
                 - before:bg-[#e3bb3e]/40         -> El /40 es la opacidad (0 a 100). Súbelo a /60 si lo quieres más brillante.
                 - before:blur-[40px]           -> Controla la dispersión. Bájalo a [20px] para un borde más duro y pegado.
                 -->
-                <div id="globe-container" class="relative w-[260px] h-[260px] sm:w-[320px] sm:h-[320px] lg:w-[420px] lg:h-[420px] cursor-grab active:cursor-grabbing flex items-center justify-center before:absolute before:w-[85%] before:h-[85%] before:bg-black/90 before:blur-[15px] before:rounded-full before:-z-10 shrink-0">
+                <div id="globe-container" style="--glow-scale: 0.3; --glow-op: 0;" class="relative w-[260px] h-[260px] sm:w-[320px] sm:h-[320px] lg:w-[420px] lg:h-[420px] cursor-grab active:cursor-grabbing flex items-center justify-center before:absolute before:w-[85%] before:h-[85%] before:bg-black/90 before:blur-[15px] before:rounded-full before:-z-10 before:scale-[var(--glow-scale)] before:opacity-[var(--glow-op)] before:will-change-transform shrink-0">
                 </div>
             </div>
 
             <!-- Columna Derecha de Eventos -->
             <div id="events-right" class="lg:col-span-4 flex flex-col gap-4 sm:gap-2 text-center lg:text-left order-3 w-full">
-                <!-- Se inyecta dinámicamente desde events.js -->
+                <!-- Se inyecta dinámicamente desde main.js -->
             </div>
 
         </div>

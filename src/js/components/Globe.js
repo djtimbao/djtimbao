@@ -33,7 +33,7 @@ export class GlobeViewer {
         this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
         
         // 1. AUMENTAMOS LA DISTANCIA DE LA CÁMARA PARA EVITAR CORTES (de 2.8 a 3.6)
-        this.camera.position.z = 3.6; 
+        this.camera.position.z = 6.0; // Inicia lejano para la animación de entrada 
 
         this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
         this.renderer.setSize(width, height);
@@ -51,6 +51,9 @@ export class GlobeViewer {
         this.createGlobeMesh();
         this.bindEvents();
         this.setupIntersectionObserver();
+        
+        // Lo seteamos oculto por defecto hasta que actúe el scroll
+        this.updateScroll(0);
         this.animate();
     }
 
@@ -64,7 +67,7 @@ export class GlobeViewer {
             bumpScale: 0.05, 
             roughness: 0.7,
             metalness: 0.1,
-            transparent: true // Permite que los océanos blancos/grises se fundan mejor
+            transparent: true // Permite que los océanos blancos/grises se fundan mejor y modula la opacidad animada
         });
 
         // Cargamos tu textura de alta compresión desde Cloudflare R2
@@ -85,6 +88,21 @@ export class GlobeViewer {
 
         this.globe = new THREE.Mesh(geometry, material);
         this.scene.add(this.globe);
+    }
+    
+    // MÉTODO PÚBLICO: Recibe el progreso de scroll (0.0 a 1.0) orquestado por main.js
+    updateScroll(progress) {
+        if (!this.globe) return;
+        
+        // Escala del globo de 0.3 a 1.0
+        const scale = 0.3 + (0.7 * progress);
+        this.globe.scale.set(scale, scale, scale);
+        
+        // Cámara avanza desde la profundidad (6.0) a posición ideal (3.6)
+        this.camera.position.z = 6.0 - (2.4 * progress);
+        
+        // Opacidad del material se fusiona con el fondo
+        this.globe.material.opacity = progress;
     }
 
     bindEvents() {
