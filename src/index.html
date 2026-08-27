@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DJ Timbao | Timba, Salsa y Son</title>
     
-    <!-- Tipografía Montserrat -->
+    <!-- Tipografía Montserrat y Bungee Inline -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Vast+Shadow&family=Bungee+Inline&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link href="/css/output.css" rel="stylesheet">
     
     <!-- Bloqueo estricto de esquema de color y tematización de la barra del navegador -->
@@ -51,6 +51,62 @@
             <div class="w-[2px] h-12 bg-zinc-800 relative overflow-hidden rounded-full">
                 <div class="absolute top-0 left-0 w-full h-full bg-[#e3bb3e] animate-scroll-line"></div>
             </div>
+        </div>
+
+    </section>
+
+    <!-- SECCIÓN: TRAYECTORIA -->
+    <section id="trayectoria" class="relative w-full min-h-[70vh] py-16 sm:py-24 px-4 sm:px-6 md:px-12 flex flex-col items-center justify-center bg-zinc-950 overflow-hidden border-t border-zinc-900/50">
+        
+        <div class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center z-10">
+            
+            <!-- Columna Izquierda: Texto Descriptivo -->
+            <div class="lg:col-span-7 flex flex-col gap-6 text-center lg:text-left">
+                
+                <!-- Wrapper Block Reveal para el Título (Retraso 0s) -->
+                <div class="relative overflow-hidden w-fit mx-auto lg:mx-0 block-reveal-group" style="--reveal-delay: 0s;">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-wider text-[#e3bb3e] uppercase opacity-0 block-reveal-text">
+                        Trayectoria
+                    </h2>
+                    <div class="absolute inset-0 bg-[#e3bb3e] z-20 block-reveal-solid"></div>
+                </div>
+
+                <div class="text-zinc-300 text-sm md:text-base leading-relaxed space-y-4 flex flex-col items-center lg:items-start">
+                    
+                    <!-- Wrapper Block Reveal para Párrafo 1 (Retraso 0.2s) -->
+                    <div class="relative overflow-hidden w-fit block-reveal-group text-left" style="--reveal-delay: 0.2s;">
+                        <p class="opacity-0 block-reveal-text">
+                            De Venezuela, pero radicado en Argentina, DJ Timbao ha dedicado más de dos décadas a perfeccionar el arte de la selección de música popular bailable cubana. Especialista en Timba, salsa y son, pero moviéndose por todos los ritmos de la música cubana, su estilo es reconocido por ser alegre, potente, pero, sobre todo, altamente bailable.
+                        </p>
+                        <div class="absolute inset-0 bg-[#e3bb3e] z-20 block-reveal-solid"></div>
+                    </div>
+                    
+                    <!-- Wrapper Block Reveal para Párrafo 2 (Retraso 0.4s) -->
+                    <div class="relative overflow-hidden w-fit block-reveal-group text-left" style="--reveal-delay: 0.4s;">
+                        <p class="opacity-0 block-reveal-text">
+                            Organizador de diferentes eventos, fiestas, festivales y conciertos que tienen como fuerte el baile de casino, Timbao no solo mezcla música, también es un talentoso y reconocido editor de piezas musicales para bailarines de diferentes categorías que interpretan coreografías para shows y competencias de baile profesional.
+                        </p>
+                        <div class="absolute inset-0 bg-[#e3bb3e] z-20 block-reveal-solid"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Número Magnético Odometer -->
+            <div class="lg:col-span-5 flex flex-col items-center justify-center select-none">
+                <div id="odometer-container" class="relative flex items-center justify-center mt-8 lg:mt-0 opacity-0 translate-y-10 transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform">
+                    <span id="experience-years" class="text-[8rem] md:text-[11rem] lg:text-[8rem] leading-none text-transparent bg-clip-text bg-gradient-to-b from-[#e3bb3e] to-yellow-700 will-change-contents font-['Vast_Shadow'] tabular-nums tracking-tighter cursor-default transition-transform duration-300">
+                        00
+                    </span>
+                    <!-- Texto de soporte -->
+                    <!-- Texto de soporte con mayor separación -->
+                    <div class="absolute -bottom-8 md:-bottom-12 flex flex-col items-center pointer-events-none">
+                        <span class="text-[10px] md:text-xs font-bold tracking-[0.4em] uppercase text-zinc-500 mb-1">Años de</span>
+                        <span class="text-base md:text-xl font-black tracking-[0.2em] uppercase text-zinc-100">Experiencia</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
     </section>

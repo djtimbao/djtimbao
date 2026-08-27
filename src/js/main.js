@@ -11,6 +11,7 @@ import { GlobalLoader } from './components/Loader.js';
 import { HeroParallax } from './components/Hero.js';
 import { GlobeViewer } from './components/Globe.js';
 import { EVENTS_DATA } from './config/events.js';
+import { OdometerEffect } from './components/Odometer.js';
 
 class TimbaoEngine {
     constructor() {
@@ -27,6 +28,8 @@ class TimbaoEngine {
         this.buildCursor();
         this.renderEvents();
         this.globe = new GlobeViewer('globe-container');
+        this.odometer = new OdometerEffect('experience-years');
+        this.setupScrollAnimations();
         this.bindEvents();
         this.render();
         this.handleInitialLoad();
@@ -37,6 +40,38 @@ class TimbaoEngine {
         // Añadimos 'will-change-transform' para que la GPU se prepare, y quitamos las transiciones CSS
         this.cursorEl.className = 'fixed top-0 left-0 w-4 h-4 bg-[#e3bb3e] rounded-full pointer-events-none z-[9998] mix-blend-difference hidden md:block will-change-transform';
         document.body.appendChild(this.cursorEl);
+    }
+
+    setupScrollAnimations() {
+        // Observador nativo para animaciones on-scroll (Block Reveal y Odómetro)
+        const trayectoriaSec = document.getElementById('trayectoria');
+        if (!trayectoriaSec) return;
+
+        const observer = new IntersectionObserver((entries, observerInstance) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // 1. Disparar animaciones CSS de Block Reveal para textos
+                    entry.target.classList.add('is-revealed');
+                    
+                    // 2. Transición suave de entrada (de abajo hacia arriba) para el Odómetro
+                    const odometerContainer = document.getElementById('odometer-container');
+                    if (odometerContainer) {
+                        odometerContainer.classList.remove('opacity-0', 'translate-y-10');
+                        odometerContainer.classList.add('opacity-100', 'translate-y-0');
+                    }
+
+                    // 3. Activar el estado de caos temporal en el Odómetro
+                    if (this.odometer) {
+                        this.odometer.triggerEntrance();
+                    }
+
+                    // 4. One-shot: Desconectar para no consumir recursos (sin animación de salida)
+                    observerInstance.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 }); // Umbral de 20% de visibilidad requerida
+
+        observer.observe(trayectoriaSec);
     }
 
     renderEvents() {
@@ -101,13 +136,13 @@ class TimbaoEngine {
 
         // Usamos closest() para asegurar que detecte el hover incluso si hay elementos dentro del botón/enlace
         document.body.addEventListener('mouseover', (e) => {
-            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('#globe-container')) {
+            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('#globe-container') || e.target.closest('#experience-years')) {
                 this.cursor.targetScale = 2.5;
             }
         });
         
         document.body.addEventListener('mouseout', (e) => {
-            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('#globe-container')) {
+            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('#globe-container') || e.target.closest('#experience-years')) {
                 this.cursor.targetScale = 1;
             }
         });

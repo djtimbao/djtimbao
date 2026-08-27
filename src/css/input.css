@@ -68,3 +68,44 @@
 .animate-scroll-line {
     animation: scrollLine 2s cubic-bezier(0.85, 0, 0.15, 1) infinite;
 }
+
+/* =========================================
+   ANIMACIONES BLOCK REVEAL (TRAYECTORIA)
+   ========================================= */
+
+/* Estado inicial de la barra amarilla: Fuera de la vista hacia la izquierda */
+.block-reveal-solid {
+    transform: translateX(-101%);
+    will-change: transform;
+}
+
+/* Se inyecta la clase .is-revealed por JS (IntersectionObserver) */
+.is-revealed .block-reveal-solid {
+    /* Usamos el mismo easing del Hero para consistencia visual (Aceleración y freno nativo) */
+    animation: blockRevealSweep 1.2s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+    animation-delay: var(--reveal-delay, 0s);
+}
+
+/* Estado inicial del texto transparente y oculto */
+.block-reveal-text {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.is-revealed .block-reveal-text {
+    animation: textShowStep 1.2s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+    animation-delay: var(--reveal-delay, 0s);
+}
+
+/* Coreografía a prueba de fallos (Evita el bug de transform-origin cruzando el contenedor con Translate) */
+@keyframes blockRevealSweep {
+    0% { transform: translateX(-101%); }
+    50% { transform: translateX(0); } /* Cubre el texto exactamente a la mitad */
+    100% { transform: translateX(101%); } /* Se retira hacia la derecha */
+}
+
+/* El texto se hace visible instantáneamente cuando el bloque lo cubre (50%) */
+@keyframes textShowStep {
+    0%, 49% { opacity: 0; visibility: hidden; }
+    50%, 100% { opacity: 1; visibility: visible; }
+}
