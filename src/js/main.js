@@ -12,6 +12,7 @@ import { HeroParallax } from './components/Hero.js';
 import { GlobeViewer } from './components/Globe.js';
 import { EVENTS_DATA } from './config/events.js';
 import { OdometerEffect } from './components/Odometer.js';
+import { ASSETS } from './config/assets.js';
 
 class TimbaoEngine {
     constructor() {
@@ -30,6 +31,7 @@ class TimbaoEngine {
         this.globe = new GlobeViewer('globe-container');
         this.odometer = new OdometerEffect('experience-years');
         this.setupScrollAnimations();
+        this.setupPlatformsAccordion();
         this.bindEvents();
         this.render();
         this.handleInitialLoad();
@@ -72,6 +74,82 @@ class TimbaoEngine {
         }, { threshold: 0.2 }); // Umbral de 20% de visibilidad requerida
 
         observer.observe(trayectoriaSec);
+    }
+
+    setupPlatformsAccordion() {
+        // Observador nativo y motor flexbox fluido para el acordeón
+        const platformsSec = document.getElementById('plataformas');
+        const accordion = document.getElementById('platforms-accordion');
+        const panels = document.querySelectorAll('.platform-panel');
+
+        // Inyección dinámica de multimedia desde R2
+        const ytMusicVideo = document.getElementById('ytmusic-video');
+        if (ytMusicVideo) {
+            ytMusicVideo.src = ASSETS.YT_MUSIC_VIDEO;
+        }
+        
+        const youtubeVideo = document.getElementById('youtube-video');
+        if (youtubeVideo) {
+            youtubeVideo.src = ASSETS.YT_VIDEO;
+        }
+        
+        const spotifyVideo = document.getElementById('spotify-video');
+        if (spotifyVideo) {
+            spotifyVideo.src = ASSETS.SPOTIFY_VIDEO;
+        }
+
+        if (!platformsSec || !accordion || panels.length === 0) return;
+
+        // 1. Intersección para la entrada (Animación de puertas de ascensor en CSS)
+        const observer = new IntersectionObserver((entries, observerInstance) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    accordion.classList.remove('opacity-0');
+                    accordion.classList.add('animate-elevator');
+                    observerInstance.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.2 });
+
+        observer.observe(platformsSec);
+
+        // 2. Motor dinámico de expansión por Flex-Grow (Hover/Tap)
+        panels.forEach(panel => {
+            const activatePanel = () => {
+                // Restaurar paneles y pausar videos ocultos
+                panels.forEach(p => {
+                    p.classList.remove('is-active', 'flex-[5]');
+                    const v = p.querySelector('.platform-video');
+                    if (v) v.pause();
+                });
+                
+                // Activar panel actual y reproducir su video
+                panel.classList.add('is-active', 'flex-[5]');
+                const activeVideo = panel.querySelector('.platform-video');
+                if (activeVideo) activeVideo.play();
+            };
+
+            panel.addEventListener('mouseenter', activatePanel);
+            // Soporte robusto para pantallas táctiles sin delay
+            panel.addEventListener('touchstart', activatePanel, { passive: true });
+
+            // Escuchador de clics para navegar usando los data-url nativos
+            panel.addEventListener('click', () => {
+                const url = panel.getAttribute('data-url');
+                if (url) {
+                    window.open(url, '_blank', 'noopener,noreferrer');
+                }
+            });
+        });
+
+        // 3. Restaurar equidad (33% para cada uno) y detener videos al quitar el cursor
+        accordion.addEventListener('mouseleave', () => {
+            panels.forEach(p => {
+                p.classList.remove('is-active', 'flex-[5]');
+                const video = p.querySelector('.platform-video');
+                if (video) video.pause();
+            });
+        });
     }
 
     renderEvents() {
@@ -134,15 +212,15 @@ class TimbaoEngine {
             this.cursor.targetY = e.clientY;
         });
 
-        // Usamos closest() para asegurar que detecte el hover incluso si hay elementos dentro del botón/enlace
+        // Usamos closest() para asegurar que detecte el hover en cualquier zona interactiva, añadiendo los paneles del acordeón
         document.body.addEventListener('mouseover', (e) => {
-            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('#globe-container') || e.target.closest('#experience-years')) {
+            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('#globe-container') || e.target.closest('#experience-years') || e.target.closest('.platform-panel')) {
                 this.cursor.targetScale = 2.5;
             }
         });
         
         document.body.addEventListener('mouseout', (e) => {
-            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('#globe-container') || e.target.closest('#experience-years')) {
+            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('#globe-container') || e.target.closest('#experience-years') || e.target.closest('.platform-panel')) {
                 this.cursor.targetScale = 1;
             }
         });

@@ -98,7 +98,6 @@
                     <span id="experience-years" class="text-[8rem] md:text-[11rem] lg:text-[8rem] leading-none text-transparent bg-clip-text bg-gradient-to-b from-[#e3bb3e] to-yellow-700 will-change-contents font-['Vast_Shadow'] tabular-nums tracking-tighter cursor-default transition-transform duration-300">
                         00
                     </span>
-                    <!-- Texto de soporte -->
                     <!-- Texto de soporte con mayor separación -->
                     <div class="absolute -bottom-8 md:-bottom-12 flex flex-col items-center pointer-events-none">
                         <span class="text-[10px] md:text-xs font-bold tracking-[0.4em] uppercase text-zinc-500 mb-1">Años de</span>
@@ -151,6 +150,81 @@
 
         </div>
 
+    </section>
+
+    <!-- SECCIÓN: PLATAFORMAS (Acordeón Expansivo y Reactivo) -->
+    <section id="plataformas" class="relative w-full h-[85vh] md:h-screen bg-zinc-950 overflow-hidden border-t border-zinc-900/50">
+        
+        <!-- Contenedor del Acordeón -->
+        <div id="platforms-accordion" class="w-full h-full flex flex-col md:flex-row opacity-0 transition-all duration-[1200ms] ease-[cubic-bezier(0.25,1,0.5,1)]">
+            
+            <!-- Panel 1: YouTube Music (IZQUIERDA) -->
+            <article class="platform-panel group relative flex-1 h-full border-b md:border-b-0 md:border-r border-zinc-900 transition-[flex-grow] duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden cursor-pointer bg-[#C3352E]" data-platform="ytmusic" data-url="https://music.youtube.com/playlist?list=PLWi7tUtohZLI42VLS6cn2pSkrcDp6FX_2&si=hPU3Qhbpu1h1QyWG">
+                
+                <!-- Capa Activa: Video portada -->
+                <video id="ytmusic-video" class="platform-video absolute inset-0 w-full h-full object-cover z-0 opacity-0 transition-opacity duration-[800ms] group-[.is-active]:opacity-100 pointer-events-none" loop muted playsinline></video>                
+                
+                <!-- Overlay Oscuro para contraste cuando está activo -->
+                <div class="absolute inset-0 bg-black/60 z-0 opacity-0 transition-opacity duration-[800ms] group-[.is-active]:opacity-100 pointer-events-none"></div>
+
+                <!-- Textos Activos (Esquina Inferior Derecha - Slide Up) -->
+                <div class="absolute bottom-6 right-6 md:bottom-10 md:right-10 pr-14 md:pr-16 flex flex-col items-end justify-end opacity-0 translate-y-10 transition-all duration-[800ms] delay-100 group-[.is-active]:opacity-100 group-[.is-active]:translate-y-0 z-20 pointer-events-none">
+                    <h3 class="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white drop-shadow-lg text-right">YT Music</h3>
+                    <p class="text-zinc-300 max-w-[200px] md:max-w-xs mt-1 md:mt-2 text-[10px] md:text-sm text-right drop-shadow-md">Escucha las mejores playlists de música cubana aquí.</p>
+                </div>
+
+                <!-- Capa Logo -->
+                <div class="absolute right-1/2 bottom-1/2 translate-x-1/2 translate-y-1/2 transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] origin-bottom-right group-[.is-active]:right-6 group-[.is-active]:bottom-6 md:group-[.is-active]:right-10 md:group-[.is-active]:bottom-10 group-[.is-active]:translate-x-0 group-[.is-active]:translate-y-0 group-[.is-active]:scale-[0.5] z-20 pointer-events-none">
+                    <!-- Icono YT Music Blanco -->
+                    <svg class="w-16 h-16 md:w-24 md:h-24 text-white fill-current drop-shadow-lg" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 19.166c-3.958 0-7.166-3.208-7.166-7.166S8.042 4.834 12 4.834s7.166 3.208 7.166 7.166-3.208 7.166-7.166 7.166zm-2.166-10.5v6.667L15.166 12l-5.332-3.334z"/></svg>
+                </div>
+            </article>
+
+            <!-- Panel 2: YouTube Video (CENTRO) -->
+            <article class="platform-panel group relative flex-1 h-full border-b md:border-b-0 md:border-r border-zinc-900 transition-[flex-grow,background-color] duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden cursor-pointer bg-[#FF0000]" data-platform="youtube" data-url="https://www.youtube.com/@djtimbao">
+                
+                <!-- Capa Base: Video Full-Bleed -->
+                <video id="youtube-video" class="platform-video absolute inset-0 w-full h-full object-cover z-0 opacity-0 transition-opacity duration-[800ms] group-[.is-active]:opacity-100 pointer-events-none" loop muted playsinline></video>
+                
+                <!-- Overlay Oscuro para contraste cuando el video se enciende -->
+                <div class="absolute inset-0 bg-black/60 z-0 opacity-0 transition-opacity duration-[800ms] group-[.is-active]:opacity-100 pointer-events-none"></div>
+
+                <!-- Textos Activos (Esquina Inferior Derecha - Slide Up) -->
+                <div class="absolute bottom-6 right-6 md:bottom-10 md:right-10 pr-14 md:pr-16 flex flex-col items-end justify-end opacity-0 translate-y-10 transition-all duration-[800ms] delay-100 group-[.is-active]:opacity-100 group-[.is-active]:translate-y-0 z-20 pointer-events-none">
+                    <h3 class="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white drop-shadow-lg text-right">YouTube</h3>
+                    <p class="text-zinc-300 max-w-[200px] md:max-w-xs mt-1 md:mt-2 text-[10px] md:text-sm text-right drop-shadow-md">Sets en vivo y el material audiovisual más rico de la timba.</p>
+                </div>
+
+                <!-- Capa Logo -->
+                <div class="absolute right-1/2 bottom-1/2 translate-x-1/2 translate-y-1/2 transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] origin-bottom-right group-[.is-active]:right-6 group-[.is-active]:bottom-6 md:group-[.is-active]:right-10 md:group-[.is-active]:bottom-10 group-[.is-active]:translate-x-0 group-[.is-active]:translate-y-0 group-[.is-active]:scale-[0.5] z-20 pointer-events-none">
+                    <!-- Icono YouTube Blanco -->
+                    <svg class="w-16 h-16 md:w-24 md:h-24 text-white fill-current drop-shadow-lg" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                </div>
+            </article>
+
+            <!-- Panel 3: Spotify (DERECHA) -->
+            <article class="platform-panel group relative flex-1 h-full transition-[flex-grow,background-color] duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden cursor-pointer bg-[#1DB954]" data-platform="spotify" data-url="https://open.spotify.com/user/e0klagzo99bvsqypf4pmrf0bh?si=91d7fb7d2f8145eb">
+                
+                <!-- Capa Activa: Imagen Portada Full-Bleed -->
+                <video id="spotify-video" class="platform-video absolute inset-0 w-full h-full object-cover z-0 opacity-0 transition-opacity duration-[800ms] group-[.is-active]:opacity-100 pointer-events-none" loop muted playsinline></video>
+                
+                <!-- Overlay Oscuro para contraste cuando está activo -->
+                <div class="absolute inset-0 bg-black/60 z-0 opacity-0 transition-opacity duration-[800ms] group-[.is-active]:opacity-100 pointer-events-none"></div>
+
+                <!-- Textos Activos (Esquina Inferior Derecha - Slide Up) -->
+                <div class="absolute bottom-6 right-6 md:bottom-10 md:right-10 pr-14 md:pr-16 flex flex-col items-end justify-end opacity-0 translate-y-10 transition-all duration-[800ms] delay-100 group-[.is-active]:opacity-100 group-[.is-active]:translate-y-0 z-20 pointer-events-none">
+                    <h3 class="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white drop-shadow-lg text-right">Spotify</h3>
+                    <p class="text-zinc-300 max-w-[200px] md:max-w-xs mt-1 md:mt-2 text-[10px] md:text-sm text-right drop-shadow-md">Escucha la mejor selección musical directo desde el perfil oficial.</p>
+                </div>
+
+                <!-- Capa Logo -->
+                <div class="absolute right-1/2 bottom-1/2 translate-x-1/2 translate-y-1/2 transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] origin-bottom-right group-[.is-active]:right-6 group-[.is-active]:bottom-6 md:group-[.is-active]:right-10 md:group-[.is-active]:bottom-10 group-[.is-active]:translate-x-0 group-[.is-active]:translate-y-0 group-[.is-active]:scale-[0.5] z-20 pointer-events-none">
+                    <!-- Icono Spotify Negro. Cambia a Verde al expandir -->
+                    <svg class="w-16 h-16 md:w-24 md:h-24 text-zinc-950 group-[.is-active]:text-[#1DB954] fill-current drop-shadow-lg transition-colors duration-[800ms]" viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.24 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.6.18-1.2.72-1.38 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.239.54-.959.72-1.56.3z"/></svg>
+                </div>
+            </article>
+
+        </div>
     </section>
 
     <script type="module" src="/js/main.js"></script>
