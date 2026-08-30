@@ -179,7 +179,8 @@ class TimbaoEngine {
                 return `
                 <a href="${item.url}" target="_blank" rel="noopener noreferrer" 
                    class="event-card group block transition-colors duration-300 py-1 px-2 rounded-md hover:bg-zinc-900/40 opacity-0 will-change-transform origin-right"
-                   data-offset="${offset}" data-side="left">
+                   data-offset="${offset}" data-side="left"
+                   data-countryid="${item.countryId}" data-lat="${item.lat}" data-lng="${item.lng}">
                     <div class="text-sm md:text-[15px] font-bold text-zinc-300 group-hover:text-[#e3bb3e] transition-colors text-center lg:text-right">
                         <span class="text-zinc-500 font-medium">${item.years} |</span> ${item.event} <span class="text-[#e3bb3e]">:${item.country}</span>
                     </div>
@@ -200,7 +201,8 @@ class TimbaoEngine {
                 return `
                 <a href="${item.url}" target="_blank" rel="noopener noreferrer" 
                    class="event-card group block transition-colors duration-300 py-1 px-2 rounded-md hover:bg-zinc-900/40 opacity-0 will-change-transform origin-left"
-                   data-offset="${offset}" data-side="right">
+                   data-offset="${offset}" data-side="right"
+                   data-countryid="${item.countryId}" data-lat="${item.lat}" data-lng="${item.lng}">
                     <div class="text-sm md:text-[15px] font-bold text-zinc-300 group-hover:text-[#e3bb3e] transition-colors text-center lg:text-left">
                         <span class="text-[#e3bb3e]">${item.country}:</span> ${item.event} <span class="text-zinc-500 font-medium">| ${item.years}</span>
                     </div>
@@ -214,8 +216,26 @@ class TimbaoEngine {
         // Guardar referencias y asignar eventos de hover (separado del renderizado 3D para evitar lag)
         this.eventNodes = document.querySelectorAll('.event-card');
         this.eventNodes.forEach(node => {
-            node.addEventListener('mouseenter', () => node.dataset.hover = 'true');
-            node.addEventListener('mouseleave', () => node.dataset.hover = 'false');
+            node.addEventListener('mouseenter', () => {
+                node.dataset.hover = 'true';
+                
+                if (this.globe) {
+                    const countryId = node.dataset.countryid;
+                    const lat = parseFloat(node.dataset.lat);
+                    const lng = parseFloat(node.dataset.lng);
+                    
+                    if (countryId) this.globe.highlightCountry(countryId);
+                    if (!isNaN(lat) && !isNaN(lng)) this.globe.focusOnLocation(lat, lng);
+                }
+            });
+            
+            node.addEventListener('mouseleave', () => {
+                node.dataset.hover = 'false';
+                
+                if (this.globe) {
+                    this.globe.resetHighlight();
+                }
+            });
         });
     }
 
@@ -227,7 +247,7 @@ class TimbaoEngine {
         const duplicatedGigs = [...UPCOMING_GIGS, ...UPCOMING_GIGS, ...UPCOMING_GIGS, ...UPCOMING_GIGS];
 
         track.innerHTML = duplicatedGigs.map((gig) => `
-            <div class="gig-card group relative shrink-0 w-[70vw] sm:w-[320px] md:w-[380px] h-[450px] md:h-[550px] flex items-center justify-center [perspective:1200px]">
+            <div class="gig-card group relative snap-center shrink-0 w-[70vw] sm:w-[320px] md:w-[380px] h-[450px] md:h-[550px] flex items-center justify-center [perspective:1200px]">
                 <article class="gig-card-inner relative w-full h-full rounded-3xl overflow-hidden transition-colors duration-75 ease-out will-change-transform border border-white/5 bg-zinc-900">
                     <img src="${gig.flyerUrl}" alt="${gig.title}" loading="lazy" class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none" />
                     

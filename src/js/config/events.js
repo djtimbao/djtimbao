@@ -12,6 +12,9 @@ export const EVENTS_DATA = {
             years: "2014 y 2016",
             event: "La City",
             country: "ARGENTINA",
+            countryId: "AR",
+            lat: -34.6037,
+            lng: -58.3816,
             role: "Dj Invitado",
             location: "Buenos Aires - CABA",
             url: "https://www.facebook.com/photo/?fbid=10202389243309060&set=a.1333636217615"
@@ -20,6 +23,9 @@ export const EVENTS_DATA = {
             years: "2016",
             event: "Latino Salsa Club",
             country: "PERÚ",
+            countryId: "PE",
+            lat: -16.4090,
+            lng: -71.5375,
             role: "Dj Invitado",
             location: "Arequipa - Arequipa",
             url: "https://www.facebook.com/photo?fbid=1602202323409704&set=a.478307810974143"
@@ -28,6 +34,9 @@ export const EVENTS_DATA = {
             years: "2016",
             event: "Orixa's Club",
             country: "CHILE",
+            countryId: "CH",
+            lat: -33.4489,
+            lng: -70.6693,
             role: "Dj Invitado",
             location: "Santiago de Chile",
             url: "https://www.facebook.com/photo?fbid=1296479460363394&set=a.560955552742735"
@@ -36,6 +45,9 @@ export const EVENTS_DATA = {
             years: "2016",
             event: "Discoteca Lavoe",
             country: "ECUADOR",
+            countryId: "EC",
+            lat: -0.1807,
+            lng: -78.4678,
             role: "Dj Invitado",
             location: "Pichincha - Quito",
             url: "https://www.facebook.com/photo?fbid=1244478592268956&set=a.557596386402299"
@@ -44,6 +56,9 @@ export const EVENTS_DATA = {
             years: "2016",
             event: "Baila Casino",
             country: "URUGUAY",
+            countryId: "UY",
+            lat: -34.9011,
+            lng: -56.1645,
             role: "Dj Oficial",
             location: "Montevideo",
             url: "https://www.instagram.com/p/C5mGIgnpK_L"
@@ -52,6 +67,9 @@ export const EVENTS_DATA = {
             years: "2023 - 2026",
             event: "Cuban Dance C",
             country: "ARGENTINA",
+            countryId: "AR",
+            lat: -34.6037,
+            lng: -58.3816,
             role: "Dj Oficial",
             location: "Buenos Aires",
             url: "https://www.instagram.com/p/DLf9impObxy"
@@ -60,6 +78,9 @@ export const EVENTS_DATA = {
     rightColumn: [
         {
             country: "VENEZUELA",
+            countryId: "VE",
+            lat: 10.4806,
+            lng: -66.9036,
             event: "Festival Salsa Casino",
             years: "2005 - 2010",
             role: "Dj Oficial",
@@ -68,6 +89,9 @@ export const EVENTS_DATA = {
         },
         {
             country: "VENEZUELA",
+            countryId: "VE",
+            lat: 10.4806,
+            lng: -66.9036,
             event: "Venezuela es Latina",
             years: "2007 - 2016",
             role: "Dj Oficial",
@@ -76,6 +100,9 @@ export const EVENTS_DATA = {
         },
         {
             country: "VENEZUELA",
+            countryId: "VE",
+            lat: 10.6427,
+            lng: -71.6125,
             event: "Congas Congreso",
             years: "2011 - 2014",
             role: "Dj Oficial",
@@ -84,6 +111,9 @@ export const EVENTS_DATA = {
         },
         {
             country: "ESPAÑA",
+            countryId: "ES",
+            lat: 36.5964,
+            lng: -4.5280,
             event: "Festival Rumba Latina",
             years: "2012",
             role: "Dj Invitado 2da edicion",
@@ -92,6 +122,9 @@ export const EVENTS_DATA = {
         },
         {
             country: "USA",
+            countryId: "US",
+            lat: 37.7749,
+            lng: -122.4194,
             event: "Salsa Rueda Festival",
             years: "2013",
             role: "Dj Invitado 5ta edicion",
@@ -100,6 +133,9 @@ export const EVENTS_DATA = {
         },
         {
             country: "CUBA",
+            countryId: "CU",
+            lat: 23.1136,
+            lng: -82.3666,
             event: "Fiesta del Tambor",
             years: "2016",
             role: "Dj Oficial 14ta edicion",
@@ -108,6 +144,9 @@ export const EVENTS_DATA = {
         },
         {
             country: "COLOMBIA",
+            countryId: "CO",
+            lat: 4.7110,
+            lng: -74.0721,
             event: "Bogotá Timba Fest",
             years: "2016",
             role: "Dj Invitado 2da edicion",
