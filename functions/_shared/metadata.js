@@ -1,4 +1,4 @@
-// Ruta: functions/lib/metadata.js
+// Ruta: functions/_shared/metadata.js
 // Responsabilidades: 
 // 1. Validar y parsear URLs de YouTube, YT Music y Spotify.
 // 2. Extraer Título y Miniatura usando el estándar público oEmbed (Zero-Cost, No API Keys).

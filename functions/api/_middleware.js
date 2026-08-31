@@ -1,11 +1,13 @@
 // Ruta: functions/api/_middleware.js
 // Responsabilidades:
 // 1. Interceptar todas las peticiones a /api/*.
-// 2. Validar el token JWT de Google (Zero Dependencies).
-// 3. Registrar o actualizar al usuario en la BD (D1).
-// 4. Inyectar los datos del usuario y sus privilegios (isAdmin) en el contexto.
+// 2. Validar el token JWT de Google y verificar el Client ID (aud).
+// 3. Registrar o actualizar al usuario en Cloudflare D1.
+// 4. Inyectar datos del usuario y rol de administración (isAdmin) en context.data.
 
-import { getDB } from '../lib/db.js';
+import { getDB } from '../_shared/db.js';
+
+const FALLBACK_CLIENT_ID = "274539249936-hi50mbgmp0a20ldrp0thfvj96o8ulm93.apps.googleusercontent.com";
 
 export async function onRequest(context) {
     const { request, env, data, next } = context;
@@ -18,7 +20,7 @@ export async function onRequest(context) {
     // 2. Extraer el token de la cabecera Authorization
     const authHeader = request.headers.get('Authorization');
     
-    // Si no hay token, lo dejamos pasar como "Anónimo" (Para el GET de la lista pública)
+    // Si no hay token, continúa como anónimo (para consultas públicas)
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         data.user = null;
         return next(); 
@@ -27,7 +29,7 @@ export async function onRequest(context) {
     const token = authHeader.split(' ')[1];
 
     try {
-        // 3. Validar el JWT directamente con Google (Evitamos instalar librerías criptográficas)
+        // 3. Validar el JWT directamente con el endpoint de Google
         const googleRes = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`);
         if (!googleRes.ok) {
             throw new Error('Token inválido o expirado.');
@@ -35,7 +37,13 @@ export async function onRequest(context) {
         
         const payload = await googleRes.json();
 
-        // 4. Trazabilidad: Sincronizar el usuario en Cloudflare D1
+        // 4. BARRERA DE SEGURIDAD AUD (Client ID): Evita uso de tokens de otras apps de Google
+        const expectedClientId = env.GOOGLE_CLIENT_ID || FALLBACK_CLIENT_ID;
+        if (payload.aud !== expectedClientId) {
+            throw new Error('Token no emitido para esta aplicación.');
+        }
+
+        // 5. Trazabilidad: Sincronizar el usuario en Cloudflare D1
         const db = getDB(env);
         await db.prepare(`
             INSERT INTO usuarios (google_id, email, nombre, foto) 
@@ -45,11 +53,11 @@ export async function onRequest(context) {
                 foto = excluded.foto
         `).bind(payload.sub, payload.email, payload.name, payload.picture).run();
 
-        // 5. Asignación de Roles: Verificamos si es DJ/Admin
+        // 6. Asignación de Roles: Verificamos si es DJ/Admin
         const adminEmails = (env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase());
         const isAdmin = adminEmails.includes(payload.email.toLowerCase());
 
-        // 6. Inyectamos la sesión en el contexto de la petición para que los endpoints la usen
+        // 7. Inyectamos la sesión en el contexto de la petición
         data.user = {
             google_id: payload.sub,
             email: payload.email,
@@ -62,7 +70,10 @@ export async function onRequest(context) {
         return next();
 
     } catch (error) {
-        return new Response(JSON.stringify({ success: false, error: 'Autenticación fallida. Vuelve a iniciar sesión.' }), {
+        return new Response(JSON.stringify({ 
+            success: false, 
+            error: error.message || 'Autenticación fallida. Vuelve a iniciar sesión.' 
+        }), {
             status: 401,
             headers: { 'Content-Type': 'application/json' }
         });

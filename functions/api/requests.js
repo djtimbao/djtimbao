@@ -3,8 +3,8 @@
 // 1. GET: Devolver la cola de reproducción y el historial (ocultando datos sensibles al público).
 // 2. POST: Recibir nuevas solicitudes, validar duplicados e insertar en Cloudflare D1.
 
-import { getDB } from '../lib/db.js';
-import { extractMetadata } from '../lib/metadata.js';
+import { getDB } from '../_shared/db.js';
+import { extractMetadata } from '../_shared/metadata.js';
 
 // ============================================================================
 // [GET] /api/requests - Obtener la lista de canciones

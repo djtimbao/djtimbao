@@ -1,4 +1,4 @@
-// Ruta: functions/lib/db.js
+// Ruta: functions/_shared/db.js
 // Qué es: Helper centralizado para la conexión a la base de datos D1 de Cloudflare.
 // Responsabilidades:
 // 1. Extraer la instancia de la base de datos D1 del contexto de ejecución de Pages Functions.
