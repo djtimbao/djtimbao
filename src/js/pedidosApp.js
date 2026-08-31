@@ -101,11 +101,6 @@ class PedidosApp {
 
     async submitSong(url) {
         try {
-            // 📡 SONDA 1: Salida de la petición
-            console.log("📡 [FETCH POST] Iniciando envío a /api/requests...");
-            console.log("   ↳ URL enviada:", url);
-            console.log("   ↳ Token presente:", !!this.token);
-
             const response = await fetch('/api/requests', {
                 method: 'POST',
                 headers: {
@@ -114,12 +109,8 @@ class PedidosApp {
                 },
                 body: JSON.stringify({ url: url })
             });
-
-            // 📡 SONDA 2: Recepción cruda
-            console.log(`📥 [FETCH POST] Respuesta recibida. Status: ${response.status} ${response.statusText}`);
             
             const contentType = response.headers.get("content-type");
-            console.log("   ↳ Content-Type recibido:", contentType);
 
             // FAIL-SAFE MODIFICADO: Capturar el error HTML de Cloudflare
             if (!contentType || !contentType.includes("application/json")) {
@@ -130,8 +121,6 @@ class PedidosApp {
             }
 
             const data = await response.json();
-            console.log("📦 [FETCH POST] Payload JSON parseado con éxito:", data);
-
             if (response.ok && data.success) {
                 this.showMessage('¡Canción agregada a la cola!', 'success');
                 this.urlInput.value = '';
@@ -140,7 +129,6 @@ class PedidosApp {
                 this.showMessage(data.error || 'Ocurrió un error al enviar el tema.', 'error');
             }
         } catch (error) {
-            // 📡 SONDA 3: Captura de la excepción
             console.error('🚨 [FRONTEND CATCH] El código frontend falló por:', error);
             this.showMessage('Error de comunicación con el servidor. Intenta de nuevo.', 'error');
         } finally {

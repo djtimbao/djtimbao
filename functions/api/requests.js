@@ -58,7 +58,10 @@ export async function onRequestPost(context) {
         // BARRERA: Solo usuarios logueados pueden pedir canciones
         if (!user) {
             return new Response(JSON.stringify({ success: false, error: 'Debes iniciar sesión con Google para pedir un tema.' }), {
-                status: 401
+                status: 401,
+                headers: { 
+                    'Content-Type': 'application/json' 
+                }
             });
         }
 
@@ -75,7 +78,10 @@ export async function onRequestPost(context) {
                 ? '¡Alguien más ya pidió este temazo! Está en la cola.'
                 : 'Esta canción ya sonó en la fiesta. ¡Pide otra!';
             return new Response(JSON.stringify({ success: false, error: mensaje }), {
-                status: 409
+                status: 409,
+                headers: { 
+                    'Content-Type': 'application/json' 
+                }
             });
         }
 
@@ -100,7 +106,10 @@ export async function onRequestPost(context) {
 
     } catch (error) {
         return new Response(JSON.stringify({ success: false, error: error.message }), {
-            status: 500
+            status: 500,
+            headers: { 
+                    'Content-Type': 'application/json' 
+            }
         });
     }
 }
