@@ -11,7 +11,7 @@ function generarHuella(titulo, artista) {
     const sinParentesis = raw.replace(/\[.*?\]|\(.*?\)/g, '');
     
     // 2. Eliminar basura comercial y sufijos automáticos de YouTube
-    const sinBasura = sinParentesis.replace(/\b(official video|video oficial|remix|feat\.?|ft\.?|lyric|topic|vevo)\b/g, '');
+    const sinBasura = sinParentesis.replace(/\b(official video|video oficial|oficial|official|remix|feat\.?|ft\.?|lyric|topic|vevo)\b/g, '');
     
     // 3. Quitar tildes/acentos y dejar estrictamente caracteres alfanuméricos pegados
     const huella = sinBasura
@@ -61,8 +61,7 @@ export async function extractMetadata(url) {
         titulo = data.title;
         let rawArtist = data.author_name || 'Desconocido';
         artista = rawArtist.replace(/\s*-\s*Topic\b/gi, '')
-                           .replace(/\bTopic\b/gi, '')
-                           .replace(/\bVEVO\b/gi, '')
+                           .replace(/\b(oficial|official|topic|vevo)\b/gi, '')
                            .trim();
 
         miniatura = data.thumbnail_url || null;
