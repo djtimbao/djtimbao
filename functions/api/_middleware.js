@@ -30,8 +30,6 @@ export async function onRequest(context) {
 
     try {
         // 3. Validar el JWT directamente con el endpoint de Google
-        console.log("📡 [MIDDLEWARE] Token recibido, consultando a Google OAuth...");
-
         const googleRes = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`);
         if (!googleRes.ok) {
             const errText = await googleRes.text();
@@ -40,20 +38,15 @@ export async function onRequest(context) {
         }
         
         const payload = await googleRes.json();
-        console.log(`✅ [MIDDLEWARE] Token válido emitido para: ${payload.email}`);
 
         // 4. BARRERA DE SEGURIDAD AUD (Client ID): Evita uso de tokens de otras apps de Google
         const expectedClientId = env.GOOGLE_CLIENT_ID || FALLBACK_CLIENT_ID;
-        console.log("🔍 [MIDDLEWARE] Evaluando seguridad de la Audiencia (aud)...");
-        console.log("   ↳ Variable de Entorno (Esperada):", expectedClientId);
-        console.log("   ↳ Payload de Google (Recibida):", payload.aud);
 
         if (payload.aud !== expectedClientId) {
             throw new Error(`Mismatch de Client ID. Esperado: ${expectedClientId}, Recibido: ${payload.aud}`);
         }
 
         // 5. Trazabilidad: Sincronizar el usuario en Cloudflare D1
-        console.log("💾 [MIDDLEWARE] Conectando a Cloudflare D1 para sincronizar usuario...");
         const db = getDB(env);
         
         await db.prepare(`
@@ -64,8 +57,6 @@ export async function onRequest(context) {
                 foto = excluded.foto
         `).bind(payload.sub, payload.email, payload.name, payload.picture).run();
         
-        console.log("✅ [MIDDLEWARE] Usuario sincronizado en BD exitosamente.");
-
         // 6. Asignación de Roles: Verificamos si es DJ/Admin
         const adminEmails = (env.ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase());
         const isAdmin = adminEmails.includes(payload.email.toLowerCase());
