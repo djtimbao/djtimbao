@@ -59,8 +59,12 @@ export async function extractMetadata(url) {
 
         const data = await response.json();
         titulo = data.title;
-        // En YouTube author_name es el canal, en Spotify es el artista
-        artista = data.author_name || 'Desconocido'; 
+        let rawArtist = data.author_name || 'Desconocido';
+        artista = rawArtist.replace(/\s*-\s*Topic\b/gi, '')
+                           .replace(/\bTopic\b/gi, '')
+                           .replace(/\bVEVO\b/gi, '')
+                           .trim();
+
         miniatura = data.thumbnail_url || null;
 
     } else if (cleanUrl.includes('spotify.com')) {
