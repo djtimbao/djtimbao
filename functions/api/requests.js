@@ -92,7 +92,10 @@ export async function onRequestPost(context) {
         ).run();
 
         return new Response(JSON.stringify({ success: true, message: '¡Canción agregada a la cola!' }), {
-            status: 201
+            status: 201,
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
 
     } catch (error) {

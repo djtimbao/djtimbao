@@ -162,6 +162,23 @@ class PedidosApp {
             const url = this.urlInput.value.trim();
             if (!url) return;
 
+            // --- 🛡️ INICIO VALIDACIÓN ANTI-PLAYLISTS ---
+            const urlLower = url.toLowerCase();
+            const isSpotify = urlLower.includes('spotify.com');
+            
+            // Si es Spotify, OBLIGAMOS a que sea un "track". Rechazamos "album" o "playlist"
+            if (isSpotify && !urlLower.includes('/track/')) {
+                this.showMessage('Por favor, envía el enlace de una sola canción, no de álbumes ni playlists.', 'warning');
+                return;
+            }
+
+            // Si es YouTube, BLOQUEAMOS el parámetro "list=" o la ruta "/playlist"
+            if (!isSpotify && (urlLower.includes('list=') || urlLower.includes('/playlist'))) {
+                this.showMessage('Por favor, envía el enlace de una sola canción, no de álbumes ni playlists.', 'warning');
+                return;
+            }
+            // --- 🛡️ FIN VALIDACIÓN ANTI-PLAYLISTS ---
+
             this.setLoadingState(true);
             this.submitSong(url);
         });

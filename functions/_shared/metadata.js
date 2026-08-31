@@ -5,6 +5,19 @@
 
 export async function extractMetadata(url) {
     const cleanUrl = url.trim();
+    const urlLower = cleanUrl.toLowerCase();
+    
+    // --- 🛡️ VALIDACIÓN BACKEND ANTI-PLAYLISTS ---
+    const isSpotify = urlLower.includes('spotify.com');
+    
+    if (isSpotify && !urlLower.includes('/track/')) {
+         throw new Error('El enlace de Spotify debe ser de una canción individual (/track/), no playlists.');
+    }
+    
+    if (!isSpotify && (urlLower.includes('list=') || urlLower.includes('/playlist'))) {
+         throw new Error('El enlace de YouTube contiene una lista de reproducción. Envía el tema individual.');
+    }
+    
     let platform = 'unknown';
     let oembedUrl = '';
 
