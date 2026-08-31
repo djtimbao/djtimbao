@@ -79,11 +79,16 @@ class PedidosApp {
     // ==========================================
     async fetchQueue() {
         try {
-            // Hacemos GET. Si el usuario está logueado, mandamos el token (para ver nombres si es Admin)
             const headers = { 'Content-Type': 'application/json' };
             if (this.token) headers['Authorization'] = `Bearer ${this.token}`;
 
             const response = await fetch('/api/requests', { headers });
+            
+            // 🛡️ BARRERA DE EXPIRACIÓN: Intercepción temprana del token caducado
+            if (response.status === 401) {
+                this.logout();
+                return; // Abortamos la ejecución instantáneamente
+            }
             
             // FAIL-SAFE: Proteger contra respuestas HTML (Errores 500/502 de Cloudflare)
             const contentType = response.headers.get("content-type");
@@ -104,6 +109,8 @@ class PedidosApp {
 
     async submitSong(url) {
         try {
+            this.setLoadingState(true);
+            
             const response = await fetch('/api/requests', {
                 method: 'POST',
                 headers: {
@@ -112,10 +119,14 @@ class PedidosApp {
                 },
                 body: JSON.stringify({ url: url })
             });
-            
-            const contentType = response.headers.get("content-type");
 
-            // FAIL-SAFE MODIFICADO: Capturar el error HTML de Cloudflare
+            // 🛡️ BARRERA DE EXPIRACIÓN: Si el token murió, limpiamos y expulsamos
+            if (response.status === 401) {
+                this.logout();
+                return; // Cortamos la ejecución aquí
+            }
+
+            const contentType = response.headers.get("content-type");
             if (!contentType || !contentType.includes("application/json")) {
                 const rawErrorText = await response.text();
                 console.error("🔥 [CRÍTICO] El servidor colapsó y no devolvió JSON. Respuesta cruda del servidor:");
@@ -124,6 +135,7 @@ class PedidosApp {
             }
 
             const data = await response.json();
+
             if (response.ok && data.success) {
                 this.showMessage('¡Canción agregada a la cola!', 'success');
                 this.urlInput.value = '';
@@ -132,7 +144,7 @@ class PedidosApp {
                 this.showMessage(data.error || 'Ocurrió un error al enviar el tema.', 'error');
             }
         } catch (error) {
-            console.error('🚨 [FRONTEND CATCH] El código frontend falló por:', error);
+            console.error('Error Frontend:', error);
             this.showMessage('Error de comunicación con el servidor. Intenta de nuevo.', 'error');
         } finally {
             this.setLoadingState(false);
