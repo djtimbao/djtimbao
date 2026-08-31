@@ -13,6 +13,18 @@
     <!-- CSS Compilado de Tailwind -->
     <link href="/css/output.css" rel="stylesheet">
     
+    <!-- Proxy para evitar la condición de carrera de GSI -->
+    <script>
+        window.handleGoogleLogin = function(response) {
+            // Guardamos la respuesta temporalmente por si la app JS aún no carga
+            window.pendingGoogleResponse = response;
+            // Si la app ya definió su propio manejador interno, lo llamamos
+            if (typeof window.appHandleGoogleLogin === 'function') {
+                window.appHandleGoogleLogin(response);
+            }
+        };
+    </script>
+
     <!-- Script Oficial de Google Identity Services -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
