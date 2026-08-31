@@ -14,7 +14,9 @@ CREATE TABLE IF NOT EXISTS solicitudes (
     plataforma TEXT CHECK(plataforma IN ('youtube', 'spotify', 'ytmusic')) NOT NULL,
     url_original TEXT NOT NULL,
     titulo TEXT NOT NULL,
+    artista TEXT DEFAULT 'Desconocido',
     miniatura TEXT,
+    huella_unica TEXT,
     estado TEXT CHECK(estado IN ('pendiente', 'reproducida')) DEFAULT 'pendiente', -- 'pendiente', 'reproducida', 'en_reproduccion'
     orden INTEGER DEFAULT 0,
     fecha_solicitud DATETIME DEFAULT CURRENT_TIMESTAMP,

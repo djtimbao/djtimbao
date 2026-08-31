@@ -16,7 +16,7 @@ export async function onRequestGet(context) {
 
         // Extraemos las solicitudes ordenadas. 
         const { results } = await db.prepare(`
-            SELECT s.id, s.plataforma, s.url_original, s.titulo, s.miniatura, s.estado, 
+            SELECT s.id, s.plataforma, s.url_original, s.titulo, s.artista, s.miniatura, s.estado, 
                    u.nombre as solicitante_nombre, u.foto as solicitante_foto
             FROM solicitudes s
             LEFT JOIN usuarios u ON s.usuario_id = u.google_id
@@ -68,15 +68,16 @@ export async function onRequestPost(context) {
         // 1. Extraemos título y miniatura sin usar API Keys
         const metadatos = await extractMetadata(url);
 
-        // 2. Lógica Anti-Duplicados: Verificamos si la URL ya existe en la BD
+        // 🛡️ MOTOR ANTI-DUPLICADOS: Busca por Huella Digital en lugar de URL
         const existingRequest = await db.prepare(
-            `SELECT estado FROM solicitudes WHERE url_original = ?`
-        ).bind(metadatos.url_original).first();
+            `SELECT estado FROM solicitudes WHERE huella_unica = ?`
+        ).bind(metadatos.huella_unica).first();
 
         if (existingRequest) {
             const mensaje = existingRequest.estado === 'pendiente' 
-                ? '¡Alguien más ya pidió este temazo! Está en la cola.'
-                : 'Esta canción ya sonó en la fiesta. ¡Pide otra!';
+                ? `¡Alguien más ya pidió "${metadatos.titulo}"! Está en la cola.`
+                : `"${metadatos.titulo}" ya sonó en la fiesta. ¡Pide otra!`;
+            
             return new Response(JSON.stringify({ success: false, error: mensaje }), {
                 status: 409,
                 headers: { 
@@ -87,14 +88,16 @@ export async function onRequestPost(context) {
 
         // 3. Inserción en Cloudflare D1
         await db.prepare(`
-            INSERT INTO solicitudes (usuario_id, plataforma, url_original, titulo, miniatura)
-            VALUES (?, ?, ?, ?, ?)
+            INSERT INTO solicitudes (usuario_id, plataforma, url_original, titulo, artista, miniatura, huella_unica)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         `).bind(
-            user.google_id,
-            metadatos.plataforma,
-            metadatos.url_original,
-            metadatos.titulo,
-            metadatos.miniatura
+            user.google_id, 
+            metadatos.plataforma, 
+            metadatos.url_original, 
+            metadatos.titulo, 
+            metadatos.artista,
+            metadatos.miniatura,
+            metadatos.huella_unica
         ).run();
 
         return new Response(JSON.stringify({ success: true, message: '¡Canción agregada a la cola!' }), {

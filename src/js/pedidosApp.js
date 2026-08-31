@@ -208,16 +208,17 @@ class PedidosApp {
     }
 
     renderSong(song) {
-        // Decide qué plantilla usar basado en el estado
         const isPlayed = song.estado === 'reproducida';
         const template = isPlayed ? this.tplPlayed : this.tplPending;
         const clone = template.content.cloneNode(true);
 
-        // Inyectar datos
         clone.querySelector('.tpl-title').textContent = song.titulo;
         
+        // 🚀 NUEVA INYECCIÓN DEL ARTISTA
+        const artistNode = clone.querySelector('.tpl-artist');
+        if (artistNode) artistNode.textContent = song.artista || 'Artista Desconocido';
+        
         const img = clone.querySelector('.tpl-img');
-        // Usamos una miniatura genérica si falla la extracción
         if (img) img.src = song.miniatura || 'https://via.placeholder.com/150/09090b/e3bb3e?text=Audio';
         
         if (!isPlayed) {
