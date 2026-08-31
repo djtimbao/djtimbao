@@ -9,6 +9,7 @@
 
 class PedidosApp {
     constructor() {
+        // 1. Leer la memoria del navegador al instanciar la clase
         this.token = sessionStorage.getItem('djtimbao_jwt') || null;
         
         // Elementos del DOM
@@ -30,25 +31,16 @@ class PedidosApp {
     }
 
     init() {
-        // Definimos el manejador interno que el proxy HTML va a llamar
         window.appHandleGoogleLogin = this.handleAuthResponse.bind(this);
+        this.bindEvents();
         
-        // Si Google respondió antes de que este JS cargara, procesamos la respuesta pendiente
-        if (window.pendingGoogleResponse) {
-            this.handleAuthResponse(window.pendingGoogleResponse);
-            window.pendingGoogleResponse = null;
-        }
-
-    this.bindEvents();
-        
-        // Si ya tenemos token en storage, saltamos el login
+        // 2. Restaurar la interfaz automáticamente si ya existe un token en memoria
         if (this.token) {
             this.authSection.classList.add('hidden');
             this.appSection.classList.remove('hidden');
             this.appSection.classList.add('flex');
         }
-
-        // Cargamos la lista pública apenas se abre la página (incluso sin login)
+        
         this.fetchQueue(); 
     }
 
@@ -58,17 +50,28 @@ class PedidosApp {
     handleAuthResponse(response) {
         if (response.credential) {
             this.token = response.credential;
-            sessionStorage.setItem('djtimbao_jwt', this.token); // Persistencia temporal
             
-            // Transición de UI fluida
+            // 3. Escribir el token en la memoria de la pestaña actual
+            sessionStorage.setItem('djtimbao_jwt', this.token);
+            
             this.authSection.classList.add('hidden');
             this.appSection.classList.remove('hidden');
             this.appSection.classList.add('flex');
             this.showMessage('Sesión iniciada. Pide tu tema.', 'success');
-
-            // Refrescar la cola ahora que tenemos credenciales
+            
+            // Refrescar la lista de canciones ahora que estamos autenticados
             this.fetchQueue();
         }
+    }
+
+    // 4. Agregar método de limpieza (Llamar a este método si fetch devuelve 401)
+    logout() {
+        this.token = null;
+        sessionStorage.removeItem('djtimbao_jwt');
+        this.appSection.classList.add('hidden');
+        this.appSection.classList.remove('flex');
+        this.authSection.classList.remove('hidden');
+        this.showMessage('Tu sesión expiró. Vuelve a iniciar sesión.', 'error');
     }
 
     // ==========================================

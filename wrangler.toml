@@ -20,6 +20,7 @@ ENVIRONMENT = "production"
 R2_PUBLIC_URL = "https://assets.djtimbao.com"
 BASE_URL = "https://www.djtimbao.com"
 ADMIN_EMAILS = "peinadoso@gmail.com,djtimbao@gmail.com"
+GOOGLE_CLIENT_ID = "274539249936-hi50mbgmp0a20ldrp0thfvj96o8ulm93.apps.googleusercontent.com"
 
 # ============================================================================
 # ENTORNO PREVIEW (Despliegues en ramas de prueba / test / dev local)
@@ -39,3 +40,4 @@ ENVIRONMENT = "staging"
 R2_PUBLIC_URL = "https://assets-test.djtimbao.com"
 BASE_URL = "https://test.djtimbao.pages.dev"
 ADMIN_EMAILS = "peinadoso@gmail.com,djtimbao@gmail.com"
+GOOGLE_CLIENT_ID = "274539249936-hi50mbgmp0a20ldrp0thfvj96o8ulm93.apps.googleusercontent.com"
