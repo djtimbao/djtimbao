@@ -1,0 +1,41 @@
+name = "djtimbao"
+compatibility_date = "2024-02-27"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "src"
+
+# ============================================================================
+# ENTORNO DE PRODUCCIÓN (Despliegues en la rama main)
+# ============================================================================
+[[env.production.d1_databases]]
+binding = "DB_MASTER"
+database_name = "djtimbao-prod"
+database_id = "af252d97-2b71-43bc-ba97-6158ea5cc629"
+
+[[env.production.r2_buckets]]
+binding = "BUCKET_ASSETS"
+bucket_name = "djtimbao-assets" # Reemplaza con el nombre interno exacto del bucket en el panel de Cloudflare
+
+[env.production.vars]
+ENVIRONMENT = "production"
+R2_PUBLIC_URL = "https://assets.djtimbao.com"
+BASE_URL = "https://www.djtimbao.com"
+ADMIN_EMAILS = "peinadoso@gmail.com,djtimbao@gmail.com"
+
+# ============================================================================
+# ENTORNO PREVIEW (Despliegues en ramas de prueba / test / dev local)
+# ============================================================================
+[[env.preview.d1_databases]]
+binding = "DB_MASTER"
+database_name = "djtimbao-dev"
+database_id = "c30c4113-cf23-496a-947b-e7ce567b01dd"
+preview_database_id = "DB"
+
+[[env.preview.r2_buckets]]
+binding = "BUCKET_ASSETS"
+bucket_name = "djtimbao-assets-test" # Reemplaza con el nombre interno exacto del bucket de test
+
+[env.preview.vars]
+ENVIRONMENT = "staging"
+R2_PUBLIC_URL = "https://assets-test.djtimbao.com"
+BASE_URL = "https://test.djtimbao.pages.dev"
+ADMIN_EMAILS = "peinadoso@gmail.com,djtimbao@gmail.com"

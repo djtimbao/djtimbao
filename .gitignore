@@ -22,3 +22,6 @@ contexto_djtimbao.md
 Thumbs.db
 .vscode/
 .idea/
+
+# Archivos de variables de entorno
+.dev.vars

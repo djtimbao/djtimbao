@@ -47,10 +47,10 @@ export function getBucketUrl() {
     const currentEnv = getCurrentEnvironment();
 
     if (currentEnv === ENV.PROD) {
-        // Bucket de producción
-        return requireConfig('R2_PROD_BUCKET', 'https://assets.djtimbao.com');
+        // Bucket de producción (Nomenclatura alineada con wrangler.toml)
+        return requireConfig('R2_PUBLIC_URL', 'https://assets.djtimbao.com');
     }
     
-    // Entorno de desarrollo local y rama test
-    return requireConfig('R2_TEST_BUCKET', 'https://assets-test.djtimbao.com');
+    // Entorno de desarrollo local y rama test (Nomenclatura alineada con wrangler.toml)
+    return requireConfig('R2_PUBLIC_URL', 'https://assets-test.djtimbao.com');
 }
