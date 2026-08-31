@@ -10,8 +10,8 @@ function generarHuella(titulo, artista) {
     // 1. Eliminar todo lo que esté entre paréntesis o corchetes (ej: "(Official Video)")
     const sinParentesis = raw.replace(/\[.*?\]|\(.*?\)/g, '');
     
-    // 2. Eliminar basura comercial y sufijos automáticos de YouTube ("- topic", "vevo")
-    const sinBasura = sinParentesis.replace(/official video|video oficial|feat\.?|ft\.?|lyric|- topic|vevo/g, '');
+    // 2. Eliminar basura comercial y sufijos automáticos de YouTube
+    const sinBasura = sinParentesis.replace(/\b(official video|video oficial|remix|feat\.?|ft\.?|lyric|topic|vevo)\b/g, '');
     
     // 3. Quitar tildes/acentos y dejar estrictamente caracteres alfanuméricos pegados
     const huella = sinBasura
