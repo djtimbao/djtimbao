@@ -113,33 +113,28 @@ class TimbaoEngine {
 
         if (!platformsSec || !accordion || panels.length === 0) return;
 
-        // 1. Intersección para la entrada (Animación de puertas de ascensor en CSS)
-        const observer = new IntersectionObserver((entries, observerInstance) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    accordion.classList.remove('opacity-0');
-                    accordion.classList.add('animate-elevator');
-                    observerInstance.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.2 });
-
-        observer.observe(platformsSec);
-
         // 2. Motor dinámico de expansión por Flex-Grow (Hover/Tap)
         panels.forEach(panel => {
             const activatePanel = () => {
-                // Restaurar paneles y pausar videos ocultos
+                // Restaurar paneles y pausar videos ocultos, silenciando el error del DOM (AbortError)
                 panels.forEach(p => {
                     p.classList.remove('is-active', 'flex-[5]');
                     const v = p.querySelector('.platform-video');
-                    if (v) v.pause();
+                    if (v && !v.paused) {
+                        const pausePromise = v.pause();
+                        if (pausePromise !== undefined) pausePromise.catch(() => {});
+                    }
                 });
                 
                 // Activar panel actual y reproducir su video
                 panel.classList.add('is-active', 'flex-[5]');
                 const activeVideo = panel.querySelector('.platform-video');
-                if (activeVideo) activeVideo.play();
+                if (activeVideo) {
+                    const playPromise = activeVideo.play();
+                    if (playPromise !== undefined) {
+                        playPromise.catch(() => { /* Ignoramos silenciosamente el AbortError si el usuario mueve rápido el cursor */ });
+                    }
+                }
             };
 
             panel.addEventListener('mouseenter', activatePanel);
@@ -188,7 +183,7 @@ class TimbaoEngine {
                         ${item.role} | ${item.location}
                     </div>
                 </a>
-            `}).join('');
+                `}).join('');
         }
 
         // COLUMNA DERECHA (ARGENTINA, CHILE, etc.)
@@ -210,7 +205,7 @@ class TimbaoEngine {
                         ${item.role} | ${item.location}
                     </div>
                 </a>
-            `}).join('');
+                `}).join('');
         }
 
         // Guardar referencias y asignar eventos de hover (separado del renderizado 3D para evitar lag)
@@ -385,24 +380,34 @@ class TimbaoEngine {
             this.hero.render(this.cursor.x, this.cursor.y);
         }
 
-        // --- 2. LÓGICA MAGNÉTICA Y ONDA DOPPLER DE EVENTOS ---
-        const eventsSec = document.getElementById('events');
-        if (eventsSec) {
-            const rect = eventsSec.getBoundingClientRect();
+        // --- 2. LÓGICA DE TRACK HORIZONTAL (Efecto Serpiente) Y ONDA DOPPLER ---
+        const trackSec = document.getElementById('horizontal-scroll-track');
+        if (trackSec) {
+            const rect = trackSec.getBoundingClientRect();
             const windowHeight = window.innerHeight;
-            const sectionCenter = rect.top + rect.height / 2;
-            const viewCenter = windowHeight / 2;
-
-            // Progreso de visibilidad (0 = Fuera de pantalla, 1 = Centro exacto)
-            const distance = Math.abs(sectionCenter - viewCenter);
-            let rawProgress = 1 - (distance / (windowHeight * 0.75)); 
-            rawProgress = Math.max(0, Math.min(1, rawProgress));
+            
+            // Calculamos el scroll total disponible (400vh totales - 100vh cámara = 300vh scrolleables)
+            const maxScroll = rect.height - windowHeight;
+            
+            // Progreso general recalculado para 3 fases: 0.0 al 3.0
+            let rawProgress = 0;
+            if (rect.top <= 0) {
+                rawProgress = (-rect.top / (maxScroll / 3));
+            }
+            rawProgress = Math.max(0, Math.min(3, rawProgress));
 
             // Aplicar inercia para evitar tirones (Damping)
             this.scrollProgress += (rawProgress - this.scrollProgress) * 0.08;
 
+            // -----------------------------------------------------------
+            // SEGMENTO 1 (Progreso 0.0 a 1.0): Freno de Salida (Esfera y Textos)
+            // -----------------------------------------------------------
+            // Al usar Math.min(this.scrollProgress, 1), el progreso se bloquea en 1.0 
+            // cuando seguimos bajando, eliminando la animación de salida.
+            const segment1Progress = Math.min(this.scrollProgress, 1);
+
             // FASE 1 (0.0 -> 0.5): Implosión Espacial (Zoom de Globo y Opacidad)
-            const globeProgress = Math.min(this.scrollProgress / 0.5, 1);
+            const globeProgress = Math.min(segment1Progress / 0.5, 1);
             if (this.globe) {
                 this.globe.updateScroll(globeProgress);
             }
@@ -417,14 +422,14 @@ class TimbaoEngine {
             }
 
             // FASE 2 (0.5 -> 1.0): Onda Expansiva de Textos
-            const textProgress = Math.max(0, (this.scrollProgress - 0.5) / 0.5);
+            const textProgress = Math.max(0, (segment1Progress - 0.5) / 0.5);
             const isDesktop = window.innerWidth >= 1024;
             
             // CONFIGURACIÓN DE LA CURVATURA MATEMÁTICA
             const curveSettings = {
                 rotationIntensity: 4, // Grados de inclinación (Ajusta si quieres más o menos rotación)
-                depthIntensity: 14,     // Fuerza de la curva (Hace el paréntesis más profundo)
-                basePush: 35            // Distancia general hacia el centro del globo
+                depthIntensity: 14,   // Fuerza de la curva (Hace el paréntesis más profundo)
+                basePush: 35          // Distancia general hacia el centro del globo
             };
 
             // Animación coreografiada
@@ -460,6 +465,18 @@ class TimbaoEngine {
                         node.style.transform = `translateY(${transY}px) scale(${hoverScale})`;
                     }
                 });
+            }
+
+            // -----------------------------------------------------------
+            // SEGMENTO 2 (Progreso 1.0 a 2.0): Movimiento Horizontal
+            // -----------------------------------------------------------
+            // Se bloquea en 1.0 para que el desplazamiento termine y pase a la Fase 3 de anclaje
+            const segment2Progress = Math.max(0, Math.min(this.scrollProgress - 1, 1));
+            const horizontalStrip = document.getElementById('horizontal-strip');
+            
+            if (horizontalStrip) {
+                // Desplazamiento horizontal. -50% mueve 100vw de la cinta de 200vw.
+                horizontalStrip.style.transform = `translate3d(${-segment2Progress * 50}%, 0, 0)`;
             }
         }
 

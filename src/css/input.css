@@ -114,14 +114,14 @@
    ANIMACIONES PLATAFORMAS (ACORDEÓN EXPANSIVO)
    ========================================= */
 
-/* Animación de entrada: Puertas de ascensor desde el centro */
-.animate-elevator {
-    animation: elevatorDoors 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+/* Animación de entrada: Efecto tren elástico de derecha a izquierda */
+.animate-elastic-train {
+    animation: elasticTrainIn 1.2s cubic-bezier(0.68, -0.6, 0.32, 1.6) forwards;
 }
 
-@keyframes elevatorDoors {
-    0% { clip-path: inset(0 50%); opacity: 0; }
-    100% { clip-path: inset(0 0); opacity: 1; }
+@keyframes elasticTrainIn {
+    0% { transform: translateX(100vw); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
 }
 
 /* =========================================
