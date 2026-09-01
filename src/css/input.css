@@ -134,3 +134,12 @@
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 }
+
+/* Utilidad para ocultar barras de scroll en contenedores internos (Efecto serpiente en móvil) */
+.hide-scrollbar {
+    -ms-overflow-style: none;  /* IE y Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari y Opera */
+}

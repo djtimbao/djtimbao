@@ -429,7 +429,7 @@ class TimbaoEngine {
             const curveSettings = {
                 rotationIntensity: 4, // Grados de inclinación (Ajusta si quieres más o menos rotación)
                 depthIntensity: 14,   // Fuerza de la curva (Hace el paréntesis más profundo)
-                basePush: 35          // Distancia general hacia el centro del globo
+                basePush: 60          // Distancia general hacia el centro del globo
             };
 
             // Animación coreografiada
