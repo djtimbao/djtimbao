@@ -306,9 +306,6 @@
   .order-2 {
     order: 2;
   }
-  .order-3 {
-    order: 3;
-  }
   .container {
     width: 100%;
     @media (width >= 40rem) {
@@ -1192,6 +1189,9 @@
     -webkit-user-select: none;
     user-select: none;
   }
+  .\[-webkit-touch-callout\:none\] {
+    -webkit-touch-callout: none;
+  }
   .\[perspective\:1200px\] {
     perspective: 1200px;
   }
@@ -1566,14 +1566,8 @@
     .lg\:contents {
       display: contents;
     }
-    .lg\:h-\[420px\] {
-      height: 420px;
-    }
     .lg\:h-\[600px\] {
       height: 600px;
-    }
-    .lg\:w-\[420px\] {
-      width: 420px;
     }
     .lg\:w-\[600px\] {
       width: 600px;

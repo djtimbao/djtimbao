@@ -173,9 +173,9 @@ class TimbaoEngine {
                 const offset = i - midLeft;
                 return `
                 <a href="${item.url}" target="_blank" rel="noopener noreferrer" 
-                   class="event-card group block transition-colors duration-300 py-1 px-2 rounded-md hover:bg-zinc-900/40 opacity-0 will-change-transform origin-right"
-                   data-offset="${offset}" data-side="left"
-                   data-countryid="${item.countryId}" data-lat="${item.lat}" data-lng="${item.lng}">
+                    class="event-card group block transition-colors duration-300 py-1 px-2 rounded-md hover:bg-zinc-900/40 opacity-0 will-change-transform origin-right select-none [-webkit-touch-callout:none]"
+                    data-offset="${offset}" data-side="left"
+                    data-countryid="${item.countryId}" data-lat="${item.lat}" data-lng="${item.lng}">
                     <div class="text-sm md:text-[15px] font-bold text-zinc-300 group-hover:text-[#e3bb3e] transition-colors text-center lg:text-right">
                         <span class="text-zinc-500 font-medium">${item.years} |</span> ${item.event} <span class="text-[#e3bb3e]">:${item.country}</span>
                     </div>

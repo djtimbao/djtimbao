@@ -151,10 +151,28 @@ export class GlobeViewer {
     // --- TRIGONOMETRÍA ESFÉRICA ---
     focusOnLocation(lat, lng) {
         this.isFocused = true;
-        // Convertimos Latitud y Longitud a radianes de Euler para el motor Three.js
-        this.targetRotation.x = lat * (Math.PI / 180);
-        // Desplazamiento estándar (-90deg) para ajustar el mapa equirectangular a la cámara frontal
-        this.targetRotation.y = -lng * (Math.PI / 180) - (Math.PI / 2);
+        
+        // 1. CALIBRACIÓN VISUAL DE LATITUD (Eje X - Inclinación vertical)
+        // Compensamos la altura para que el país suba y se acerque al centro del viewport
+        const LAT_OFFSET_DEGREES = -15; // Ajusta este número (ej. -10, -25, o valores positivos) hasta lograr la altura perfecta
+        
+        this.targetRotation.x = (lat + LAT_OFFSET_DEGREES) * (Math.PI / 180);
+        
+        // 2. CALIBRACIÓN VISUAL DE LONGITUD (Eje Y)
+        // Compensamos el desvío natural del lienzo del SVG respecto a la geometría 3D
+        const MAP_OFFSET_DEGREES = -70; // Si necesitas ajuste fino, sube o baja este número
+        
+        const rawTargetY = (-lng + MAP_OFFSET_DEGREES) * (Math.PI / 180);
+        
+        // 3. ALGORITMO DE CAMINO MÁS CORTO (Módulo 2π)
+        // Evita el efecto trompo al buscar la ruta más directa
+        const PI2 = Math.PI * 2;
+        let diff = (rawTargetY - this.rotation.y) % PI2;
+        
+        if (diff > Math.PI) diff -= PI2;
+        if (diff < -Math.PI) diff += PI2;
+        
+        this.targetRotation.y = this.rotation.y + diff;
     }
 
     updateScroll(progress) {
