@@ -70,18 +70,49 @@
         <section id="app-section" class="hidden flex-col gap-8 mt-6">
             
             <!-- Formulario de Pedido -->
-            <form id="request-form" class="flex flex-col gap-3">
-                <label for="song-url" class="text-xs font-bold text-zinc-500 uppercase tracking-wider">Pega el link | YouTube o Spotify</label>
-                <div class="flex gap-2">
-                    <input type="url" id="song-url" required placeholder="https://youtu.be/..." 
-                           class="flex-1 bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#e3bb3e] transition-colors rounded-none appearance-none">
-                    <button type="submit" id="submit-btn" 
-                            class="bg-[#e3bb3e] text-black font-black uppercase text-xs tracking-wider px-6 py-3 rounded-lg active:scale-95 transition-transform flex items-center justify-center min-w-[100px]">
-                        Pedir
+            <div class="flex flex-col gap-5">
+                
+                <!-- Sistema de Pestañas (Tabs) -->
+                <div class="flex p-1 bg-zinc-900 rounded-lg border border-zinc-800 w-full">
+                    <button type="button" id="tab-link" class="flex-1 py-2.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-md bg-zinc-800 text-white shadow-sm transition-all duration-300 pointer-events-none">
+                        Pegar Link
+                    </button>
+                    <button type="button" id="tab-manual" class="flex-1 py-2.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-md text-zinc-500 hover:text-zinc-300 transition-all duration-300">
+                        Escribir Nombre
                     </button>
                 </div>
-                <p id="form-message" class="text-xs hidden mt-1 font-medium"></p>
-            </form>
+
+                <form id="request-form" class="flex flex-col gap-4">
+                    
+                    <!-- Modo 1: Pegar Link (Activo por defecto) -->
+                    <div id="mode-link" class="flex flex-col gap-2">
+                        <label for="song-url" class="text-xs font-bold text-zinc-500 uppercase tracking-wider">Enlace de YouTube, YT Music o Spotify</label>
+                        <input type="url" id="song-url" placeholder="https://youtu.be/..." 
+                               class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#e3bb3e] transition-colors rounded-none appearance-none">
+                    </div>
+
+                    <!-- Modo 2: Escritura Manual (Oculto por defecto) -->
+                    <div id="mode-manual" class="hidden flex-col gap-3">
+                        <div class="flex flex-col gap-2">
+                            <label for="song-title" class="text-xs font-bold text-zinc-500 uppercase tracking-wider">Título de la Canción *</label>
+                            <input type="text" id="song-title" placeholder="Ej: Soy todo" 
+                                   class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#e3bb3e] transition-colors rounded-none appearance-none">
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <label for="song-artist" class="text-xs font-bold text-zinc-500 uppercase tracking-wider">Artista | Opcional</label>
+                            <input type="text" id="song-artist" placeholder="Ej: Los Van Van" 
+                                   class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#e3bb3e] transition-colors rounded-none appearance-none">
+                        </div>
+                    </div>
+
+                    <!-- Botón de Envío Full-Width -->
+                    <button type="submit" id="submit-btn" 
+                            class="bg-[#e3bb3e] text-black font-black uppercase text-xs tracking-wider px-6 py-4 rounded-lg active:scale-95 transition-transform flex items-center justify-center w-full shadow-lg">
+                        Pedir Tema
+                    </button>
+                    <p id="form-message" class="text-xs hidden mt-1 font-medium text-center"></p>
+                </form>
+            </div>
 
             <!-- Lista de Canciones en Cola -->
             <div>

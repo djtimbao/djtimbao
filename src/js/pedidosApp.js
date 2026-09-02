@@ -20,6 +20,15 @@ class PedidosApp {
         this.submitBtn = document.getElementById('submit-btn');
         this.formMessage = document.getElementById('form-message');
         
+        // Elementos del Modo Dual (Tabs)
+        this.tabLink = document.getElementById('tab-link');
+        this.tabManual = document.getElementById('tab-manual');
+        this.modeLink = document.getElementById('mode-link');
+        this.modeManual = document.getElementById('mode-manual');
+        this.titleInput = document.getElementById('song-title');
+        this.artistInput = document.getElementById('song-artist');
+        this.currentMode = 'link'; // Estado inicial
+        
         this.queueList = document.getElementById('queue-list');
         this.historyList = document.getElementById('history-list');
 
@@ -107,7 +116,7 @@ class PedidosApp {
         }
     }
 
-    async submitSong(url) {
+    async submitSong(payload) {
         try {
             this.setLoadingState(true);
             
@@ -117,7 +126,7 @@ class PedidosApp {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${this.token}`
                 },
-                body: JSON.stringify({ url: url })
+                body: JSON.stringify(payload)
             });
 
             // 🛡️ BARRERA DE EXPIRACIÓN: Si el token murió, limpiamos y expulsamos
@@ -138,7 +147,10 @@ class PedidosApp {
 
             if (response.ok && data.success) {
                 this.showMessage('¡Canción agregada a la cola!', 'success');
+                // Limpiar inputs dependiendo del modo
                 this.urlInput.value = '';
+                this.titleInput.value = '';
+                this.artistInput.value = '';
                 this.fetchQueue(); 
             } else {
                 this.showMessage(data.error || 'Ocurrió un error al enviar el tema.', 'error');
@@ -155,6 +167,40 @@ class PedidosApp {
     // 3. EVENTOS DEL FORMULARIO
     // ==========================================
     bindEvents() {
+        // Alternar a modo Link
+        this.tabLink.addEventListener('click', () => {
+            this.currentMode = 'link';
+            this.tabLink.classList.replace('text-zinc-500', 'text-white');
+            this.tabLink.classList.replace('hover:text-zinc-300', 'bg-zinc-800');
+            this.tabLink.classList.add('shadow-sm', 'pointer-events-none');
+            
+            this.tabManual.classList.replace('text-white', 'text-zinc-500');
+            this.tabManual.classList.replace('bg-zinc-800', 'hover:text-zinc-300');
+            this.tabManual.classList.remove('shadow-sm', 'pointer-events-none');
+            
+            this.modeLink.classList.remove('hidden');
+            this.modeLink.classList.add('flex');
+            this.modeManual.classList.add('hidden');
+            this.modeManual.classList.remove('flex');
+        });
+
+        // Alternar a modo Manual
+        this.tabManual.addEventListener('click', () => {
+            this.currentMode = 'manual';
+            this.tabManual.classList.replace('text-zinc-500', 'text-white');
+            this.tabManual.classList.replace('hover:text-zinc-300', 'bg-zinc-800');
+            this.tabManual.classList.add('shadow-sm', 'pointer-events-none');
+            
+            this.tabLink.classList.replace('text-white', 'text-zinc-500');
+            this.tabLink.classList.replace('bg-zinc-800', 'hover:text-zinc-300');
+            this.tabLink.classList.remove('shadow-sm', 'pointer-events-none');
+            
+            this.modeManual.classList.remove('hidden');
+            this.modeManual.classList.add('flex');
+            this.modeLink.classList.add('hidden');
+            this.modeLink.classList.remove('flex');
+        });
+
         this.form.addEventListener('submit', (e) => {
             e.preventDefault();
             if (!this.token) {
@@ -162,28 +208,47 @@ class PedidosApp {
                 return;
             }
 
-            const url = this.urlInput.value.trim();
-            if (!url) return;
+            let payload = {};
 
-            // --- 🛡️ INICIO VALIDACIÓN ANTI-PLAYLISTS ---
-            const urlLower = url.toLowerCase();
-            const isSpotify = urlLower.includes('spotify.com');
-            
-            // Si es Spotify, OBLIGAMOS a que sea un "track". Rechazamos "album" o "playlist"
-            if (isSpotify && !urlLower.includes('/track/')) {
-                this.showMessage('Por favor, envía el enlace de una sola canción, no de álbumes ni playlists.', 'warning');
-                return;
-            }
+            if (this.currentMode === 'link') {
+                const url = this.urlInput.value.trim();
+                if (!url) {
+                    this.showMessage('Por favor, pega un enlace válido.', 'warning');
+                    return;
+                }
 
-            // Si es YouTube, BLOQUEAMOS el parámetro "list=" o la ruta "/playlist"
-            if (!isSpotify && (urlLower.includes('list=') || urlLower.includes('/playlist'))) {
-                this.showMessage('Por favor, envía el enlace de una sola canción, no de álbumes ni playlists.', 'warning');
-                return;
+                // --- 🛡️ INICIO VALIDACIÓN ANTI-PLAYLISTS ---
+                const urlLower = url.toLowerCase();
+                const isSpotify = urlLower.includes('spotify.com');
+                
+                // Si es Spotify, OBLIGAMOS a que sea un "track". Rechazamos "album" o "playlist"
+                if (isSpotify && !urlLower.includes('/track/')) {
+                    this.showMessage('Por favor, envía el enlace de una sola canción, no de álbumes ni playlists.', 'warning');
+                    return;
+                }
+
+                // Si es YouTube, BLOQUEAMOS el parámetro "list=" o la ruta "/playlist"
+                if (!isSpotify && (urlLower.includes('list=') || urlLower.includes('/playlist'))) {
+                    this.showMessage('Por favor, envía el enlace de una sola canción, no de álbumes ni playlists.', 'warning');
+                    return;
+                }
+                // --- 🛡️ FIN VALIDACIÓN ANTI-PLAYLISTS ---
+
+                payload = { url: url };
+            } else {
+                const titulo = this.titleInput.value.trim();
+                const artista = this.artistInput.value.trim();
+                
+                if (!titulo) {
+                    this.showMessage('Por favor, escribe el título de la canción.', 'warning');
+                    return;
+                }
+                
+                payload = { mode: 'manual', titulo: titulo, artista: artista };
             }
-            // --- 🛡️ FIN VALIDACIÓN ANTI-PLAYLISTS ---
 
             this.setLoadingState(true);
-            this.submitSong(url);
+            this.submitSong(payload);
         });
     }
 
@@ -234,7 +299,7 @@ class PedidosApp {
         if (artistNode) artistNode.textContent = song.artista || 'Artista Desconocido';
         
         const img = clone.querySelector('.tpl-img');
-        if (img) img.src = song.miniatura || 'https://via.placeholder.com/150/09090b/e3bb3e?text=Audio';
+        if (img) img.src = song.miniatura || '/img/djt-logo.jpg';
         
         if (!isPlayed) {
             clone.querySelector('.tpl-platform').textContent = song.plataforma;

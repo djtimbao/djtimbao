@@ -22,8 +22,29 @@ function generarHuella(titulo, artista) {
     return huella;
 }
 
-export async function extractMetadata(url) {
-    const cleanUrl = url.trim();
+export async function extractMetadata(payload) {
+    // --- 🚀 BYPASS MODO MANUAL (Zero-Cost / Generación de URL de Búsqueda) ---
+    if (payload && payload.mode === 'manual') {
+        const titulo = payload.titulo.trim();
+        const artista = (payload.artista || 'Desconocido').trim();
+        
+        // Ensamblamos los parámetros de búsqueda listos para abrir en YouTube
+        const searchQuery = `${titulo} ${artista !== 'Desconocido' ? artista : ''}`.trim();
+        
+        return {
+            plataforma: 'youtube', // Asignamos 'youtube' para cumplir con el CHECK constraint de la base de datos D1
+            url_original: `https://www.youtube.com/results?search_query=${encodeURIComponent(searchQuery)}`,
+            titulo: titulo,
+            artista: artista,
+            miniatura: null, // Pasamos null para que el frontend inyecte el placeholder automático (fallback)
+            huella_unica: generarHuella(titulo, artista)
+        };
+    }
+
+    // --- MODO LINK ESTÁNDAR (Extracción oEmbed) ---
+    // Soporte para leer la URL desde el payload dinámico
+    const rawUrl = typeof payload === 'string' ? payload : payload.url;
+    const cleanUrl = rawUrl.trim();
     const urlLower = cleanUrl.toLowerCase();
     
     // --- 🛡️ VALIDACIÓN BACKEND ANTI-PLAYLISTS ---

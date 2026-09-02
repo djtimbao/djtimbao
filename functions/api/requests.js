@@ -53,7 +53,9 @@ export async function onRequestPost(context) {
     try {
         const db = getDB(context.env);
         const user = context.data.user;
-        const { url } = await context.request.json();
+        
+        // Recibimos el payload completo (puede traer { url } o { mode, titulo, artista })
+        const payload = await context.request.json();
 
         // BARRERA: Solo usuarios logueados pueden pedir canciones
         if (!user) {
@@ -65,8 +67,8 @@ export async function onRequestPost(context) {
             });
         }
 
-        // 1. Extraemos título y miniatura sin usar API Keys
-        const metadatos = await extractMetadata(url);
+        // 1. Delegamos el procesamiento al motor de metadatos (Modo Link o Modo Manual)
+        const metadatos = await extractMetadata(payload);
 
         // 🛡️ MOTOR ANTI-DUPLICADOS: Busca por Huella Digital en lugar de URL
         const existingRequest = await db.prepare(
