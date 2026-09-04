@@ -8,7 +8,7 @@
     <!-- Tipografía Montserrat y Bungee Inline -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Vast+Shadow&family=Bungee+Inline&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Vast+Shadow&family=Bungee+Inline&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link href="/css/output.css" rel="stylesheet">
     
     <!-- Bloqueo estricto de esquema de color y tematización de la barra del navegador -->
@@ -52,10 +52,116 @@
 
     </section>
 
+    <!-- SECCIÓN: NAVEGACIÓN STICKERS -->
+    <section id="stickers-nav" class="relative w-full py-16 px-4 md:px-12 lg:px-24 flex flex-col items-center justify-center bg-zinc-950 z-30 border-t border-zinc-900/50">
+        <div class="w-full grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-8 items-center justify-items-center">
+            
+            <!-- Sticker 1: Menciones (Microfono) -->
+            <a href="https://music.youtube.com/playlist?list=PLWi7tUtohZLKGTjyfyC7bOCsHoP3Cwc01&si=cqeC-iOijaKWoPdI" target="_blank" rel="noopener noreferrer" class="sticker-card group flex flex-col items-center cursor-pointer">
+                
+                <!-- Título Curvo SVG (2 Líneas Independientes) -->
+                <svg viewBox="0 0 320 110" class="w-full max-w-[260px] lg:max-w-[320px] overflow-visible -mb-6 lg:-mb-10 z-10 transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-2 lg:group-hover:-translate-y-2 pointer-events-none">
+                    <!-- Path Superior -->
+                    <path id="arc-mentions-top" d="M 10,60 A 180,60 0 0,1 310,60" fill="transparent" />
+                    <!-- Path Inferior -->
+                    <path id="arc-mentions-bottom" d="M 10,95 A 180,60 0 0,1 310,95" fill="transparent" />
+                    
+                    <!-- Texto Superior (Línea 1 - Más pequeño) -->
+                    <text class="text-[22px] lg:text-[22px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
+                        <textPath href="#arc-mentions-top" startOffset="50%" text-anchor="middle">Timbao en</textPath>
+                    </text>
+
+                    <!-- Texto Inferior (Línea 2 - Más grande) -->
+                    <text class="text-[36px] lg:text-[36px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
+                        <textPath href="#arc-mentions-bottom" startOffset="50%" text-anchor="middle">Canciones</textPath>
+                    </text>
+                </svg>
+
+                <div class="animate-idle-float float-delay-1 w-full max-w-[320px] lg:max-w-[280px] relative aspect-square mb-4 z-20">
+                    <img id="img-sticker-mentions" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" loading="eager" decoding="async" alt="Menciones a DJ Timbao" class="w-full h-full object-contain sticker-hover">
+                    
+                    <!-- Texto Animado (Troquelado) -->
+                    <div class="sticker-text-wrapper absolute bottom-6 right-2 lg:bottom-2 lg:right-8 flex flex-col items-center rotate-[-5deg] z-40 pointer-events-none">
+                        <span class="sticker-text-cutout font-['Luckiest_Guy'] text-[22px] lg:text-2xl leading-none tracking-wide" data-text="CANCIONES DONDE">CANCIONES DONDE</span>
+                        <span class="sticker-text-cutout font-['Luckiest_Guy'] text-[22px] lg:text-2xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="MENCIONAN A">MENCIONAN A</span>
+                        <span class="sticker-text-cutout font-['Luckiest_Guy'] text-[22px] lg:text-2xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="DJ TIMBAO">DJ TIMBAO</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Sticker 2: Radio (Parlante) -->
+            <a href="/radio.html" class="sticker-card group flex flex-col items-center cursor-pointer">
+                
+                <!-- Título Curvo SVG (2 Líneas Independientes) -->
+                <svg viewBox="0 0 320 110" class="w-full max-w-[300px] lg:max-w-[360px] overflow-visible -mb-12 lg:-mb-16 z-10 transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-2 lg:group-hover:-translate-y-2 pointer-events-none">
+                    <!-- Path Superior -->
+                    <path id="arc-radio-top" d="M 10,60 A 180,60 0 0,1 310,60" fill="transparent" />
+                    <!-- Path Inferior -->
+                    <path id="arc-radio-bottom" d="M 10,95 A 180,60 0 0,1 310,95" fill="transparent" />
+                    
+                    <!-- Texto Superior (Línea 1 - Más pequeño) -->
+                    <text class="text-[22px] lg:text-[22px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
+                        <textPath href="#arc-radio-top" startOffset="50%" text-anchor="middle">Radio</textPath>
+                    </text>
+
+                    <!-- Texto Inferior (Línea 2 - Más grande) -->
+                    <text class="text-[36px] lg:text-[36px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
+                        <textPath href="#arc-radio-bottom" startOffset="50%" text-anchor="middle">Timbao</textPath>
+                    </text>
+                </svg>
+
+                <!-- Aumentamos el w-56 a w-64 en móvil, y el md:w-64 a md:w-[300px] en desktop para compensación óptica -->
+                <div class="animate-idle-float float-delay-2 w-full max-w-[320px] lg:max-w-[400px] relative aspect-square mb-4 z-20">
+                    <img id="img-sticker-radio" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" loading="eager" decoding="async" alt="Radio DJ Timbao 24/7" class="w-full h-full object-contain sticker-hover">
+                    
+                    <!-- Texto Animado (Troquelado) -->
+                    <div class="sticker-text-wrapper absolute bottom-12 right-2 lg:bottom-14 lg:right-8 flex flex-col items-center rotate-[-5deg] z-40 pointer-events-none">
+                        <span class="sticker-text-cutout font-['Luckiest_Guy'] text-2xl lg:text-3xl leading-none tracking-wide" data-text="MÚSICA CUBANA">MÚSICA CUBANA</span>
+                        <span class="sticker-text-cutout font-['Luckiest_Guy'] text-3xl lg:text-4xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="24/7">24/7</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Sticker 3: Pedidos (Escribiendo) -->
+            <a href="/pedidos.html" class="sticker-card group flex flex-col items-center cursor-pointer">
+                
+                <!-- Título Curvo SVG (2 Líneas Independientes) -->
+                <svg viewBox="0 0 320 110" class="w-full max-w-[260px] lg:max-w-[320px] overflow-visible -mb-6 lg:-mb-10 z-10 transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-2 lg:group-hover:-translate-y-2 pointer-events-none">
+                    <!-- Path Superior -->
+                    <path id="arc-pedidos-top" d="M 10,60 A 180,60 0 0,1 310,60" fill="transparent" />
+                    <!-- Path Inferior -->
+                    <path id="arc-pedidos-bottom" d="M 10,95 A 180,60 0 0,1 310,95" fill="transparent" />
+                    
+                    <!-- Texto Superior (Línea 1 - Más pequeño) -->
+                    <text class="text-[28px] lg:text-[28px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
+                        <textPath href="#arc-pedidos-top" startOffset="50%" text-anchor="middle">Pídele al</textPath>
+                    </text>
+
+                    <!-- Texto Inferior (Línea 2 - Más grande) -->
+                    <text class="text-[42px] lg:text-[42px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
+                        <textPath href="#arc-pedidos-bottom" startOffset="50%" text-anchor="middle">DJ</textPath>
+                    </text>
+                </svg>
+
+                <div class="animate-idle-float float-delay-3 w-full max-w-[320px] lg:max-w-[280px] relative aspect-square mb-4 z-20">
+                    <img id="img-sticker-requests" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" loading="eager" decoding="async" alt="Pide tu canción" class="w-full h-full object-contain sticker-hover">
+                    
+                    <!-- Texto Animado (Troquelado) -->
+                    <div class="sticker-text-wrapper absolute bottom-8 right-2 lg:bottom-2 lg:right-8 flex flex-col items-center rotate-[-5deg] z-40 pointer-events-none">
+                        <span class="sticker-text-cutout font-['Luckiest_Guy'] text-xl lg:text-2xl leading-none tracking-wide" data-text="CANCIONES PARA">CANCIONES PARA</span>
+                        <span class="sticker-text-cutout font-['Luckiest_Guy'] text-xl lg:text-2xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="BAILAR EN">BAILAR EN</span>
+                        <span class="sticker-text-cutout font-['Luckiest_Guy'] text-xl lg:text-2xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="LA FIESTA">LA FIESTA</span>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+    </section>
+
     <!-- SECCIÓN: TRAYECTORIA -->
-    <section id="trayectoria" class="relative w-full min-h-[70vh] py-16 sm:py-24 px-4 sm:px-6 md:px-12 flex flex-col items-center justify-center bg-zinc-950 overflow-hidden border-t border-zinc-900/50">
+    <section id="trayectoria" class="relative w-full min-h-[70vh] py-16 sm:py-24 px-4 sm:px-6 md:px-12 lg:px-24 flex flex-col items-center justify-center bg-zinc-950 overflow-hidden border-t border-zinc-900/50">
         
-        <div class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center z-10">
+        <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center z-10">
             
             <!-- Columna Izquierda: Texto Descriptivo -->
             <div class="lg:col-span-7 flex flex-col gap-6 text-center lg:text-left">
@@ -108,7 +214,7 @@
     </section>
 
     <!-- ========================================================================= -->
-    <!-- CONTENEDOR TRACK: SCROLL HORIZONTAL (Efecto Serpiente)                    -->
+    <!-- CONTENEDOR TRACK: SCROLL HORIZONTAL (Efecto Serpiente)                 -->
     <!-- ========================================================================= -->
     <div id="horizontal-scroll-track" class="relative w-full h-[400vh] bg-zinc-950">
         
@@ -151,13 +257,11 @@
                             
                             <!-- Columna Izquierda de Eventos -->
                             <div id="events-left" class="lg:col-span-4 flex flex-col gap-3 sm:gap-2 text-center lg:text-right lg:order-1 w-full">
-                                <!-- Se inyecta dinámicamente desde main.js -->
-                            </div>
+                                </div>
 
                             <!-- Columna Derecha de Eventos -->
                             <div id="events-right" class="lg:col-span-4 flex flex-col gap-3 sm:gap-2 text-center lg:text-left lg:order-3 w-full">
-                                <!-- Se inyecta dinámicamente desde main.js -->
-                            </div>
+                                </div>
 
                         </div>
 
@@ -170,12 +274,12 @@
                     
                     <!-- Contenedor del Acordeón -->
                     <div id="platforms-accordion" class="w-full h-full flex flex-col md:flex-row transition-all duration-[1200ms] ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden">
-                    
+                        
                         <!-- Panel 1: YouTube Music (IZQUIERDA) -->
                         <article class="platform-panel group relative flex-1 h-full border-b md:border-b-0 md:border-r border-zinc-900 transition-[flex-grow] duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden cursor-pointer bg-[#C3352E]" data-platform="ytmusic" data-url="https://music.youtube.com/playlist?list=PLWi7tUtohZLI42VLS6cn2pSkrcDp6FX_2&si=hPU3Qhbpu1h1QyWG">
-                                                
+                            
                             <!-- Capa Activa: Video portada -->
-                            <video id="ytmusic-video" class="platform-video absolute inset-0 w-full h-full object-cover z-0 opacity-0 transition-opacity duration-[800ms] group-[.is-active]:opacity-100 pointer-events-none" loop muted playsinline></video>                
+                            <video id="ytmusic-video" class="platform-video absolute inset-0 w-full h-full object-cover z-0 opacity-0 transition-opacity duration-[800ms] group-[.is-active]:opacity-100 pointer-events-none" loop muted playsinline></video>
                             
                             <!-- Overlay Oscuro para contraste cuando está activo -->
                             <div class="absolute inset-0 bg-black/60 z-0 opacity-0 transition-opacity duration-[800ms] group-[.is-active]:opacity-100 pointer-events-none"></div>
@@ -271,7 +375,7 @@
 
     <!-- SECCIÓN: LIVE REQUEST -->
     <section id="live-request-cta" class="relative w-full py-16 px-4 flex justify-center bg-zinc-950 border-t border-zinc-900/50">
-        <div class="w-full max-w-4xl bg-zinc-900 border border-zinc-800 rounded-2xl p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 hover:border-zinc-700 transition-colors">
+        <div class="w-full bg-zinc-900 border border-zinc-800 rounded-2xl p-8 md:p-12 lg:px-24 flex flex-col md:flex-row items-center justify-between gap-8 hover:border-zinc-700 transition-colors">
             
             <div class="flex flex-col text-center md:text-left">
                 <h2 class="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter">

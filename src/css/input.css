@@ -2,9 +2,9 @@
  * • La ruta: src/css/input.css
  * • Que es: Archivo principal y único de estilos donde se importa el motor de Tailwind v4 y se declaran las animaciones nativas personalizadas.
  * • Responsabilidades:
- *   1. Importar las utilidades de Tailwind CSS v4.
- *   2. Definir estilos globales básicos (como ocultar el cursor nativo).
- *   3. Declarar los fotogramas clave (@keyframes) y clases para las animaciones puras (loader, fill, scale).
+ * 1. Importar las utilidades de Tailwind CSS v4.
+ * 2. Definir estilos globales básicos (como ocultar el cursor nativo).
+ * 3. Declarar los fotogramas clave (@keyframes) y clases para las animaciones puras (loader, fill, scale).
  */
 
 @import "tailwindcss";
@@ -67,6 +67,127 @@
 
 .animate-scroll-line {
     animation: scrollLine 2s cubic-bezier(0.85, 0, 0.15, 1) infinite;
+}
+
+/* =========================================
+   ANIMACIONES STICKERS INTERACTIVOS
+   ========================================= */
+
+@keyframes idleFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.animate-idle-float {
+    animation: idleFloat 4s ease-in-out infinite;
+    will-change: transform;
+}
+
+/* Variaciones de retraso para que no floten sincronizados */
+.float-delay-1 { animation-delay: 0s; }
+.float-delay-2 { animation-delay: 0.8s; }
+.float-delay-3 { animation-delay: 1.6s; }
+
+/* Físicas del Hover Pop */
+.sticker-hover {
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: drop-shadow(0 0 0 rgba(227, 187, 62, 0));
+    will-change: transform, filter;
+}
+
+.sticker-card:hover .sticker-hover {
+    transform: scale(1.08) rotate(3deg);
+    filter: drop-shadow(0 5px 5px rgba(255, 255, 255, 0.2));
+}
+
+/* =========================================
+   ANIMACIONES Y FÍSICAS DE TEXTOS TROQUELADOS (STICKERS)
+   ========================================= */
+
+.sticker-text-cutout {
+    position: relative;
+    display: block;
+    color: transparent; /* Hace transparente el texto base para no interferir, pero mantiene sus proporciones */
+    z-index: 1; /* Crea un contexto de apilamiento blindado */
+    
+    /* Estado inicial para la animación (Oculto y desplazado hacia abajo) */
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(20px) scale(0.8);
+    will-change: transform, opacity, filter;
+}
+
+/* Forzamos el contexto de apilamiento para que las líneas superiores solapen a las inferiores (como un sticker real) */
+.sticker-text-wrapper > .sticker-text-cutout:nth-child(1) { z-index: 3; }
+.sticker-text-wrapper > .sticker-text-cutout:nth-child(2) { z-index: 2; }
+.sticker-text-wrapper > .sticker-text-cutout:nth-child(3) { z-index: 1; }
+
+/* El borde masivo negro (Troquel) aislado en la capa posterior */
+.sticker-text-cutout::before {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    
+    -webkit-text-fill-color: #000;
+    color: #000;
+    -webkit-text-stroke: 8px #000;
+    text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 0 4px 0 #000, 0 6px 0 #000;
+    pointer-events: none;
+}
+
+/* El texto con degradado aislado en la capa frontal */
+.sticker-text-cutout::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    
+    /* Degradado interno sutil (Amarillo claro a dorado) */
+    background: linear-gradient(to bottom, #e95612, #e3bb3e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    pointer-events: none;
+}
+
+/* Coreografía de Animación Encadenada al hacer Hover */
+.sticker-card:hover .sticker-text-cutout {
+    /* 1. Entra rápido con pop | 2. Se queda flotando infinitamente */
+    animation: 
+        stickerTextPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+        stickerTextFloat 2.5s ease-in-out 0.4s infinite alternate;
+}
+
+/* Escalonamiento (Staggering) de las líneas de texto para que entren una tras otra */
+.sticker-card:hover .sticker-text-cutout:nth-child(1) { animation-delay: 0s, 0.4s; }
+.sticker-card:hover .sticker-text-cutout:nth-child(2) { animation-delay: 0.08s, 0.48s; }
+.sticker-card:hover .sticker-text-cutout:nth-child(3) { animation-delay: 0.16s, 0.56s; }
+
+/* Fotogramas Clave: Entrada magnética con foco */
+@keyframes stickerTextPop {
+    0% {
+        opacity: 0;
+        filter: blur(12px);
+        transform: translateY(20px) scale(0.6);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Fotogramas Clave: Flotación asíncrona sutil en sentido opuesto a la imagen */
+@keyframes stickerTextFloat {
+    0% { transform: translateY(0) scale(1); }
+    100% { transform: translateY(5px) scale(1); }
 }
 
 /* =========================================

@@ -2,8 +2,8 @@
  * • Ruta: src/js/config/assets.js
  * • Que es: Archivo de configuración para centralizar recursos estáticos y variables globales.
  * • Responsabilidades:
- *   1. Almacenar cadenas de texto inmutables (como paths de SVG) para evitar código hardcodeado (DRY).
- *   2. Exportar estos recursos para ser consumidos por cualquier módulo del proyecto.
+ * 1. Almacenar cadenas de texto inmutables (como paths de SVG) para evitar código hardcodeado (DRY).
+ * 2. Exportar estos recursos para ser consumidos por cualquier módulo del proyecto.
  */
 
 import { getBucketUrl } from './env.js';
@@ -18,6 +18,11 @@ export const ASSETS = {
     SPOTIFY_VIDEO: `${BUCKET}/assets/card-spotify.mp4`,
     YT_VIDEO: `${BUCKET}/assets/card-youtube.mp4`,
     
+    // Stickers dinámicos de Caricaturas
+    STICKER_MENTIONS: `${BUCKET}/assets/sticker-menciones.webp`,
+    STICKER_RADIO: `${BUCKET}/assets/sticker-radio.webp`,
+    STICKER_REQUESTS: `${BUCKET}/assets/sticker-pedidos.webp`,
+
     // Mapa vectorial SVG para la textura interactiva principal
     GLOBE_SVG_MAP: '/img/dj-timbao-world-map.svg',
 

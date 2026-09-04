@@ -2,9 +2,9 @@
  * • La ruta: src/js/main.js
  * • Que es: Motor principal de interacciones de la interfaz de usuario, orquestador de módulos.
  * • Responsabilidades:
- *   1. Importar e inicializar componentes globales (Loader, Cursor, Hero, GlobeViewer).
- *   2. Controlar la lógica de inicialización en el evento load de la ventana.
- *   3. Ejecutar el bucle principal de renderizado (requestAnimationFrame) para físicas nativas.
+ * 1. Importar e inicializar componentes globales (Loader, Cursor, Hero, GlobeViewer).
+ * 2. Controlar la lógica de inicialización en el evento load de la ventana.
+ * 3. Ejecutar el bucle principal de renderizado (requestAnimationFrame) para físicas nativas.
  */
 
 import { GlobalLoader } from './components/Loader.js';
@@ -21,7 +21,7 @@ class TimbaoEngine {
         this.cursor = { x: 0, y: 0, targetX: 0, targetY: 0, scale: 1, targetScale: 1 };
         // Motor de inercia para la progresión del scroll
         this.scrollProgress = 0; 
-        
+
         // Estado del motor matemático para el Carrusel Marquee 3D Infinito
         this.gigsState = {
             position: 0,
@@ -39,6 +39,7 @@ class TimbaoEngine {
 
     init() {
         this.buildCursor();
+        this.setupStickers();
         this.renderEvents();
         this.renderGigs();
         this.globe = new GlobeViewer('globe-container');
@@ -55,6 +56,18 @@ class TimbaoEngine {
         // Añadimos 'will-change-transform' para que la GPU se prepare, y quitamos las transiciones CSS
         this.cursorEl.className = 'fixed top-0 left-0 w-4 h-4 bg-[#e3bb3e] rounded-full pointer-events-none z-[9998] mix-blend-difference hidden md:block will-change-transform';
         document.body.appendChild(this.cursorEl);
+    }
+
+    setupStickers() {
+        // Inyectamos dinámicamente las imágenes desde R2 para la nueva sección de navegación
+        const sMentions = document.getElementById('img-sticker-mentions');
+        if (sMentions) sMentions.src = ASSETS.STICKER_MENTIONS;
+        
+        const sRadio = document.getElementById('img-sticker-radio');
+        if (sRadio) sRadio.src = ASSETS.STICKER_RADIO;
+        
+        const sRequests = document.getElementById('img-sticker-requests');
+        if (sRequests) sRequests.src = ASSETS.STICKER_REQUESTS;
     }
 
     setupScrollAnimations() {
@@ -173,9 +186,9 @@ class TimbaoEngine {
                 const offset = i - midLeft;
                 return `
                 <a href="${item.url}" target="_blank" rel="noopener noreferrer" 
-                    class="event-card group block transition-colors duration-300 py-1 px-2 rounded-md hover:bg-zinc-900/40 opacity-0 will-change-transform origin-right select-none [-webkit-touch-callout:none]"
-                    data-offset="${offset}" data-side="left"
-                    data-countryid="${item.countryId}" data-lat="${item.lat}" data-lng="${item.lng}">
+                   class="event-card group block transition-colors duration-300 py-1 px-2 rounded-md hover:bg-zinc-900/40 opacity-0 will-change-transform origin-right select-none [-webkit-touch-callout:none]"
+                   data-offset="${offset}" data-side="left"
+                   data-countryid="${item.countryId}" data-lat="${item.lat}" data-lng="${item.lng}">
                     <div class="text-sm md:text-[15px] font-bold text-zinc-300 group-hover:text-[#e3bb3e] transition-colors text-center lg:text-right">
                         <span class="text-zinc-500 font-medium">${item.years} |</span> ${item.event} <span class="text-[#e3bb3e]">:${item.country}</span>
                     </div>
@@ -242,31 +255,31 @@ class TimbaoEngine {
         const duplicatedGigs = [...UPCOMING_GIGS, ...UPCOMING_GIGS, ...UPCOMING_GIGS, ...UPCOMING_GIGS];
 
         track.innerHTML = duplicatedGigs.map((gig) => `
-            <div class="gig-card group relative snap-center shrink-0 w-[70vw] sm:w-[320px] md:w-[380px] h-[450px] md:h-[550px] flex items-center justify-center [perspective:1200px]">
-                <article class="gig-card-inner relative w-full h-full rounded-3xl overflow-hidden transition-colors duration-75 ease-out will-change-transform border border-white/5 bg-zinc-900">
-                    <img src="${gig.flyerUrl}" alt="${gig.title}" loading="lazy" class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none" />
-                    
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/20 z-10 transition-opacity duration-500 opacity-80 group-[.is-active]:opacity-100 pointer-events-none"></div>
-                    <div class="absolute inset-0 bg-black/60 z-10 transition-opacity duration-500 group-[.is-active]:opacity-0 pointer-events-none"></div>
-                    
-                    <div class="absolute bottom-0 inset-x-0 p-6 md:p-8 bg-black/30 backdrop-blur-md border-t border-white/10 z-20 flex flex-col gap-2 translate-y-12 opacity-0 group-[.is-active]:translate-y-0 group-[.is-active]:opacity-100 transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)]">
-                        <div>
-                            <span class="text-[#e3bb3e] text-xs md:text-sm font-bold tracking-widest uppercase">${gig.date} • ${gig.time}</span>
-                            <h3 class="text-xl md:text-3xl font-black text-white uppercase mt-1 leading-none tracking-tighter drop-shadow-lg">${gig.title}</h3>
-                            <p class="text-zinc-300 text-xs md:text-sm mt-2 uppercase tracking-widest flex items-center gap-2">
-                                <svg class="w-3 h-3 md:w-4 md:h-4 fill-current text-[#e3bb3e]" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-                                ${gig.location}
-                            </p>
-                        </div>
-                        <div class="flex items-center gap-3 mt-4">
-                            <a href="${gig.actionUrl}" target="_blank" rel="noopener noreferrer" class="flex-1 bg-[#e3bb3e] hover:bg-yellow-500 text-black text-center py-3 md:py-4 rounded-xl font-black uppercase tracking-widest text-xs transition-all hover:scale-[1.02] shadow-[0_0_20px_rgba(227,187,62,0.3)]">${gig.actionText}</a>
-                            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(gig.title)}&location=${encodeURIComponent(gig.location)}&details=Evento+con+DJ+Timbao" target="_blank" rel="noopener noreferrer" title="Agendar en Calendario" class="w-11 h-11 md:w-14 md:h-14 shrink-0 flex items-center justify-center bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all hover:scale-[1.05] backdrop-blur-sm border border-white/5">
-                                <svg class="w-5 h-5 md:w-6 md:h-6 fill-current" viewBox="0 0 24 24"><path d="M19 4h-2V2h-2v2H9V2H7v2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
-                            </a>
-                        </div>
+        <div class="gig-card group relative snap-center shrink-0 w-[70vw] sm:w-[320px] md:w-[380px] h-[450px] md:h-[550px] flex items-center justify-center [perspective:1200px]">
+            <article class="gig-card-inner relative w-full h-full rounded-3xl overflow-hidden transition-colors duration-75 ease-out will-change-transform border border-white/5 bg-zinc-900">
+                <img src="${gig.flyerUrl}" alt="${gig.title}" loading="lazy" class="absolute inset-0 w-full h-full object-cover z-0 pointer-events-none" />
+                
+                <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/20 z-10 transition-opacity duration-500 opacity-80 group-[.is-active]:opacity-100 pointer-events-none"></div>
+                <div class="absolute inset-0 bg-black/60 z-10 transition-opacity duration-500 group-[.is-active]:opacity-0 pointer-events-none"></div>
+                
+                <div class="absolute bottom-0 inset-x-0 p-6 md:p-8 bg-black/30 backdrop-blur-md border-t border-white/10 z-20 flex flex-col gap-2 translate-y-12 opacity-0 group-[.is-active]:translate-y-0 group-[.is-active]:opacity-100 transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)]">
+                    <div>
+                        <span class="text-[#e3bb3e] text-xs md:text-sm font-bold tracking-widest uppercase">${gig.date} • ${gig.time}</span>
+                        <h3 class="text-xl md:text-3xl font-black text-white uppercase mt-1 leading-none tracking-tighter drop-shadow-lg">${gig.title}</h3>
+                        <p class="text-zinc-300 text-xs md:text-sm mt-2 uppercase tracking-widest flex items-center gap-2">
+                            <svg class="w-3 h-3 md:w-4 md:h-4 fill-current text-[#e3bb3e]" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            ${gig.location}
+                        </p>
                     </div>
-                </article>
-            </div>
+                    <div class="flex items-center gap-3 mt-4">
+                        <a href="${gig.actionUrl}" target="_blank" rel="noopener noreferrer" class="flex-1 bg-[#e3bb3e] hover:bg-yellow-500 text-black text-center py-3 md:py-4 rounded-xl font-black uppercase tracking-widest text-xs transition-all hover:scale-[1.02] shadow-[0_0_20px_rgba(227,187,62,0.3)]">${gig.actionText}</a>
+                        <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(gig.title)}&location=${encodeURIComponent(gig.location)}&details=Evento+con+DJ+Timbao" target="_blank" rel="noopener noreferrer" title="Agendar en Calendario" class="w-11 h-11 md:w-14 md:h-14 shrink-0 flex items-center justify-center bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all hover:scale-[1.05] backdrop-blur-sm border border-white/5">
+                            <svg class="w-5 h-5 md:w-6 md:h-6 fill-current" viewBox="0 0 24 24"><path d="M19 4h-2V2h-2v2H9V2H7v2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V6c0-1.103-.897-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </article>
+        </div>
         `).join('');
 
         this.gigCards = document.querySelectorAll('.gig-card');
@@ -309,13 +322,13 @@ class TimbaoEngine {
 
         // Usamos closest() para asegurar que detecte el hover en todos los componentes interactivos
         document.body.addEventListener('mouseover', (e) => {
-            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('#globe-container') || e.target.closest('#experience-years') || e.target.closest('.gig-card') || e.target.closest('.platform-panel')) {
+            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('#globe-container') || e.target.closest('#experience-years') || e.target.closest('.gig-card') || e.target.closest('.platform-panel') || e.target.closest('.sticker-card')) {
                 this.cursor.targetScale = 2.5;
             }
         });
         
         document.body.addEventListener('mouseout', (e) => {
-            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('#globe-container') || e.target.closest('#experience-years') || e.target.closest('.gig-card') || e.target.closest('.platform-panel')) {
+            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('#globe-container') || e.target.closest('#experience-years') || e.target.closest('.gig-card') || e.target.closest('.platform-panel') || e.target.closest('.sticker-card')) {
                 this.cursor.targetScale = 1;
             }
         });
