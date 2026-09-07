@@ -13,7 +13,7 @@ import { GlobeViewer } from './components/Globe.js';
 import { EVENTS_DATA } from './config/events.js';
 import { UPCOMING_GIGS } from './config/gigs.js';
 import { OdometerEffect } from './components/Odometer.js';
-import { ASSETS } from './config/assets.js';
+import { ASSETS, ICONS } from './config/assets.js';
 
 class TimbaoEngine {
     constructor() {
@@ -46,6 +46,7 @@ class TimbaoEngine {
         this.odometer = new OdometerEffect('experience-years');
         this.setupScrollAnimations();
         this.setupPlatformsAccordion();
+        this.setupFooter();
         this.bindEvents();
         this.render();
         this.handleInitialLoad();
@@ -171,6 +172,101 @@ class TimbaoEngine {
                 if (video) video.pause();
             });
         });
+    }
+
+    setupFooter() {
+        const logoContainer = document.getElementById('footer-logo-container');
+        const socialContainer = document.getElementById('social-icons-container');
+        const contactContainer = document.getElementById('contact-info-container');
+        const slogan = document.getElementById('footer-slogan');
+
+        // 1. Inyectar Logo Vectorial
+        if (logoContainer) {
+            logoContainer.innerHTML = ICONS.djTimbaoLogo;
+        }
+
+        // 2. Inyectar Redes Sociales y Plataformas (Grid dinámico)
+        if (socialContainer) {
+            const networks = [
+                { url: 'https://instagram.com/djtimbao', icon: ICONS.instagram, label: 'Instagram' },
+                { url: 'https://facebook.com/djtimbao', icon: ICONS.facebook, label: 'Facebook' },
+                { url: 'https://youtube.com/@djtimbao', icon: ICONS.youtube, label: 'YouTube' },
+                { url: 'https://music.youtube.com/channel/@djtimbao', icon: ICONS.ytMusic, label: 'YT Music' },
+                { url: 'https://open.spotify.com/user/e0klagzo99bvsqypf4pmrf0bh?', icon: ICONS.spotify, label: 'Spotify' },
+                { url: 'https://audio.com/djtimbao', icon: ICONS.audioCom, label: 'Audio.com' }
+            ];
+
+            socialContainer.innerHTML = networks.map(net => `
+                <a href="${net.url}" target="_blank" rel="noopener noreferrer" aria-label="${net.label}" class="group relative flex justify-center opacity-100 hover:opacity-100 transition-all duration-300 will-change-transform">
+                    
+                    <!-- 1. Envolvemos el SVG en un div para que la escala (scale-110) no deforme el tooltip -->
+                    <div class="transition-transform duration-300 group-hover:scale-110">
+                        ${net.icon}
+                    </div>
+                    
+                    <!-- 2. Tooltip Nativo CSS (Acelerado por GPU) -->
+                    <span class="absolute -top-10 left-1/2 -translate-x-1/2 px-2.5 py-1 bg-zinc-900 text-[#e3bb3e] text-[10px] font-bold uppercase tracking-widest rounded-md opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 pointer-events-none whitespace-nowrap shadow-[0_5px_15px_rgba(0,0,0,0.5)] border border-zinc-800 z-50">
+                        ${net.label}
+                        <!-- Triángulo inferior del globo -->
+                        <span class="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-zinc-800"></span>
+                    </span>
+                    
+                </a>
+            `).join('');
+        }
+
+        // 3. Inyectar Métodos de Contacto (Anti-Scraping Extremo Nivel 2)
+        if (contactContainer) {
+            // Cifrado de enlaces on-the-fly (btoa). Los bots leerán el DOM final, pero no verán enlaces.
+            const mailHash = btoa("mailto:" + "contacto" + "@" + "djtimbao.com");
+            const tgHash = btoa("https://" + "t.me/" + "djtimbao");
+            const waHash = btoa("https://" + "wa.me/" + "5491161380106");
+
+            // Separamos el símbolo '@' (&#64;) para romper escaneos de expresiones regulares simples.
+            contactContainer.innerHTML = `
+                <span onclick="window.location.href=atob('${mailHash}')" class="cursor-pointer hover:opacity-60 transition-opacity">contacto<span class="inline-block">&#64;</span>djtimbao.com</span>
+                
+                <span onclick="window.open(atob('${tgHash}'), '_blank')" class="cursor-pointer hover:opacity-60 transition-opacity flex items-center gap-2">
+                    <span class="w-5 h-5 shrink-0 text-black fill-current">${ICONS.telegram}</span> Telegram
+                </span>
+                
+                <span onclick="window.open(atob('${waHash}'), '_blank')" class="cursor-pointer hover:opacity-60 transition-opacity flex items-center gap-2">
+                    <span class="w-5 h-5 shrink-0 text-black fill-current">${ICONS.whatsapp}</span> WhatsApp
+                </span>
+            `;
+        }
+
+        // 4. Referencias al DOM para la solapa y el footer
+        const mainNode = document.querySelector('main');
+        const footerNode = document.getElementById('site-footer');
+
+        // 5. Observador para Animación del Slogan (Efecto Reveal)
+        if (slogan && mainNode) {
+            const trigger = document.createElement('div');
+            // Anclamos un sensor en el borde exacto de la solapa principal
+            trigger.className = 'w-full h-1 absolute bottom-0 left-0 pointer-events-none';
+            mainNode.appendChild(trigger);
+
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    slogan.classList.remove('translate-y-[100%]');
+                    slogan.classList.add('translate-y-0');
+                    observer.disconnect(); // Optimizamos memoria desconectando tras el primer disparo
+                }
+            }, { threshold: 1.0 });
+            observer.observe(trigger);
+        }
+
+        // 6. Motor de Efecto Cortina Fluido (Dynamic Margin)
+        if (mainNode && footerNode) {
+            // Garantiza que la solapa principal deje un hueco milimétrico para ver el footer fijo
+            const resizeObserver = new ResizeObserver(entries => {
+                for (let entry of entries) {
+                    mainNode.style.marginBottom = `${entry.contentRect.height}px`;
+                }
+            });
+            resizeObserver.observe(footerNode);
+        }
     }
 
     renderEvents() {
@@ -320,15 +416,15 @@ class TimbaoEngine {
             this.cursor.targetY = e.clientY;
         });
 
-        // Usamos closest() para asegurar que detecte el hover en todos los componentes interactivos
+        // Usamos closest() para asegurar que detecte el hover en componentes interactivos, incluyendo enlaces anti-scraping (.cursor-pointer)
         document.body.addEventListener('mouseover', (e) => {
-            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('#globe-container') || e.target.closest('#experience-years') || e.target.closest('.gig-card') || e.target.closest('.platform-panel') || e.target.closest('.sticker-card')) {
+            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('.cursor-pointer') || e.target.closest('#globe-container') || e.target.closest('#experience-years') || e.target.closest('.gig-card') || e.target.closest('.platform-panel') || e.target.closest('.sticker-card')) {
                 this.cursor.targetScale = 2.5;
             }
         });
         
         document.body.addEventListener('mouseout', (e) => {
-            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('#globe-container') || e.target.closest('#experience-years') || e.target.closest('.gig-card') || e.target.closest('.platform-panel') || e.target.closest('.sticker-card')) {
+            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('.cursor-pointer') || e.target.closest('#globe-container') || e.target.closest('#experience-years') || e.target.closest('.gig-card') || e.target.closest('.platform-panel') || e.target.closest('.sticker-card')) {
                 this.cursor.targetScale = 1;
             }
         });

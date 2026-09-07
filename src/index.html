@@ -8,7 +8,7 @@
     <!-- Tipografía Montserrat y Bungee Inline -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Vast+Shadow&family=Bungee+Inline&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Squada+One&family=Luckiest+Guy&family=Vast+Shadow&family=Bungee+Inline&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link href="/css/output.css" rel="stylesheet">
     
     <!-- Bloqueo estricto de esquema de color y tematización de la barra del navegador -->
@@ -20,6 +20,8 @@
     </style>
 </head>
 <body class="bg-zinc-950 text-white selection:bg-[#e3bb3e] selection:text-black antialiased overflow-x-hidden">
+
+    <main class="relative z-10 bg-zinc-950 shadow-[0_20px_30px_rgba(0,0,0,1)]">
 
     <!-- HERO SECTION -->
     <section id="hero" class="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden">
@@ -366,34 +368,53 @@
 
         <!-- Contenedor Viewport para el Marquee -->
         <div id="gigs-viewport" class="w-full overflow-hidden py-10 md:py-16 z-20 [perspective:1400px]">
-            <!-- Pista Infinita (Track) movida por JS -->
             <div id="gigs-track" class="flex gap-4 md:gap-8 w-max will-change-transform items-center" style="transform: translate3d(0px, 0px, 0px);">
             </div>
         </div>
 
     </section>
-
-    <!-- SECCIÓN: LIVE REQUEST -->
-    <section id="live-request-cta" class="relative w-full py-16 px-4 flex justify-center bg-zinc-950 border-t border-zinc-900/50">
-        <div class="w-full bg-zinc-900 border border-zinc-800 rounded-2xl p-8 md:p-12 lg:px-24 flex flex-col md:flex-row items-center justify-between gap-8 hover:border-zinc-700 transition-colors">
+    
+    </main> 
+    
+    <!-- FOOTER -->
+    <footer id="site-footer" class="fixed bottom-0 left-0 w-full min-h-[70vh] md:min-h-[75vh] bg-[#e3bb3e] z-0 flex flex-col justify-end pt-32 overflow-hidden">
+        
+        <!-- Rejilla Superior: Logo y Contacto -->
+        <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center z-10 px-6 md:px-12 lg:px-24 mb-16 md:mb-2">
             
-            <div class="flex flex-col text-center md:text-left">
-                <h2 class="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter">
-                    Pedidos <span class="text-[#e3bb3e]">de canciones</span>
-                </h2>
-                <p class="text-zinc-400 text-sm mt-2 max-w-md">
-                    ¿Estás en la fiesta? Entra aquí para pedir tu tema favorito directamente a la cabina del DJ.
-                </p>
+            <!-- Columna Izquierda: Logo de DJ Timbao -->
+            <div class="flex justify-center md:justify-start">
+                <!-- Se inyectó text-black para forzar el SVG nativo -->
+                <div class="w-48 md:w-64 animate-idle-float text-black fill-current" id="footer-logo-container">
+                </div>
             </div>
-            
-            <a href="/pedidos.html" target="_blank" rel="noopener noreferrer" class="shrink-0 bg-[#e3bb3e] hover:bg-yellow-500 text-black font-black uppercase text-sm tracking-widest px-8 py-4 rounded-xl active:scale-95 transition-transform flex items-center gap-3">
-                <!-- Icono Musical -->
-                <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 18c-4.411 0-8-3.589-8-8s3.589-8 8-8 8 3.589 8 8-3.589 8-8 8zm1-13h-2v6l5.25 3.15.75-1.23-4-2.37z"/></svg>
-                Pedir Tema
-            </a>
-            
+
+            <!-- Columna Derecha: Redes, Plataformas y Email -->
+            <div class="flex flex-col items-center md:items-end gap-8 text-black">
+                
+                <div class="flex flex-col items-center md:items-end gap-3">
+                    <span class="text-xs font-black uppercase tracking-[0.2em] opacity-70">Sígueme y Escúchame</span>
+                    <div class="flex flex-wrap justify-center md:justify-end gap-4 md:gap-6" id="social-icons-container">
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center md:items-end gap-2 mt-2">
+                    <span class="text-xs font-black uppercase tracking-[0.2em] opacity-70">Contacto y Contrataciones</span>
+                    <div class="flex flex-col items-center md:items-end gap-1 font-bold text-base tracking-wider" id="contact-info-container">
+                    </div>
+                </div>
+
+            </div>
         </div>
-    </section>
+
+        <!-- Slogan Gigante (#BailaYGoza) -->
+        <div class="w-full flex justify-center mt-16 md:mt-0 h-[21vw] md:h-[16vw] overflow-hidden select-none pointer-events-none">
+            <h2 id="footer-slogan" class="font-['Squada_One'] text-[32vw] md:text-[24vw] text-black leading-none tracking-[-0.06em] translate-y-[100%] will-change-transform transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
+                #BAILAYGOZA
+            </h2>
+        </div>
+        
+    </footer>
 
     <script type="module" src="/js/main.js"></script>
 </body>
