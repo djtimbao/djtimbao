@@ -179,6 +179,37 @@ class TimbaoEngine {
         const socialContainer = document.getElementById('social-icons-container');
         const contactContainer = document.getElementById('contact-info-container');
         const slogan = document.getElementById('footer-slogan');
+        const footerNode = document.getElementById('site-footer');
+
+        // 0. Inyectar Trama de Fondo SVG (Costo Cero - Hardware Accelerated)
+        if (footerNode && typeof ASSETS !== 'undefined' && ASSETS.LOGO_SHORT_PATH) {
+            const patternContainer = document.createElement('div');
+            // Tailwind classes: Absoluto, cubre todo, debajo del contenido (-z-1), no bloquea clics, 50% opacidad
+            // Máscara CSS nativa: Negro sólido arriba (100% visible), degradado al centro, transparente abajo (0% visible)
+            patternContainer.className = 'absolute inset-0 w-full h-full pointer-events-none opacity-50 z-[-1]';
+            patternContainer.style.maskImage = 'linear-gradient(to bottom, black 0%, black 30%, transparent 80%)';
+            patternContainer.style.webkitMaskImage = 'linear-gradient(to bottom, black 0%, black 30%, transparent 80%)';
+
+            patternContainer.innerHTML = `
+                <svg class="w-full h-full">
+                    <defs>
+                        <!-- Patrón de 250x250px que se repite infinitamente -->
+                        <pattern id="footer-djt-pattern" width="250" height="250" patternUnits="userSpaceOnUse" patternTransform="rotate(5)">
+                            <!-- Variación 1: Monograma base rotado a la izquierda -->
+                            <path d="${ASSETS.LOGO_SHORT_PATH}" transform="translate(20, 30) scale(0.04) rotate(-15)" fill="#f1d853"></path>
+                            <!-- Variación 2: Monograma desplazado rotado a la derecha -->
+                            <path d="${ASSETS.LOGO_SHORT_PATH}" transform="translate(140, 60) scale(0.035) rotate(20)" fill="#f1d853"></path>
+                            <!-- Variación 3: Monograma pequeño sin rotación -->
+                            <path d="${ASSETS.LOGO_SHORT_PATH}" transform="translate(80, 160) scale(0.025)" fill="#f1d853"></path>
+                            <!-- Variación 4: Monograma inferior invertido levemente -->
+                            <path d="${ASSETS.LOGO_SHORT_PATH}" transform="translate(200, 190) scale(0.045) rotate(-5)" fill="#f1d853"></path>
+                        </pattern>
+                    </defs>
+                    <rect width="100%" height="100%" fill="url(#footer-djt-pattern)"></rect>
+                </svg>
+            `;
+            footerNode.insertBefore(patternContainer, footerNode.firstChild);
+        }
 
         // 1. Inyectar Logo Vectorial
         if (logoContainer) {
@@ -238,7 +269,6 @@ class TimbaoEngine {
 
         // 4. Referencias al DOM para la solapa y el footer
         const mainNode = document.querySelector('main');
-        const footerNode = document.getElementById('site-footer');
 
         // 5. Observador para Animación del Slogan (Efecto Reveal)
         if (slogan && mainNode) {
@@ -534,11 +564,12 @@ class TimbaoEngine {
             const textProgress = Math.max(0, (segment1Progress - 0.5) / 0.5);
             const isDesktop = window.innerWidth >= 1024;
             
-            // CONFIGURACIÓN DE LA CURVATURA MATEMÁTICA
+            // CONFIGURACIÓN DE LA CURVATURA DE LOS TEXTOS DEL GLOBO CON MATEMÁTICA RESPONSIVA
+            const isUltraWide = window.innerWidth >= 1536; // Detecta monitores grandes (21"+)
             const curveSettings = {
-                rotationIntensity: 4, // Grados de inclinación (Ajusta si quieres más o menos rotación)
-                depthIntensity: 14,   // Fuerza de la curva (Hace el paréntesis más profundo)
-                basePush: 60          // Distancia general hacia el centro del globo
+                rotationIntensity: 4,                   // Grados de inclinación (Ajusta si quieres más o menos rotación)
+                depthIntensity: isUltraWide ? 14 : 16,   // Fuerza de la curva (Hace el paréntesis más profundo) | monitores : laptops
+                basePush: isUltraWide ? 60 : 13        // Distancia general hacia el centro del globo | monitores : laptops
             };
 
             // Animación coreografiada
