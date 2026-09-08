@@ -2,6 +2,7 @@
 // Responsabilidades:
 // 1. GET: Devolver la cola de reproducción y el historial (ocultando datos sensibles al público).
 // 2. POST: Recibir nuevas solicitudes, validar duplicados e insertar en Cloudflare D1.
+// 3. PATCH: Actualizar el estado de la canción a 'reproducida' y registrar la hora exacta.
 
 import { getDB } from '../_shared/db.js';
 import { extractMetadata } from '../_shared/metadata.js';
@@ -13,10 +14,11 @@ export async function onRequestGet(context) {
     try {
         const db = getDB(context.env);
         const user = context.data.user;
+        const isAdmin = user && user.isAdmin;
 
-        // Extraemos las solicitudes ordenadas. 
         const { results } = await db.prepare(`
             SELECT s.id, s.plataforma, s.url_original, s.titulo, s.artista, s.miniatura, s.estado, 
+                   s.fecha_solicitud, s.hora_reproduccion,
                    u.nombre as solicitante_nombre, u.foto as solicitante_foto
             FROM solicitudes s
             LEFT JOIN usuarios u ON s.usuario_id = u.google_id
@@ -28,14 +30,15 @@ export async function onRequestGet(context) {
 
         // SEGURIDAD PÚBLICA: Si no es Admin, borramos los nombres/fotos por privacidad
         const sanitizedResults = results.map(row => {
-            if (!user || !user.isAdmin) {
+            if (!isAdmin) {
                 delete row.solicitante_nombre;
                 delete row.solicitante_foto;
             }
             return row;
         });
 
-        return new Response(JSON.stringify({ success: true, data: sanitizedResults }), {
+        // Inyectamos isAdmin para que el frontend despliegue controles privilegiados
+        return new Response(JSON.stringify({ success: true, isAdmin: !!isAdmin, data: sanitizedResults }), {
             headers: { 'Content-Type': 'application/json' },
             status: 200
         });
@@ -54,20 +57,16 @@ export async function onRequestPost(context) {
         const db = getDB(context.env);
         const user = context.data.user;
         
-        // Recibimos el payload completo (puede traer { url } o { mode, titulo, artista })
         const payload = await context.request.json();
 
         // BARRERA: Solo usuarios logueados pueden pedir canciones
         if (!user) {
             return new Response(JSON.stringify({ success: false, error: 'Debes iniciar sesión con Google para pedir un tema.' }), {
                 status: 401,
-                headers: { 
-                    'Content-Type': 'application/json' 
-                }
+                headers: { 'Content-Type': 'application/json' }
             });
         }
 
-        // 1. Delegamos el procesamiento al motor de metadatos (Modo Link o Modo Manual)
         const metadatos = await extractMetadata(payload);
 
         // 🛡️ MOTOR ANTI-DUPLICADOS: Busca por Huella Digital en lugar de URL
@@ -82,13 +81,11 @@ export async function onRequestPost(context) {
             
             return new Response(JSON.stringify({ success: false, error: mensaje }), {
                 status: 409,
-                headers: { 
-                    'Content-Type': 'application/json' 
-                }
+                headers: { 'Content-Type': 'application/json' }
             });
         }
 
-        // 3. Inserción en Cloudflare D1
+        // Inserción en Cloudflare D1
         await db.prepare(`
             INSERT INTO solicitudes (usuario_id, plataforma, url_original, titulo, artista, miniatura, huella_unica)
             VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -104,17 +101,65 @@ export async function onRequestPost(context) {
 
         return new Response(JSON.stringify({ success: true, message: '¡Canción agregada a la cola!' }), {
             status: 201,
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            headers: { 'Content-Type': 'application/json' }
         });
 
     } catch (error) {
         return new Response(JSON.stringify({ success: false, error: error.message }), {
             status: 500,
-            headers: { 
-                    'Content-Type': 'application/json' 
-            }
+            headers: { 'Content-Type': 'application/json' }
+        });
+    }
+}
+
+// ============================================================================
+// [PATCH] /api/requests - (ADMIN ONLY) Actualizar estado y registrar timestamp
+// ============================================================================
+export async function onRequestPatch(context) {
+    try {
+        const db = getDB(context.env);
+        const user = context.data.user;
+
+        // BARRERA STRICTA: Solo los administradores pueden cambiar estados
+        if (!user || !user.isAdmin) {
+            return new Response(JSON.stringify({ success: false, error: 'Acceso denegado. Permisos de DJ requeridos.' }), {
+                status: 403,
+                headers: { 'Content-Type': 'application/json' }
+            });
+        }
+
+        const payload = await context.request.json();
+        const { id, estado } = payload;
+
+        if (!id || !estado) {
+            return new Response(JSON.stringify({ success: false, error: 'Faltan parámetros de actualización.' }), { status: 400 });
+        }
+
+        // Si el estado cambia a 'reproducida', inyectamos la hora exacta de SQLite (CURRENT_TIMESTAMP)
+        if (estado === 'reproducida') {
+            await db.prepare(`
+                UPDATE solicitudes 
+                SET estado = ?, hora_reproduccion = CURRENT_TIMESTAMP 
+                WHERE id = ?
+            `).bind(estado, id).run();
+        } else {
+            // Reversión o cambio a otros estados (ej. devolver a pendiente) sin alterar hora_reproduccion
+            await db.prepare(`
+                UPDATE solicitudes 
+                SET estado = ? 
+                WHERE id = ?
+            `).bind(estado, id).run();
+        }
+
+        return new Response(JSON.stringify({ success: true, message: 'Estado actualizado correctamente.' }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+    } catch (error) {
+        return new Response(JSON.stringify({ success: false, error: error.message }), {
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
         });
     }
 }

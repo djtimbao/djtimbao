@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS solicitudes (
     estado TEXT CHECK(estado IN ('pendiente', 'reproducida')) DEFAULT 'pendiente', -- 'pendiente', 'reproducida', 'en_reproduccion'
     orden INTEGER DEFAULT 0,
     fecha_solicitud DATETIME DEFAULT CURRENT_TIMESTAMP,
+    hora_reproduccion DATETIME, -- (UTC0)
     FOREIGN KEY (usuario_id) REFERENCES usuarios(google_id) ON DELETE CASCADE
 );
 

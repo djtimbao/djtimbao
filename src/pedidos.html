@@ -49,8 +49,11 @@
                 <svg class="w-4 h-4 fill-current transform group-hover:-translate-x-0.5 transition-transform" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21 11H6.414l5.293-5.293-1.414-1.414L2.586 12l7.707 7.707 1.414-1.414L6.414 13H21z"/></svg>
             </a>
 
-            <h1 class="text-2xl font-black uppercase tracking-tighter text-white">DJ Timbao</h1>
-            <p class="text-xs font-bold tracking-widest text-[#e3bb3e] uppercase mt-1">Pedidos de canciones</p>
+            <!-- Logo SVG Inyectado Dinámicamente -->
+            <div id="header-logo" class="w-24 md:w-32 h-full text-[#e3bb3e] fill-current">
+            </div>
+            
+            <p class="text-xs font-bold tracking-widest text-zinc-500 uppercase mt-2">Pedidos de canciones</p>
         </header>
 
         <!-- SECCIÓN DE AUTENTICACIÓN -->
@@ -74,24 +77,17 @@
                 
                 <!-- Sistema de Pestañas (Tabs) -->
                 <div class="flex p-1 bg-zinc-900 rounded-lg border border-zinc-800 w-full">
-                    <button type="button" id="tab-link" class="flex-1 py-2.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-md bg-zinc-800 text-white shadow-sm transition-all duration-300 pointer-events-none">
-                        Pegar Link
-                    </button>
                     <button type="button" id="tab-manual" class="flex-1 py-2.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-md text-zinc-500 hover:text-zinc-300 transition-all duration-300">
                         Escribir Nombre
+                    </button>
+                    <button type="button" id="tab-link" class="flex-1 py-2.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider rounded-md bg-zinc-800 text-white shadow-sm transition-all duration-300 pointer-events-none">
+                        Pegar Link
                     </button>
                 </div>
 
                 <form id="request-form" class="flex flex-col gap-4">
                     
-                    <!-- Modo 1: Pegar Link (Activo por defecto) -->
-                    <div id="mode-link" class="flex flex-col gap-2">
-                        <label for="song-url" class="text-xs font-bold text-zinc-500 uppercase tracking-wider">Enlace de YouTube, YT Music o Spotify</label>
-                        <input type="url" id="song-url" placeholder="https://youtu.be/..." 
-                               class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#e3bb3e] transition-colors rounded-none appearance-none">
-                    </div>
-
-                    <!-- Modo 2: Escritura Manual (Oculto por defecto) -->
+                    <!-- Modo 2: Escritura Manual (Oculto por defecto, se activará desde JS) -->
                     <div id="mode-manual" class="hidden flex-col gap-3">
                         <div class="flex flex-col gap-2">
                             <label for="song-title" class="text-xs font-bold text-zinc-500 uppercase tracking-wider">Título de la Canción *</label>
@@ -103,6 +99,13 @@
                             <input type="text" id="song-artist" placeholder="Ej: Los Van Van" 
                                    class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#e3bb3e] transition-colors rounded-none appearance-none">
                         </div>
+                    </div>
+
+                    <!-- Modo 1: Pegar Link (Activo por defecto) -->
+                    <div id="mode-link" class="flex flex-col gap-2">
+                        <label for="song-url" class="text-xs font-bold text-zinc-500 uppercase tracking-wider">Enlace de YouTube, YT Music o Spotify</label>
+                        <input type="url" id="song-url" placeholder="https://youtu.be/..." 
+                               class="w-full bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-3.5 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-[#e3bb3e] transition-colors rounded-none appearance-none">
                     </div>
 
                     <!-- Botón de Envío Full-Width -->
@@ -134,14 +137,17 @@
         </section>
     </main>
 
-    <!-- TEMPLATES PARA RENDERIZADO EFICIENTE POR JS -->
     <template id="tpl-song-pending">
-        <li class="flex items-center gap-3 bg-zinc-900 border border-zinc-800 p-2 rounded-lg">
+        <li class="flex items-center gap-3 bg-zinc-900 border border-zinc-800 p-2 rounded-lg relative overflow-hidden group">
             <img src="" alt="Cover" class="w-14 h-14 rounded object-cover shrink-0 tpl-img bg-zinc-950">
             <div class="flex-1 min-w-0 flex flex-col justify-center">
                 <h3 class="text-sm font-bold text-zinc-100 truncate tpl-title"></h3>
                 <p class="text-xs text-zinc-400 truncate tpl-artist"></p>
-                <span class="text-[9px] mt-0.5 font-bold uppercase tracking-widest text-[#e3bb3e] tpl-platform"></span>
+                
+                <div class="flex items-center gap-2 mt-0.5">
+                    <span class="text-[9px] font-bold uppercase tracking-widest text-[#e3bb3e] tpl-platform"></span>
+                    <span class="text-[9px] font-medium text-zinc-600 tpl-time-request hidden"></span>
+                </div>
             </div>
             <a href="#" target="_blank" rel="noopener noreferrer" class="shrink-0 w-10 h-10 flex items-center justify-center bg-zinc-800 hover:bg-zinc-700 rounded-md active:scale-95 transition-all tpl-link">
                 <svg class="w-4 h-4 fill-zinc-300" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -155,6 +161,8 @@
             <div class="flex-1 min-w-0 flex flex-col justify-center">
                 <h3 class="text-xs font-semibold text-zinc-500 line-through truncate tpl-title"></h3>
                 <p class="text-[10px] text-zinc-600 truncate tpl-artist"></p>
+                <!-- TimeStamp Ya Sonó -->
+                <p class="text-[9px] mt-0.5 font-medium text-zinc-700 tpl-time-played"></p>
             </div>
             <div class="shrink-0 w-6 h-6 flex items-center justify-center">
                 <svg class="w-4 h-4 text-zinc-600 fill-current" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>

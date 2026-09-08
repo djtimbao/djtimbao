@@ -7,10 +7,13 @@
  *   3. Conectar con el backend Serverless para leer/escribir canciones (Fetch API).
  */
 
+import { ICONS } from './config/assets.js';
+
 class PedidosApp {
     constructor() {
         // 1. Leer la memoria del navegador al instanciar la clase
         this.token = sessionStorage.getItem('djtimbao_jwt') || null;
+        this.isAdmin = false; 
         
         // Elementos del DOM
         this.authSection = document.getElementById('auth-section');
@@ -27,7 +30,7 @@ class PedidosApp {
         this.modeManual = document.getElementById('mode-manual');
         this.titleInput = document.getElementById('song-title');
         this.artistInput = document.getElementById('song-artist');
-        this.currentMode = 'link'; // Estado inicial
+        this.currentMode = 'manual';
         
         this.queueList = document.getElementById('queue-list');
         this.historyList = document.getElementById('history-list');
@@ -40,8 +43,15 @@ class PedidosApp {
     }
 
     init() {
+        const headerLogo = document.getElementById('header-logo');
+        if (headerLogo && typeof ICONS !== 'undefined' && ICONS.djTimbaoLogo) {
+            headerLogo.innerHTML = ICONS.djTimbaoLogo;
+        }
+
         window.appHandleGoogleLogin = this.handleAuthResponse.bind(this);
         this.bindEvents();
+        
+        this.tabManual.click();
         
         // 2. Restaurar la interfaz automáticamente si ya existe un token en memoria
         if (this.token) {
@@ -108,6 +118,8 @@ class PedidosApp {
             const data = await response.json();
 
             if (data.success) {
+                // 🚀 Detección de Admin: Si el backend nos expone data.isAdmin o no oculta los solicitantes
+                this.isAdmin = data.isAdmin === true || data.data.some(s => s.solicitante_nombre !== undefined);
                 this.renderAllSongs(data.data);
             }
         } catch (error) {
@@ -255,6 +267,21 @@ class PedidosApp {
     // ==========================================
     // 4. UTILIDADES DE INTERFAZ & RENDERIZADO
     // ==========================================
+    
+    // Formateador nativo para convertir horas UTC0 a la zona horaria del usuario
+    formatTime(sqlTimestamp) {
+        if (!sqlTimestamp) return '';
+        // SQLite guarda 'YYYY-MM-DD HH:MM:SS'. Lo pasamos a formato ISO estricto UTC agregando la 'T' y la 'Z'
+        const isoString = sqlTimestamp.replace(' ', 'T') + 'Z';
+        const date = new Date(isoString);
+        
+        if (isNaN(date)) return '';
+        
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${hours}:${minutes} Hrs`;
+    }
+
     setLoadingState(isLoading) {
         this.submitBtn.disabled = isLoading;
         this.submitBtn.innerHTML = isLoading 
@@ -301,11 +328,25 @@ class PedidosApp {
         const img = clone.querySelector('.tpl-img');
         if (img) img.src = song.miniatura || '/img/djt-logo.jpg';
         
+        // Inyección de la hora de Solicitud (Visible solo para administradores)
+        const timeReqNode = clone.querySelector('.tpl-time-request');
+        if (timeReqNode && song.hora_solicitud) {
+            timeReqNode.textContent = this.formatTime(song.hora_solicitud);
+            if (this.isAdmin) {
+                timeReqNode.classList.remove('hidden');
+            }
+        }
+
         if (!isPlayed) {
             clone.querySelector('.tpl-platform').textContent = song.plataforma;
             clone.querySelector('.tpl-link').href = song.url_original;
             this.queueList.appendChild(clone);
         } else {
+            // Inyección de la hora de Reproducción (En "Ya Sonaron")
+            const timePlayedNode = clone.querySelector('.tpl-time-played');
+            if (timePlayedNode && song.hora_reproduccion) {
+                timePlayedNode.textContent = `Sonó a las ${this.formatTime(song.hora_reproduccion)}`;
+            }
             this.historyList.appendChild(clone);
         }
     }
