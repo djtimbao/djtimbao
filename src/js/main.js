@@ -218,7 +218,7 @@ class TimbaoEngine {
         // 3. Inyectar Métodos de Contacto (Anti-Scraping Extremo Nivel 2)
         if (contactContainer) {
             // Cifrado de enlaces on-the-fly (btoa). Los bots leerán el DOM final, pero no verán enlaces.
-            const mailHash = btoa("mailto:" + "contacto" + "@" + "djtimbao.com");
+            const mailHash = btoa("mailto:" + "hablame" + "@" + "djtimbao.com");
             const tgHash = btoa("https://" + "t.me/" + "djtimbao");
             const waHash = btoa("https://" + "wa.me/" + "5491161380106");
 
