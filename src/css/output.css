@@ -478,6 +478,9 @@
   .min-h-\[70vh\] {
     min-height: 70vh;
   }
+  .min-h-\[75vh\] {
+    min-height: 75vh;
+  }
   .min-h-screen {
     min-height: 100vh;
   }
@@ -1652,14 +1655,11 @@
     .md\:h-\[550px\] {
       height: 550px;
     }
-    .md\:min-h-\[75vh\] {
-      min-height: 75vh;
+    .md\:min-h-\[70vh\] {
+      min-height: 70vh;
     }
     .md\:min-h-\[90vh\] {
       min-height: 90vh;
-    }
-    .md\:min-h-\[100vh\] {
-      min-height: 100vh;
     }
     .md\:w-4 {
       width: calc(var(--spacing) * 4);
