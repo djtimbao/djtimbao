@@ -285,3 +285,42 @@
 .hide-scrollbar::-webkit-scrollbar {
     display: none; /* Chrome, Safari y Opera */
 }
+
+/* =========================================
+   ANIMACIÓN CINEMÁTICA (SUBTÍTULO PRESSKIT)
+   ========================================= */
+
+/* 1. Fondo dorado: Comienza comprimido como una línea muy fina */
+.cinematic-bg {
+    transform: scaleX(0) scaleY(0.02);
+    will-change: transform;
+}
+
+/* El gatillo '.is-revealed' es inyectado por el IntersectionObserver en main.js */
+.is-revealed .cinematic-bg {
+    animation: cinematicBgExpand 1s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+    animation-delay: 0.8s; /* Espera a que termine la entrada de la palabra principal */
+}
+
+@keyframes cinematicBgExpand {
+    0% { transform: scaleX(0) scaleY(0.02); }
+    40% { transform: scaleX(1) scaleY(0.02); } /* Expansión X: Forma la línea horizontal */
+    100% { transform: scaleX(1) scaleY(1); }   /* Expansión Y: Abre el rectángulo completo */
+}
+
+/* 2. Texto: Emerge suavemente hacia arriba revelándose */
+.cinematic-text {
+    opacity: 0;
+    transform: translateY(15px);
+    will-change: transform, opacity;
+}
+
+.is-revealed .cinematic-text {
+    animation: cinematicTextEmerge 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: 1.3s; /* Entra en escena justo cuando el rectángulo empieza a ganar altura */
+}
+
+@keyframes cinematicTextEmerge {
+    0% { opacity: 0; transform: translateY(15px); }
+    100% { opacity: 1; transform: translateY(0); }
+}

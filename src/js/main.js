@@ -13,6 +13,7 @@ import { GlobeViewer } from './components/Globe.js';
 import { EVENTS_DATA } from './config/events.js';
 import { OdometerEffect } from './components/Odometer.js';
 import { ASSETS, ICONS } from './config/assets.js';
+import { getBucketUrl } from './config/env.js';
 
 class TimbaoEngine {
     constructor() {
@@ -52,8 +53,10 @@ class TimbaoEngine {
         this.globe = new GlobeViewer('globe-container');
         this.odometer = new OdometerEffect('experience-years');
         this.setupScrollAnimations();
+        this.setupPresskitAnimation();
         this.setupPlatformsAccordion();
         this.setupFooter();
+        this.setupDynamicLinks();
         this.bindEvents();
         this.render();
         this.handleInitialLoad();
@@ -78,36 +81,78 @@ class TimbaoEngine {
         if (sRequests) sRequests.src = ASSETS.STICKER_REQUESTS;
     }
 
-    setupScrollAnimations() {
-        // Observador nativo para animaciones on-scroll (Block Reveal y Odómetro)
-        const trayectoriaSec = document.getElementById('trayectoria');
-        if (!trayectoriaSec) return;
+    setupDynamicLinks() {
+        const presskitCard = document.getElementById('presskit-card');
+        
+        if (presskitCard) {
+            // Obtenemos el bucket dinámico (detecta automáticamente Dev, Staging o Prod)
+            const bucketUrl = getBucketUrl();
+            // Inyectamos la URL absoluta construida en tiempo de ejecución
+            presskitCard.href = `${bucketUrl}/presskit.pdf`;
+        }
+    }
 
+    setupScrollAnimations() {
+        // 1. Capturamos ambas secciones independientes
+        const trayectoriaSec = document.getElementById('trayectoria');
+        const presskitSec = document.getElementById('presskit');
+
+        // Observador nativo unificado y de alto rendimiento
         const observer = new IntersectionObserver((entries, observerInstance) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // 1. Disparar animaciones CSS de Block Reveal para textos
+                    
+                    // 2. Disparamos animaciones CSS de Block Reveal en la sección que haya entrado
                     entry.target.classList.add('is-revealed');
                     
-                    // 2. Transición suave de entrada (de abajo hacia arriba) para el Odómetro
-                    const odometerContainer = document.getElementById('odometer-container');
-                    if (odometerContainer) {
-                        odometerContainer.classList.remove('opacity-0', 'translate-y-10');
-                        odometerContainer.classList.add('opacity-100', 'translate-y-0');
+                    // 3. Lógica EXCLUSIVA para el Odómetro (Solo si entró la sección trayectoria)
+                    if (entry.target.id === 'trayectoria') {
+                        const odometerContainer = document.getElementById('odometer-container');
+                        if (odometerContainer) {
+                            odometerContainer.classList.remove('opacity-0', 'translate-y-10');
+                            odometerContainer.classList.add('opacity-100', 'translate-y-0');
+                        }
+                        if (this.odometer) {
+                            this.odometer.triggerEntrance();
+                        }
                     }
 
-                    // 3. Activar el estado de caos temporal en el Odómetro
-                    if (this.odometer) {
-                        this.odometer.triggerEntrance();
-                    }
-
-                    // 4. One-shot: Desconectar para no consumir recursos (sin animación de salida)
+                    // 4. One-shot: Desconectar memoria solo de la sección que ya se animó
                     observerInstance.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.2 }); // Umbral de 20% de visibilidad requerida
+        }, { threshold: 0.2 }); // Umbral de 20% de visibilidad
 
-        observer.observe(trayectoriaSec);
+        // 5. Iniciar la observación
+        if (trayectoriaSec) observer.observe(trayectoriaSec);
+        if (presskitSec) observer.observe(presskitSec);
+    }
+
+    setupPresskitAnimation() {
+        const presskitCard = document.getElementById('presskit-card');
+        if (!presskitCard) return;
+
+        // Utilizamos IntersectionObserver nativo para máximo rendimiento (Costo Cero)
+        const observer = new IntersectionObserver((entries) => {
+            // Evaluamos en tiempo real si el usuario está en móvil (ancho menor a 768px de Tailwind)
+            const isMobile = window.innerWidth < 768;
+
+            entries.forEach(entry => {
+                // Si el elemento intercepta el centro Y estamos en un móvil
+                if (entry.isIntersecting && isMobile) {
+                    presskitCard.classList.add('is-active');
+                } else {
+                    // El vinilo se guarda en su funda al salir del centro o si se redimensiona a PC
+                    presskitCard.classList.remove('is-active');
+                }
+            });
+        }, { 
+            // threshold: 0.5 asegura que el trigger se dispare exactamente cuando 
+            // la mitad de la altura del vinilo toca la vista (centro de la pantalla)
+            threshold: 0.5 
+        });
+
+        observer.observe(presskitCard);
     }
 
     setupPlatformsAccordion() {

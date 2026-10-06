@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Squada+One&family=Luckiest+Guy&family=Vast+Shadow&family=Bungee+Inline&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Finger+Paint&family=Squada+One&family=Luckiest+Guy&family=Vast+Shadow&family=Bungee+Inline&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link href="/css/output.css" rel="stylesheet">
     
     <meta name="color-scheme" content="dark only">
@@ -135,7 +135,7 @@
 
         </div>
     </section>
-
+    
     <!-- SECCIÓN: TRAYECTORIA -->
     <section id="trayectoria" class="relative w-full min-h-[70vh] py-16 sm:py-24 px-4 sm:px-6 md:px-12 lg:px-24 flex flex-col items-center justify-center bg-zinc-950 overflow-hidden border-t border-zinc-900/50">
         
@@ -182,24 +182,35 @@
             </div>
 
         </div>
+    </section>
+
+    <!-- SECCIÓN: PRESSKIT -->
+    <section id="presskit" class="relative w-full py-16 sm:py-24 px-4 sm:px-6 md:px-12 lg:px-24 flex flex-col items-center justify-center bg-zinc-950 overflow-hidden border-t border-zinc-900/50">
         
-        <!-- PRESSKIT -->
-        <div class="w-full mt-8 md:mt-12 pt-8 border-t border-zinc-900/50 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center z-10">
+        <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center z-10">
             
             <div class="lg:col-span-7 flex flex-col items-center lg:items-start justify-center w-full overflow-hidden">
-                <div class="relative overflow-hidden w-fit block-reveal-group py-4 px-2" style="--reveal-delay: 0.6s;">
-                    <h2 class="font-['Squada_One'] text-[120px] md:text-[140px] lg:text-[180px] leading-[0.75] tracking-[-0.05em] text-[#e3bb3e] uppercase transition-all duration-[800ms] ease-out hover:tracking-normal hover:drop-shadow-[0_0_20px_rgba(227,187,62,0.6)] opacity-0 block-reveal-text cursor-default select-none scale-y-[1.2] origin-bottom">
-                        RESEÑA &gt;&gt;&gt;
+                <div class="relative overflow-hidden w-fit block-reveal-group pt-12 pb-4 px-2" style="--reveal-delay: 0.2s;">
+                    <h2 class="font-['Finger_Paint'] text-[90px] md:text-[100px] lg:text-[100px] leading-normal tracking-normal text-[#e3bb3e] uppercase ease-out opacity-0 block-reveal-text cursor-default select-none scale-y-[1.2] origin-bottom">
+                        RESEÑA
                     </h2>
                     <div class="absolute inset-0 bg-[#e3bb3e] z-20 block-reveal-solid"></div>
-                </div>
             </div>
+            
+            <div class="relative overflow-hidden w-fit mt-4 md:mt-6 px-6 py-3 md:px-8 md:py-4">
+                <div class="absolute inset-0 bg-[#e3bb3e] cinematic-bg z-0"></div>
+                
+                <p class="relative z-10 text-black text-sm md:text-base font-bold tracking-widest uppercase text-center cinematic-text">
+                    Un vistazo de la experiencia de Dj Timbao a traves del tiempo.
+                </p>
+            </div>
+        </div>
 
             <div class="lg:col-span-5 flex items-center justify-center lg:justify-end perspective-[1200px]">
                 
-                <a href="https://assets.djtimbao.com/presskit.pdf" download="DJ_Timbao_Presskit.pdf" target="_blank" rel="noopener noreferrer" class="group relative flex items-center justify-center w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 cursor-pointer" aria-label="Descargar Presskit de DJ Timbao">
+                <a href="#" id="presskit-card" download="DJ_Timbao_Presskit.pdf" target="_blank" rel="noopener noreferrer" class="group relative flex items-center justify-center w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 cursor-pointer mt-8 lg:mt-0" aria-label="Descargar Presskit de DJ Timbao">
                     
-                    <div class="absolute w-[95%] h-[95%] rounded-full shadow-[20px_0_30px_rgba(0,0,0,0.8)] transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-x-[55%] md:group-hover:-translate-x-[65%] group-hover:-rotate-[180deg] z-0 flex items-center justify-center border border-black/50 will-change-transform" style="background: repeating-radial-gradient(circle, #09090b 0, #09090b 2px, #18181b 3px, #09090b 4px);">
+                    <div class="absolute w-[95%] h-[95%] rounded-full shadow-[20px_0_30px_rgba(0,0,0,0.8)] transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-x-[55%] md:group-hover:-translate-x-[65%] group-[.is-active]:-translate-x-[55%] md:group-[.is-active]:-translate-x-[65%] group-hover:-rotate-[180deg] group-[.is-active]:-rotate-[180deg] z-0 flex items-center justify-center border border-black/50 will-change-transform" style="background: repeating-radial-gradient(circle, #09090b 0, #09090b 2px, #18181b 3px, #09090b 4px);">
                         
                         <div class="w-[35%] h-[35%] rounded-full bg-[#e3bb3e] flex flex-col items-center justify-center shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] relative overflow-hidden">
                             <div class="absolute w-[90%] h-[90%] border-[2px] border-black/10 rounded-full pointer-events-none"></div>
@@ -212,18 +223,20 @@
                         </div>
                     </div>
 
-                    <div class="absolute inset-0 bg-[#e3bb3e] shadow-[10px_10px_30px_rgba(0,0,0,0.9)] flex flex-col items-center justify-center p-4 md:p-6 z-10 transition-transform duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:translate-x-2 md:group-hover:translate-x-4 will-change-transform">
+                    <div class="absolute inset-0 bg-[#e3bb3e] shadow-[10px_10px_30px_rgba(0,0,0,0.9)] flex flex-col items-center justify-center p-4 md:p-6 z-10 transition-transform duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:translate-x-2 md:group-hover:translate-x-4 group-[.is-active]:translate-x-2 md:group-[.is-active]:translate-x-4 will-change-transform overflow-hidden">
                         
-                        <div class="absolute inset-[3px] md:inset-[4px] border border-black/15 pointer-events-none rounded-[1px]"></div>
+                        <img src="https://assets.djtimbao.com/assets/presskit-cover.webp" alt="Portada Presskit" class="absolute inset-0 w-full h-full object-cover z-0 opacity-40 mix-blend-multiply" onerror="this.style.display='none'">
                         
-                        <div id="presskit-logo-container" class="w-full max-w-[100px] md:max-w-[120px] flex items-center justify-center text-black drop-shadow-md fill-current">
+                        <div class="absolute inset-[3px] md:inset-[4px] border border-black/15 pointer-events-none rounded-[1px] z-10"></div>
+                        
+                        <div id="presskit-logo-container" class="w-full max-w-[100px] md:max-w-[120px] flex items-center justify-center text-black drop-shadow-md fill-current z-10">
                         </div>
 
-                        <span class="absolute bottom-4 md:bottom-5 font-black tracking-[0.4em] text-[8px] md:text-[10px] text-black uppercase">
+                        <span class="absolute bottom-4 md:bottom-5 font-black tracking-[0.4em] text-[8px] md:text-[10px] text-black uppercase z-10">
                             Presskit
                         </span>
 
-                        <div class="absolute inset-0 bg-gradient-to-tr from-black/5 via-transparent to-white/20 pointer-events-none"></div>
+                        <div class="absolute inset-0 bg-gradient-to-tr from-black/5 via-transparent to-white/20 pointer-events-none z-10"></div>
                     </div>
 
                 </a>
