@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DJ Timbao | Timba, Salsa y Son</title>
     
-    <!-- Tipografía Montserrat y Bungee Inline -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Squada+One&family=Luckiest+Guy&family=Vast+Shadow&family=Bungee+Inline&family=Montserrat:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link href="/css/output.css" rel="stylesheet">
     
-    <!-- Bloqueo estricto de esquema de color y tematización de la barra del navegador -->
     <meta name="color-scheme" content="dark only">
     <meta name="theme-color" content="#09090b">
 
@@ -26,7 +24,6 @@
     <!-- HERO SECTION -->
     <section id="hero" class="relative w-full h-screen flex flex-col items-center justify-center overflow-hidden">
         
-        <!-- Layer 0: Fondo Multimedia -->
         <div class="absolute inset-0 w-full h-full z-0 pointer-events-none">
             <div class="absolute inset-0 bg-zinc-950/75 z-10"></div>
             <video id="hero-media" class="absolute inset-0 w-full h-full object-cover scale-110 will-change-transform" autoplay loop muted playsinline>
@@ -34,17 +31,15 @@
             </video>
         </div>
 
-        <!-- Layer 1: Tipografía Principal -->
         <div class="relative z-20 text-center flex flex-col items-center select-none">
             <h1 class="hero-title clip-hidden text-[12vw] md:text-[9vw] leading-none font-black tracking-tighter uppercase mb-2 md:mb-4 will-change-transform">
                 DJ Timbao
             </h1>
             <p class="hero-subtitle clip-hidden text-lg md:text-3xl font-bold tracking-widest text-[#e3bb3e] uppercase will-change-transform">
-                Timba, Salsa y Son
+                Baila y Goza
             </p>
         </div>
 
-        <!-- Layer 2: Indicador de Scroll -->
         <div class="hero-scroll opacity-0 absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center transition-opacity duration-1000 z-20">
             <span class="text-[10px] tracking-widest mb-3 uppercase text-zinc-400 font-bold">Scroll</span>
             <div class="w-[2px] h-12 bg-zinc-800 relative overflow-hidden rounded-full">
@@ -54,26 +49,21 @@
 
     </section>
 
-    <!-- SECCIÓN: NAVEGACIÓN STICKERS -->
+    <!-- NAVEGACIÓN STICKERS -->
     <section id="stickers-nav" class="relative w-full py-16 px-4 md:px-12 lg:px-24 flex flex-col items-center justify-center bg-zinc-950 z-30 border-t border-zinc-900/50">
         <div class="w-full grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-8 items-center justify-items-center">
             
             <!-- Sticker 1: Menciones (Microfono) -->
             <a href="https://music.youtube.com/playlist?list=PLWi7tUtohZLKGTjyfyC7bOCsHoP3Cwc01&si=cqeC-iOijaKWoPdI" target="_blank" rel="noopener noreferrer" class="sticker-card group flex flex-col items-center cursor-pointer">
                 
-                <!-- Título Curvo SVG (2 Líneas Independientes) -->
                 <svg viewBox="0 0 320 110" class="w-full max-w-[260px] lg:max-w-[320px] overflow-visible -mb-6 lg:-mb-10 z-10 transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-2 lg:group-hover:-translate-y-2 pointer-events-none">
-                    <!-- Path Superior -->
                     <path id="arc-mentions-top" d="M 10,60 A 180,60 0 0,1 310,60" fill="transparent" />
-                    <!-- Path Inferior -->
                     <path id="arc-mentions-bottom" d="M 10,95 A 180,60 0 0,1 310,95" fill="transparent" />
                     
-                    <!-- Texto Superior (Línea 1 - Más pequeño) -->
                     <text class="text-[22px] lg:text-[22px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
                         <textPath href="#arc-mentions-top" startOffset="50%" text-anchor="middle">Timbao en</textPath>
                     </text>
 
-                    <!-- Texto Inferior (Línea 2 - Más grande) -->
                     <text class="text-[36px] lg:text-[36px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
                         <textPath href="#arc-mentions-bottom" startOffset="50%" text-anchor="middle">Canciones</textPath>
                     </text>
@@ -82,7 +72,6 @@
                 <div class="animate-idle-float float-delay-1 w-full max-w-[320px] lg:max-w-[280px] relative aspect-square mb-4 z-20">
                     <img id="img-sticker-mentions" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" loading="eager" decoding="async" alt="Menciones a DJ Timbao" class="w-full h-full object-contain sticker-hover">
                     
-                    <!-- Texto Animado (Troquelado) -->
                     <div class="sticker-text-wrapper absolute bottom-6 right-2 lg:bottom-2 lg:right-8 flex flex-col items-center rotate-[-5deg] z-40 pointer-events-none">
                         <span class="sticker-text-cutout font-['Luckiest_Guy'] text-[22px] lg:text-2xl leading-none tracking-wide" data-text="CANCIONES DONDE">CANCIONES DONDE</span>
                         <span class="sticker-text-cutout font-['Luckiest_Guy'] text-[22px] lg:text-2xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="MENCIONAN A">MENCIONAN A</span>
@@ -91,32 +80,25 @@
                 </div>
             </a>
 
-            <!-- Sticker 2: Radio (Parlante) -->
+            <!-- Sticker 2: Radio -->
             <a href="/radio.html" class="sticker-card group flex flex-col items-center cursor-pointer">
                 
-                <!-- Título Curvo SVG (2 Líneas Independientes) -->
                 <svg viewBox="0 0 320 110" class="w-full max-w-[300px] lg:max-w-[360px] overflow-visible -mb-12 lg:-mb-16 z-10 transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-2 lg:group-hover:-translate-y-2 pointer-events-none">
-                    <!-- Path Superior -->
                     <path id="arc-radio-top" d="M 10,60 A 180,60 0 0,1 310,60" fill="transparent" />
-                    <!-- Path Inferior -->
                     <path id="arc-radio-bottom" d="M 10,95 A 180,60 0 0,1 310,95" fill="transparent" />
                     
-                    <!-- Texto Superior (Línea 1 - Más pequeño) -->
                     <text class="text-[22px] lg:text-[22px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
                         <textPath href="#arc-radio-top" startOffset="50%" text-anchor="middle">Radio</textPath>
                     </text>
 
-                    <!-- Texto Inferior (Línea 2 - Más grande) -->
                     <text class="text-[36px] lg:text-[36px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
                         <textPath href="#arc-radio-bottom" startOffset="50%" text-anchor="middle">Timbao</textPath>
                     </text>
                 </svg>
 
-                <!-- Aumentamos el w-56 a w-64 en móvil, y el md:w-64 a md:w-[300px] en desktop para compensación óptica -->
                 <div class="animate-idle-float float-delay-2 w-full max-w-[320px] lg:max-w-[400px] relative aspect-square mb-4 z-20">
                     <img id="img-sticker-radio" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" loading="eager" decoding="async" alt="Radio DJ Timbao 24/7" class="w-full h-full object-contain sticker-hover">
                     
-                    <!-- Texto Animado (Troquelado) -->
                     <div class="sticker-text-wrapper absolute bottom-12 right-2 lg:bottom-14 lg:right-8 flex flex-col items-center rotate-[-5deg] z-40 pointer-events-none">
                         <span class="sticker-text-cutout font-['Luckiest_Guy'] text-2xl lg:text-3xl leading-none tracking-wide" data-text="MÚSICA CUBANA">MÚSICA CUBANA</span>
                         <span class="sticker-text-cutout font-['Luckiest_Guy'] text-3xl lg:text-4xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="24/7">24/7</span>
@@ -124,22 +106,17 @@
                 </div>
             </a>
 
-            <!-- Sticker 3: Pedidos (Escribiendo) -->
+            <!-- Sticker 3: Pedidos -->
             <a href="/pedidos.html" class="sticker-card group flex flex-col items-center cursor-pointer">
                 
-                <!-- Título Curvo SVG (2 Líneas Independientes) -->
                 <svg viewBox="0 0 320 110" class="w-full max-w-[260px] lg:max-w-[320px] overflow-visible -mb-6 lg:-mb-10 z-10 transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-2 lg:group-hover:-translate-y-2 pointer-events-none">
-                    <!-- Path Superior -->
                     <path id="arc-pedidos-top" d="M 10,60 A 180,60 0 0,1 310,60" fill="transparent" />
-                    <!-- Path Inferior -->
                     <path id="arc-pedidos-bottom" d="M 10,95 A 180,60 0 0,1 310,95" fill="transparent" />
                     
-                    <!-- Texto Superior (Línea 1 - Más pequeño) -->
                     <text class="text-[28px] lg:text-[28px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
                         <textPath href="#arc-pedidos-top" startOffset="50%" text-anchor="middle">Pídele al</textPath>
                     </text>
 
-                    <!-- Texto Inferior (Línea 2 - Más grande) -->
                     <text class="text-[42px] lg:text-[42px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
                         <textPath href="#arc-pedidos-bottom" startOffset="50%" text-anchor="middle">DJ</textPath>
                     </text>
@@ -148,7 +125,6 @@
                 <div class="animate-idle-float float-delay-3 w-full max-w-[320px] lg:max-w-[280px] relative aspect-square mb-4 z-20">
                     <img id="img-sticker-requests" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" loading="eager" decoding="async" alt="Pide tu canción" class="w-full h-full object-contain sticker-hover">
                     
-                    <!-- Texto Animado (Troquelado) -->
                     <div class="sticker-text-wrapper absolute bottom-8 right-2 lg:bottom-2 lg:right-8 flex flex-col items-center rotate-[-5deg] z-40 pointer-events-none">
                         <span class="sticker-text-cutout font-['Luckiest_Guy'] text-xl lg:text-2xl leading-none tracking-wide" data-text="CANCIONES PARA">CANCIONES PARA</span>
                         <span class="sticker-text-cutout font-['Luckiest_Guy'] text-xl lg:text-2xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="BAILAR EN">BAILAR EN</span>
@@ -165,10 +141,8 @@
         
         <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center z-10">
             
-            <!-- Columna Izquierda: Texto Descriptivo -->
             <div class="lg:col-span-7 flex flex-col gap-6 text-center lg:text-left">
                 
-                <!-- Wrapper Block Reveal para el Título (Retraso 0s) -->
                 <div class="relative overflow-hidden w-fit mx-auto lg:mx-0 block-reveal-group" style="--reveal-delay: 0s;">
                     <h2 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-wider text-[#e3bb3e] uppercase opacity-0 block-reveal-text">
                         Trayectoria
@@ -178,7 +152,6 @@
 
                 <div class="text-zinc-300 text-sm md:text-base leading-relaxed space-y-4 flex flex-col items-center lg:items-start">
                     
-                    <!-- Wrapper Block Reveal para Párrafo 1 (Retraso 0.2s) -->
                     <div class="relative overflow-hidden w-fit block-reveal-group text-left" style="--reveal-delay: 0.2s;">
                         <p class="opacity-0 block-reveal-text">
                             De Venezuela, pero radicado en Argentina, DJ Timbao ha dedicado más de dos décadas a perfeccionar el arte de la selección de música popular bailable cubana. Especialista en Timba, salsa y son, pero moviéndose por todos los ritmos de la música cubana, su estilo es reconocido por ser alegre, potente, pero, sobre todo, altamente bailable.
@@ -186,7 +159,6 @@
                         <div class="absolute inset-0 bg-[#e3bb3e] z-20 block-reveal-solid"></div>
                     </div>
                     
-                    <!-- Wrapper Block Reveal para Párrafo 2 (Retraso 0.4s) -->
                     <div class="relative overflow-hidden w-fit block-reveal-group text-left" style="--reveal-delay: 0.4s;">
                         <p class="opacity-0 block-reveal-text">
                             Organizador de diferentes eventos, fiestas, festivales y conciertos que tienen como fuerte el baile de casino, Timbao no solo mezcla música, también es un talentoso y reconocido editor de piezas musicales para bailarines de diferentes categorías que interpretan coreografías para shows y competencias de baile profesional.
@@ -197,13 +169,11 @@
                 </div>
             </div>
 
-            <!-- Columna Derecha: Número Magnético Odometer -->
             <div class="lg:col-span-5 flex flex-col items-center justify-center select-none">
                 <div id="odometer-container" class="relative flex items-center justify-center mt-8 lg:mt-0 opacity-0 translate-y-10 transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform">
                     <span id="experience-years" class="text-[8rem] md:text-[11rem] lg:text-[8rem] leading-none text-transparent bg-clip-text bg-gradient-to-b from-[#e3bb3e] to-yellow-700 will-change-contents font-['Vast_Shadow'] tabular-nums tracking-tighter cursor-default transition-transform duration-300">
                         00
                     </span>
-                    <!-- Texto de soporte con mayor separación -->
                     <div class="absolute -bottom-8 md:-bottom-12 flex flex-col items-center pointer-events-none">
                         <span class="text-[10px] md:text-xs font-bold tracking-[0.4em] uppercase text-zinc-500 mb-1">Años de</span>
                         <span class="text-base md:text-xl font-black tracking-[0.2em] uppercase text-zinc-100">Experiencia</span>
@@ -212,24 +182,66 @@
             </div>
 
         </div>
+        
+        <!-- PRESSKIT -->
+        <div class="w-full mt-8 md:mt-12 pt-8 border-t border-zinc-900/50 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center z-10">
+            
+            <div class="lg:col-span-7 flex flex-col items-center lg:items-start justify-center w-full overflow-hidden">
+                <div class="relative overflow-hidden w-fit block-reveal-group py-4 px-2" style="--reveal-delay: 0.6s;">
+                    <h2 class="font-['Squada_One'] text-[120px] md:text-[140px] lg:text-[180px] leading-[0.75] tracking-[-0.05em] text-[#e3bb3e] uppercase transition-all duration-[800ms] ease-out hover:tracking-normal hover:drop-shadow-[0_0_20px_rgba(227,187,62,0.6)] opacity-0 block-reveal-text cursor-default select-none scale-y-[1.2] origin-bottom">
+                        RESEÑA &gt;&gt;&gt;
+                    </h2>
+                    <div class="absolute inset-0 bg-[#e3bb3e] z-20 block-reveal-solid"></div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-5 flex items-center justify-center lg:justify-end perspective-[1200px]">
+                
+                <a href="https://assets.djtimbao.com/presskit.pdf" download="DJ_Timbao_Presskit.pdf" target="_blank" rel="noopener noreferrer" class="group relative flex items-center justify-center w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 cursor-pointer" aria-label="Descargar Presskit de DJ Timbao">
+                    
+                    <div class="absolute w-[95%] h-[95%] rounded-full shadow-[20px_0_30px_rgba(0,0,0,0.8)] transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-x-[55%] md:group-hover:-translate-x-[65%] group-hover:-rotate-[180deg] z-0 flex items-center justify-center border border-black/50 will-change-transform" style="background: repeating-radial-gradient(circle, #09090b 0, #09090b 2px, #18181b 3px, #09090b 4px);">
+                        
+                        <div class="w-[35%] h-[35%] rounded-full bg-[#e3bb3e] flex flex-col items-center justify-center shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] relative overflow-hidden">
+                            <div class="absolute w-[90%] h-[90%] border-[2px] border-black/10 rounded-full pointer-events-none"></div>
+                            
+                            <span class="absolute top-2 text-[5px] md:text-[6px] font-black uppercase text-black tracking-widest leading-none">Timbao</span>
+                            
+                            <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-zinc-950 shadow-inner z-10 my-auto"></div>
+                            
+                            <span class="absolute bottom-2 text-[4px] md:text-[5px] font-bold uppercase text-black tracking-widest leading-none">Presskit</span>
+                        </div>
+                    </div>
+
+                    <div class="absolute inset-0 bg-[#e3bb3e] shadow-[10px_10px_30px_rgba(0,0,0,0.9)] flex flex-col items-center justify-center p-4 md:p-6 z-10 transition-transform duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:translate-x-2 md:group-hover:translate-x-4 will-change-transform">
+                        
+                        <div class="absolute inset-[3px] md:inset-[4px] border border-black/15 pointer-events-none rounded-[1px]"></div>
+                        
+                        <div id="presskit-logo-container" class="w-full max-w-[100px] md:max-w-[120px] flex items-center justify-center text-black drop-shadow-md fill-current">
+                        </div>
+
+                        <span class="absolute bottom-4 md:bottom-5 font-black tracking-[0.4em] text-[8px] md:text-[10px] text-black uppercase">
+                            Presskit
+                        </span>
+
+                        <div class="absolute inset-0 bg-gradient-to-tr from-black/5 via-transparent to-white/20 pointer-events-none"></div>
+                    </div>
+
+                </a>
+            </div>
+
+        </div>
 
     </section>
 
-    <!-- ========================================================================= -->
-    <!-- CONTENEDOR TRACK: SCROLL HORIZONTAL (Efecto Serpiente)                 -->
-    <!-- ========================================================================= -->
     <div id="horizontal-scroll-track" class="relative w-full h-[400vh] bg-zinc-950">
         
-        <!-- CÁMARA STICKY (Se fija en pantalla mientras hacemos scroll por los 400vh) -->
         <div class="sticky top-0 w-full h-screen overflow-hidden">
             
-            <!-- CINTA HORIZONTAL (Mide 200vw para albergar Eventos y Plataformas) -->
             <div id="horizontal-strip" class="flex w-[200vw] h-full will-change-transform">
 
-                <!-- SECCIÓN: EVENTOS, FESTIVALES Y CONGRESOS (PANEL 1 - 100vw) -->
+                <!-- SECCIÓN: EVENTOS, FESTIVALES Y CONGRESOS -->
                 <section id="events" class="relative w-screen h-screen py-10 px-4 sm:px-6 md:px-12 flex flex-col items-center justify-center bg-zinc-950 overflow-hidden shrink-0">
                     
-                    <!-- Título de la Sección -->
                     <div class="text-center mb-6 sm:mb-10 z-10">
                         <h2 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-wider text-[#e3bb3e] uppercase">
                             Eventos, Festivales y Congresos
@@ -239,10 +251,9 @@
                         </p>
                     </div>
 
-                    <!-- Contenedor Principal: 2 Columnas de Eventos + Globo 3D Central (Full-Width) -->
                     <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-2 items-center z-10">
                         
-                        <!-- Columna Central: Globo 3D Interactivo con Glow (En el DOM va primero para el stack de Mobile) -->
+                        <!-- Columna Central: Globo 3D Interactivo con Glow -->
                         <div class="lg:col-span-4 flex items-center justify-center order-1 lg:order-2 z-10 w-full">
                             <!-- 
                             TUTORIAL PARA MODIFICAR EL GLOW:
@@ -254,14 +265,10 @@
                             </div>
                         </div>
 
-                        <!-- Contenedor Scrollable Móvil (Desaparece en Desktop gracias a lg:contents) -->
-                        <div class="flex flex-col gap-6 w-full order-2 lg:contents max-h-[40vh] overflow-y-auto overscroll-contain hide-scrollbar">
-                            
-                            <!-- Columna Izquierda de Eventos -->
+                        <div class="flex flex-col gap-6 w-full order-2 lg:contents max-h-[40vh] overflow-y-auto overscroll-auto hide-scrollbar touch-pan-y" style="-webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%); mask-image: linear-gradient(to bottom, black 85%, transparent 100%);">    
                             <div id="events-left" class="lg:col-span-4 flex flex-col gap-3 sm:gap-2 text-center lg:text-right lg:order-1 w-full">
                                 </div>
 
-                            <!-- Columna Derecha de Eventos -->
                             <div id="events-right" class="lg:col-span-4 flex flex-col gap-3 sm:gap-2 text-center lg:text-left lg:order-3 w-full">
                                 </div>
 
@@ -271,73 +278,57 @@
 
                 </section>
 
-                <!-- SECCIÓN: PLATAFORMAS (Acordeón Expansivo y Reactivo) (PANEL 2 - 100vw) -->
+                <!-- SECCIÓN: PLATAFORMAS -->
                 <section id="plataformas" class="relative w-screen h-screen bg-zinc-950 overflow-hidden border-l border-zinc-900/50 shrink-0">
                     
-                    <!-- Contenedor del Acordeón -->
                     <div id="platforms-accordion" class="w-full h-full flex flex-col md:flex-row transition-all duration-[1200ms] ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden">
                         
-                        <!-- Panel 1: YouTube Music (IZQUIERDA) -->
+                        <!-- Panel 1: YouTube Music -->
                         <article class="platform-panel group relative flex-1 h-full border-b md:border-b-0 md:border-r border-zinc-900 transition-[flex-grow] duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden cursor-pointer bg-[#C3352E]" data-platform="ytmusic" data-url="https://music.youtube.com/playlist?list=PLWi7tUtohZLI42VLS6cn2pSkrcDp6FX_2&si=hPU3Qhbpu1h1QyWG">
                             
-                            <!-- Capa Activa: Video portada -->
                             <video id="ytmusic-video" class="platform-video absolute inset-0 w-full h-full object-cover z-0 opacity-0 transition-opacity duration-[800ms] group-[.is-active]:opacity-100 pointer-events-none" loop muted playsinline></video>
                             
-                            <!-- Overlay Oscuro para contraste cuando está activo -->
                             <div class="absolute inset-0 bg-black/60 z-0 opacity-0 transition-opacity duration-[800ms] group-[.is-active]:opacity-100 pointer-events-none"></div>
 
-                            <!-- Textos Activos (Esquina Inferior Derecha - Slide Up) -->
                             <div class="absolute bottom-6 right-6 md:bottom-10 md:right-10 pr-14 md:pr-16 flex flex-col items-end justify-end opacity-0 translate-y-10 transition-all duration-[800ms] delay-100 group-[.is-active]:opacity-100 group-[.is-active]:translate-y-0 z-20 pointer-events-none">
                                 <h3 class="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white drop-shadow-lg text-right">YT Music</h3>
                                 <p class="text-zinc-300 max-w-[200px] md:max-w-xs mt-1 md:mt-2 text-[10px] md:text-sm text-right drop-shadow-md">Escucha las mejores playlists de música cubana aquí.</p>
                             </div>
 
-                            <!-- Capa Logo -->
                             <div class="absolute right-1/2 bottom-1/2 translate-x-1/2 translate-y-1/2 transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] origin-bottom-right group-[.is-active]:right-6 group-[.is-active]:bottom-6 md:group-[.is-active]:right-10 md:group-[.is-active]:bottom-10 group-[.is-active]:translate-x-0 group-[.is-active]:translate-y-0 group-[.is-active]:scale-[0.5] z-20 pointer-events-none">
-                                <!-- Icono YT Music Blanco (Blindado con aspect-square) -->
                                 <svg preserveAspectRatio="xMidYMid meet" class="w-16 md:w-24 h-auto aspect-square shrink-0 text-white fill-current drop-shadow-lg block" viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 19.166c-3.958 0-7.166-3.208-7.166-7.166S8.042 4.834 12 4.834s7.166 3.208 7.166 7.166-3.208 7.166-7.166 7.166zm-2.166-10.5v6.667L15.166 12l-5.332-3.334z"/></svg>
                             </div>
                         </article>
 
-                        <!-- Panel 2: YouTube Video (CENTRO) -->
+                        <!-- Panel 2: YouTube Video -->
                         <article class="platform-panel group relative flex-1 h-full border-b md:border-b-0 md:border-r border-zinc-900 transition-[flex-grow,background-color] duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden cursor-pointer bg-[#FF0000]" data-platform="youtube" data-url="https://www.youtube.com/@djtimbao">
                             
-                            <!-- Capa Base: Video Full-Bleed -->
                             <video id="youtube-video" class="platform-video absolute inset-0 w-full h-full object-cover z-0 opacity-0 transition-opacity duration-[800ms] group-[.is-active]:opacity-100 pointer-events-none" loop muted playsinline></video>
                             
-                            <!-- Overlay Oscuro para contraste cuando el video se enciende -->
                             <div class="absolute inset-0 bg-black/60 z-0 opacity-0 transition-opacity duration-[800ms] group-[.is-active]:opacity-100 pointer-events-none"></div>
 
-                            <!-- Textos Activos (Esquina Inferior Derecha - Slide Up) -->
                             <div class="absolute bottom-6 right-6 md:bottom-10 md:right-10 pr-14 md:pr-16 flex flex-col items-end justify-end opacity-0 translate-y-10 transition-all duration-[800ms] delay-100 group-[.is-active]:opacity-100 group-[.is-active]:translate-y-0 z-20 pointer-events-none">
                                 <h3 class="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white drop-shadow-lg text-right">YouTube</h3>
                                 <p class="text-zinc-300 max-w-[200px] md:max-w-xs mt-1 md:mt-2 text-[10px] md:text-sm text-right drop-shadow-md">Sets en vivo y el material audiovisual más rico de la timba.</p>
                             </div>
 
-                            <!-- Capa Logo -->
                             <div class="absolute right-1/2 bottom-1/2 translate-x-1/2 translate-y-1/2 transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] origin-bottom-right group-[.is-active]:right-6 group-[.is-active]:bottom-6 md:group-[.is-active]:right-10 md:group-[.is-active]:bottom-10 group-[.is-active]:translate-x-0 group-[.is-active]:translate-y-0 group-[.is-active]:scale-[0.5] z-20 pointer-events-none">
-                                <!-- Icono YouTube Blanco (Blindado con aspect-square) -->
                                 <svg preserveAspectRatio="xMidYMid meet" class="w-16 md:w-24 h-auto aspect-square shrink-0 text-white fill-current drop-shadow-lg block" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
                             </div>
                         </article>
 
-                        <!-- Panel 3: Spotify (DERECHA) -->
+                        <!-- Panel 3: Spotify -->
                         <article class="platform-panel group relative flex-1 h-full transition-[flex-grow,background-color] duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] overflow-hidden cursor-pointer bg-[#1DB954]" data-platform="spotify" data-url="https://open.spotify.com/user/e0klagzo99bvsqypf4pmrf0bh?si=91d7fb7d2f8145eb">
-                            <!-- Capa Activa: Imagen Portada Full-Bleed -->
                             <video id="spotify-video" class="platform-video absolute inset-0 w-full h-full object-cover z-0 opacity-0 transition-opacity duration-[800ms] group-[.is-active]:opacity-100 pointer-events-none" loop muted playsinline></video>
                             
-                            <!-- Overlay Oscuro para contraste cuando está activo -->
                             <div class="absolute inset-0 bg-black/60 z-0 opacity-0 transition-opacity duration-[800ms] group-[.is-active]:opacity-100 pointer-events-none"></div>
 
-                            <!-- Textos Activos (Esquina Inferior Derecha - Slide Up) -->
                             <div class="absolute bottom-6 right-6 md:bottom-10 md:right-10 pr-14 md:pr-16 flex flex-col items-end justify-end opacity-0 translate-y-10 transition-all duration-[800ms] delay-100 group-[.is-active]:opacity-100 group-[.is-active]:translate-y-0 z-20 pointer-events-none">
                                 <h3 class="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white drop-shadow-lg text-right">Spotify</h3>
                                 <p class="text-zinc-300 max-w-[200px] md:max-w-xs mt-1 md:mt-2 text-[10px] md:text-sm text-right drop-shadow-md">Escucha la mejor selección musical directo desde el perfil oficial.</p>
                             </div>
 
-                            <!-- Capa Logo -->
                             <div class="absolute right-1/2 bottom-1/2 translate-x-1/2 translate-y-1/2 transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] origin-bottom-right group-[.is-active]:right-6 group-[.is-active]:bottom-6 md:group-[.is-active]:right-10 md:group-[.is-active]:bottom-10 group-[.is-active]:translate-x-0 group-[.is-active]:translate-y-0 group-[.is-active]:scale-[0.5] z-20 pointer-events-none">
-                                <!-- Icono Spotify Negro. Cambia a Verde al expandir (Blindado con aspect-square) -->
                                 <svg preserveAspectRatio="xMidYMid meet" class="w-16 md:w-24 h-auto aspect-square shrink-0 text-zinc-950 group-[.is-active]:text-[#1DB954] fill-current drop-shadow-lg transition-colors duration-[800ms] block" viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.24 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.6.18-1.2.72-1.38 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.239.54-.959.72-1.56.3z"/></svg>
                             </div>
                         </article>
@@ -352,11 +343,9 @@
     <!-- SECCIÓN: PRÓXIMAS FECHAS -->
     <section id="gigs" class="relative w-full py-20 sm:py-32 flex flex-col items-center justify-center bg-zinc-950 overflow-hidden border-t border-zinc-900/50">
         
-        <!-- Gradientes laterales para enmarcar el 3D y suavizar la entrada/salida -->
         <div class="pointer-events-none absolute inset-y-0 left-0 w-[15vw] md:w-[20vw] bg-gradient-to-r from-zinc-950 via-zinc-950/80 to-transparent z-30"></div>
         <div class="pointer-events-none absolute inset-y-0 right-0 w-[15vw] md:w-[20vw] bg-gradient-to-l from-zinc-950 via-zinc-950/80 to-transparent z-30"></div>
 
-        <!-- Título de la Sección -->
         <div class="text-center mb-10 z-10 relative">
             <h2 class="text-3xl md:text-5xl font-black tracking-tighter text-white uppercase drop-shadow-lg">
                 ¡Dónde <span class="text-[#e3bb3e]">Timbao</span> va a tocar!
@@ -366,7 +355,6 @@
             </p>
         </div>
 
-        <!-- Contenedor Viewport para el Marquee -->
         <div id="gigs-viewport" class="w-full overflow-hidden py-10 md:py-16 z-20 [perspective:1400px]">
             <div id="gigs-track" class="flex gap-4 md:gap-8 w-max will-change-transform items-center" style="transform: translate3d(0px, 0px, 0px);">
             </div>
@@ -379,17 +367,13 @@
     <!-- FOOTER -->
     <footer id="site-footer" class="fixed bottom-0 left-0 w-full min-h-[75vh] md:min-h-[70vh] bg-[#e3bb3e] z-0 flex flex-col justify-end pt-32 overflow-hidden">
         
-        <!-- Rejilla Superior: Logo y Contacto -->
         <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-12 items-center z-10 px-6 md:px-18 lg:px-24 mb-2 md:mb-2">
             
-            <!-- Columna Izquierda: Logo de DJ Timbao -->
             <div class="flex justify-center md:justify-start">
-                <!-- Se inyectó text-black para forzar el SVG nativo -->
                 <div class="w-48 md:w-64 animate-idle-float text-black fill-current" id="footer-logo-container">
                 </div>
             </div>
 
-            <!-- Columna Derecha: Redes, Plataformas y Email -->
             <div class="flex flex-col items-center md:items-end gap-8 text-black">
                 
                 <div class="flex flex-col items-center md:items-end gap-3">
@@ -407,7 +391,6 @@
             </div>
         </div>
 
-        <!-- Slogan Gigante (#BailaYGoza) -->
         <div class="w-full flex justify-center mt-16 md:mt-0 h-[21vw] md:h-[16vw] overflow-hidden select-none pointer-events-none">
             <h2 id="footer-slogan" class="font-['Squada_One'] text-[32vw] md:text-[24vw] text-black leading-none tracking-[-0.06em] translate-y-[100%] will-change-transform transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
                 #BAILAYGOZA

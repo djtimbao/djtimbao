@@ -22,14 +22,22 @@ class TimbaoEngine {
         // Motor de inercia para la progresión del scroll
         this.scrollProgress = 0; 
 
-        // Estado del motor matemático para el Carrusel Marquee 3D Infinito
+        // Estado del motor matemático para el Carrusel Marquee 3D Infinito (Swipe & Inercia)
         this.gigsState = {
             position: 0,
             speed: -1.5,
             targetSpeed: -1.5,
             baseSpeed: -1.5,
             isHovered: false,
-            wrapWidth: 0
+            wrapWidth: 0,
+            
+            // Físicas Táctiles
+            isDragging: false,
+            startX: 0,
+            currentX: 0,
+            dragVelocity: 0,
+            lastDragTime: 0,
+            startY: 0
         };
 
         this.globalLoader = new GlobalLoader();
@@ -373,12 +381,33 @@ class TimbaoEngine {
         });
     }
 
-    renderGigs() {
+    async renderGigs() {
         const track = document.getElementById('gigs-track');
-        if (!track || typeof UPCOMING_GIGS === 'undefined') return;
+        // Usamos el contenedor padre para atar los eventos táctiles y asegurar captura completa
+        const viewport = document.getElementById('gigs-viewport');
+        if (!track || !viewport) return;
+
+        let activeGigs = [];
+        try {
+            // Consumo de la API Serverless (Cloudflare D1) a Costo Cero
+            const response = await fetch('/api/gigs');
+            const result = await response.json();
+            
+            // Priorizamos la Base de Datos. Si está vacía, usamos el archivo local como respaldo (Fallback)
+            if (result.success && result.data.length > 0) {
+                activeGigs = result.data;
+            } else if (typeof UPCOMING_GIGS !== 'undefined') {
+                activeGigs = UPCOMING_GIGS;
+            }
+        } catch (error) {
+            console.error("Error cargando eventos desde BD, usando archivo local.", error);
+            if (typeof UPCOMING_GIGS !== 'undefined') activeGigs = UPCOMING_GIGS;
+        }
+
+        if (activeGigs.length === 0) return;
 
         // Inyección multiplicada (4 veces) del array para garantizar un Seamless Loop en resoluciones amplias
-        const duplicatedGigs = [...UPCOMING_GIGS, ...UPCOMING_GIGS, ...UPCOMING_GIGS, ...UPCOMING_GIGS];
+        const duplicatedGigs = [...activeGigs, ...activeGigs, ...activeGigs, ...activeGigs];
 
         track.innerHTML = duplicatedGigs.map((gig) => `
         <div class="gig-card group relative snap-center shrink-0 w-[70vw] sm:w-[320px] md:w-[380px] h-[450px] md:h-[550px] flex items-center justify-center [perspective:1200px]">
@@ -419,8 +448,10 @@ class TimbaoEngine {
             card._translateZ = 0;
             
             card.addEventListener('mouseenter', () => {
-                this.gigsState.isHovered = true;
-                card.dataset.hovered = 'true';
+                if(!this.gigsState.isDragging) {
+                    this.gigsState.isHovered = true;
+                    card.dataset.hovered = 'true';
+                }
             });
             
             card.addEventListener('mouseleave', () => {
@@ -431,6 +462,7 @@ class TimbaoEngine {
             });
             
             card.addEventListener('mousemove', (e) => {
+                if(this.gigsState.isDragging) return;
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left - rect.width / 2;
                 const y = e.clientY - rect.top - rect.height / 2;
@@ -438,6 +470,68 @@ class TimbaoEngine {
                 card._targetRotateXHover = -(y / (rect.height / 2)) * 15; 
             });
         });
+
+        // MOTOR DE ARRASTRE TÁCTIL (SWIPE) PARA EL CARRUSEL
+        const onDragStart = (e) => {
+            this.gigsState.isDragging = true;
+            this.gigsState.isHovered = false; // Forzar soltar tarjetas si estaba en hover
+            this.gigsState.startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            this.gigsState.startY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+            this.gigsState.currentX = this.gigsState.startX;
+            this.gigsState.lastDragTime = Date.now();
+            this.gigsState.dragVelocity = 0;
+        };
+
+        const onDragMove = (e) => {
+            if (!this.gigsState.isDragging) return;
+            
+            const currentX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
+            const currentY = e.type.includes('mouse') ? e.clientY : e.touches[0].clientY;
+            
+            const deltaX = currentX - this.gigsState.currentX;
+            const deltaY = Math.abs(currentY - this.gigsState.startY);
+
+            // Permitir scroll vertical natural si el usuario mueve el dedo de arriba/abajo (DeltaY mayor)
+            if (deltaY > Math.abs(currentX - this.gigsState.startX) && deltaY > 10) {
+                this.gigsState.isDragging = false;
+                return;
+            }
+
+            // Si es un arrastre horizontal puro, prevenimos scroll vertical e inyectamos al track
+            if (e.cancelable) e.preventDefault(); 
+            
+            // Calculamos velocidad instantánea para inercia
+            const now = Date.now();
+            const timeDelta = now - this.gigsState.lastDragTime;
+            if (timeDelta > 0) {
+                this.gigsState.dragVelocity = deltaX / timeDelta * 15; 
+            }
+            
+            this.gigsState.currentX = currentX;
+            this.gigsState.lastDragTime = now;
+            
+            // Mueve instantáneamente el Marquee
+            this.gigsState.position += deltaX;
+        };
+
+        const onDragEnd = () => {
+            if (!this.gigsState.isDragging) return;
+            this.gigsState.isDragging = false;
+            
+            // Inyectamos la inercia (Momentum) capturada como velocidad objetivo
+            if (Math.abs(this.gigsState.dragVelocity) > 2) {
+                this.gigsState.targetSpeed = this.gigsState.dragVelocity;
+            }
+        };
+
+        // Listeners para Móvil y Desktop anclados al Viewport del Carrusel
+        viewport.addEventListener('mousedown', onDragStart);
+        window.addEventListener('mousemove', onDragMove, { passive: false });
+        window.addEventListener('mouseup', onDragEnd);
+        
+        viewport.addEventListener('touchstart', onDragStart, { passive: true });
+        window.addEventListener('touchmove', onDragMove, { passive: false });
+        window.addEventListener('touchend', onDragEnd);
     }
 
     bindEvents() {
@@ -459,8 +553,11 @@ class TimbaoEngine {
             }
         });
 
-        // Eventos que modifican la velocidad del Marquee basado en Scroll (Mouse)
+        // Eventos que modifican la velocidad del Marquee basado en Scroll Vertical (Mouse Wheel)
         window.addEventListener('wheel', (e) => {
+            // Solo afectar si no estamos interactuando manualmente
+            if (this.gigsState.isDragging) return;
+            
             const delta = Math.sign(e.deltaY);
             if (delta > 0) { // Hacia abajo -> Impulso a la izquierda
                 this.gigsState.baseSpeed = -1.5;
@@ -470,25 +567,7 @@ class TimbaoEngine {
                 this.gigsState.targetSpeed = 25;
             }
         }, { passive: true });
-
-        // Soporte táctil (Mobile) para inercia de Swipe
-        let lastTouchY = 0;
-        window.addEventListener('touchstart', (e) => { lastTouchY = e.touches[0].clientY; }, { passive: true });
-        window.addEventListener('touchmove', (e) => {
-            const currentY = e.touches[0].clientY;
-            const deltaY = lastTouchY - currentY;
-            if (Math.abs(deltaY) > 5) {
-                const delta = Math.sign(deltaY);
-                if (delta > 0) {
-                    this.gigsState.baseSpeed = -1.5;
-                    this.gigsState.targetSpeed = -25;
-                } else if (delta < 0) {
-                    this.gigsState.baseSpeed = 1.5;
-                    this.gigsState.targetSpeed = 25;
-                }
-                lastTouchY = currentY;
-            }
-        }, { passive: true });
+        
     }
 
     handleInitialLoad() {
@@ -631,14 +710,17 @@ class TimbaoEngine {
                 }
             }
 
-            // Aceleración y fricción matemática del Marquee
-            this.gigsState.targetSpeed += (this.gigsState.baseSpeed - this.gigsState.targetSpeed) * 0.05;
-            
-            // Forzamos el freno en Hover
-            let currentTargetSpeed = this.gigsState.isHovered ? 0 : this.gigsState.targetSpeed;
-            this.gigsState.speed += (currentTargetSpeed - this.gigsState.speed) * 0.1;
+            // Si NO estamos arrastrando, aplicamos Aceleración Automática y Fricción Matemática
+            if (!this.gigsState.isDragging) {
+                // Recuperar gradualmente la velocidad base (frenar inercia)
+                this.gigsState.targetSpeed += (this.gigsState.baseSpeed - this.gigsState.targetSpeed) * 0.05;
+                
+                // Forzamos freno absoluto en Hover (PC)
+                let currentTargetSpeed = this.gigsState.isHovered ? 0 : this.gigsState.targetSpeed;
+                this.gigsState.speed += (currentTargetSpeed - this.gigsState.speed) * 0.1;
 
-            this.gigsState.position += this.gigsState.speed;
+                this.gigsState.position += this.gigsState.speed;
+            }
 
             // Bucle Infinito Inquebrantable
             if (this.gigsState.wrapWidth > 0) {
@@ -664,8 +746,8 @@ class TimbaoEngine {
                 
                 let targetScale, targetRotateY, targetRotateX, targetZ;
                 
-                if (card.dataset.hovered === 'true') {
-                    // Tarjeta capturada por el ratón vuela hacia adelante
+                if (card.dataset.hovered === 'true' && !this.gigsState.isDragging) {
+                    // Tarjeta capturada por el ratón vuela hacia adelante (Solo si no arrastramos)
                     targetScale = 1.15;
                     targetRotateY = card._targetRotateYHover || 0;
                     targetRotateX = card._targetRotateXHover || 0;

@@ -26,3 +26,17 @@ CREATE TABLE IF NOT EXISTS solicitudes (
 
 -- Índice para optimizar el filtrado de la cola activa en tiempo real
 CREATE INDEX IF NOT EXISTS idx_solicitudes_estado ON solicitudes(estado);
+
+-- Tabla de Próximas Fechas (Gigs)
+CREATE TABLE IF NOT EXISTS eventos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT NOT NULL,
+    date TEXT NOT NULL,
+    time TEXT NOT NULL,
+    location TEXT NOT NULL,
+    flyerUrl TEXT NOT NULL,
+    actionUrl TEXT NOT NULL,
+    actionText TEXT DEFAULT '+ Info',
+    orden INTEGER DEFAULT 0,
+    fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
+);
