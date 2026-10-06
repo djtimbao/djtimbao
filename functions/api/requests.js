@@ -163,3 +163,31 @@ export async function onRequestPatch(context) {
         });
     }
 }
+
+// ============================================================================
+// [DELETE] /api/requests - (ADMIN ONLY) Limpiar toda la cola de reproducción
+// ============================================================================
+export async function onRequestDelete(context) {
+    try {
+        const db = getDB(context.env);
+        const user = context.data.user;
+
+        if (!user || !user.isAdmin) {
+            return new Response(JSON.stringify({ success: false, error: 'Acceso denegado.' }), { 
+                status: 403, headers: { 'Content-Type': 'application/json' } 
+            });
+        }
+
+        // Ejecuta el borrado total de la tabla de solicitudes
+        await db.prepare(`DELETE FROM solicitudes`).run();
+
+        return new Response(JSON.stringify({ success: true, message: 'La lista de pedidos ha sido limpiada.' }), { 
+            status: 200, headers: { 'Content-Type': 'application/json' } 
+        });
+
+    } catch (error) {
+        return new Response(JSON.stringify({ success: false, error: error.message }), { 
+            status: 500, headers: { 'Content-Type': 'application/json' } 
+        });
+    }
+}

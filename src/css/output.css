@@ -8,7 +8,9 @@
       "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
       "Courier New", monospace;
+    --color-red-300: oklch(80.8% 0.114 19.571);
     --color-red-400: oklch(70.4% 0.191 22.216);
+    --color-red-500: oklch(63.7% 0.237 25.331);
     --color-yellow-500: oklch(79.5% 0.184 86.047);
     --color-yellow-700: oklch(55.4% 0.135 66.442);
     --color-green-400: oklch(79.2% 0.209 151.711);
@@ -575,9 +577,6 @@
   .w-48 {
     width: calc(var(--spacing) * 48);
   }
-  .w-56 {
-    width: calc(var(--spacing) * 56);
-  }
   .w-64 {
     width: calc(var(--spacing) * 64);
   }
@@ -643,6 +642,9 @@
   }
   .flex-1 {
     flex: 1;
+  }
+  .flex-\[2\] {
+    flex: 2;
   }
   .flex-\[5\] {
     flex: 5;
@@ -817,9 +819,6 @@
   .overscroll-auto {
     overscroll-behavior: auto;
   }
-  .overscroll-contain {
-    overscroll-behavior: contain;
-  }
   .rounded {
     border-radius: 0.25rem;
   }
@@ -870,6 +869,9 @@
   .border-l {
     border-left-style: var(--tw-border-style);
     border-left-width: 1px;
+  }
+  .border-\[\#e3bb3e\] {
+    border-color: #e3bb3e;
   }
   .border-black\/10 {
     border-color: color-mix(in srgb, #000 10%, transparent);
@@ -1096,6 +1098,9 @@
   }
   .object-cover {
     object-fit: cover;
+  }
+  .p-0\.5 {
+    padding: calc(var(--spacing) * 0.5);
   }
   .p-1 {
     padding: var(--spacing);
@@ -1788,11 +1793,14 @@
     .hover\:border-\[\#e3bb3e\]:hover {
       border-color: #e3bb3e;
     }
+    .hover\:border-zinc-700:hover {
+      border-color: var(--color-zinc-700);
+    }
     .hover\:bg-\[\#e3bb3e\]:hover {
       background-color: #e3bb3e;
     }
-    .hover\:bg-red-400:hover {
-      background-color: var(--color-red-400);
+    .hover\:bg-red-500:hover {
+      background-color: var(--color-red-500);
     }
     .hover\:bg-white\/20:hover {
       background-color: color-mix(in srgb, #fff 20%, transparent);
@@ -1822,6 +1830,9 @@
     }
     .hover\:text-black:hover {
       color: var(--color-black);
+    }
+    .hover\:text-red-300:hover {
+      color: var(--color-red-300);
     }
     .hover\:text-white:hover {
       color: var(--color-white);
@@ -1865,9 +1876,6 @@
   }
   .active\:cursor-grabbing:active {
     cursor: grabbing;
-  }
-  .active\:text-white:active {
-    color: var(--color-white);
   }
   @media (width >= 40rem) {
     .sm\:mb-10 {
@@ -2003,9 +2011,6 @@
     }
     .md\:w-\[20vw\] {
       width: 20vw;
-    }
-    .md\:w-\[300px\] {
-      width: 300px;
     }
     .md\:w-\[380px\] {
       width: 380px;
