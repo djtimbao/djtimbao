@@ -11,7 +11,6 @@ import { GlobalLoader } from './components/Loader.js';
 import { HeroParallax } from './components/Hero.js';
 import { GlobeViewer } from './components/Globe.js';
 import { EVENTS_DATA } from './config/events.js';
-import { UPCOMING_GIGS } from './config/gigs.js';
 import { OdometerEffect } from './components/Odometer.js';
 import { ASSETS, ICONS } from './config/assets.js';
 
@@ -393,21 +392,27 @@ class TimbaoEngine {
             const response = await fetch('/api/gigs');
             const result = await response.json();
             
-            // Priorizamos la Base de Datos. Si está vacía, usamos el archivo local como respaldo (Fallback)
+            // Leemos estrictamente de la Base de Datos
             if (result.success && result.data.length > 0) {
                 activeGigs = result.data;
-            } else if (typeof UPCOMING_GIGS !== 'undefined') {
-                activeGigs = UPCOMING_GIGS;
             }
         } catch (error) {
-            console.error("Error cargando eventos desde BD, usando archivo local.", error);
-            if (typeof UPCOMING_GIGS !== 'undefined') activeGigs = UPCOMING_GIGS;
+            console.error("Error cargando eventos desde BD.", error);
         }
 
+        // Si la base de datos está vacía, abortamos el renderizado del carrusel pacíficamente
         if (activeGigs.length === 0) return;
 
-        // Inyección multiplicada (4 veces) del array para garantizar un Seamless Loop en resoluciones amplias
-        const duplicatedGigs = [...activeGigs, ...activeGigs, ...activeGigs, ...activeGigs];
+        // 1. Guardamos la cantidad real de eventos en el estado para que el motor 3D la lea
+        this.gigsState.originalCount = activeGigs.length;
+
+        // 2. Multiplicador Dinámico: Garantizamos un mínimo de 12 tarjetas físicas en el DOM 
+        // para asegurar que el carrusel cubra hasta los monitores Ultrawide más extremos.
+        let duplicatedGigs = [];
+        const copiesNeeded = Math.max(4, Math.ceil(12 / activeGigs.length));
+        for (let i = 0; i < copiesNeeded; i++) {
+            duplicatedGigs.push(...activeGigs);
+        }
 
         track.innerHTML = duplicatedGigs.map((gig) => `
         <div class="gig-card group relative snap-center shrink-0 w-[70vw] sm:w-[320px] md:w-[380px] h-[450px] md:h-[550px] flex items-center justify-center [perspective:1200px]">
@@ -700,11 +705,12 @@ class TimbaoEngine {
         }
 
         // --- 3. LÓGICA MARQUEE INFINITO Y TARJETAS 3D ---
-        if (this.gigsTrack && this.gigCards && typeof UPCOMING_GIGS !== 'undefined') {
+        // Ahora dependemos de la cantidad real de eventos (originalCount) rescatada de la BD
+        if (this.gigsTrack && this.gigCards && this.gigsState.originalCount) {
             // Calculamos con precisión el ancho de un bloque original para efectuar el teletransporte perfecto
-            if (this.gigsState.wrapWidth === 0 && this.gigCards.length > UPCOMING_GIGS.length) {
+            if (this.gigsState.wrapWidth === 0 && this.gigCards.length > this.gigsState.originalCount) {
                 const card0 = this.gigCards[0];
-                const cardN = this.gigCards[UPCOMING_GIGS.length];
+                const cardN = this.gigCards[this.gigsState.originalCount];
                 if (card0 && cardN) {
                     this.gigsState.wrapWidth = cardN.offsetLeft - card0.offsetLeft;
                 }
