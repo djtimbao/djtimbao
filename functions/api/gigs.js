@@ -52,7 +52,7 @@ export async function onRequestGet(context) {
 }
 
 // ============================================================================
-// [POST] /api/gigs - ADMIN: Crear nueva fecha
+// [POST] /api/gigs - ADMIN: Crear nueva fecha (Multipart / File Upload)
 // ============================================================================
 export async function onRequestPost(context) {
     try {
@@ -60,17 +60,43 @@ export async function onRequestPost(context) {
         const user = context.data.user;
 
         if (!user || !user.isAdmin) {
-            return new Response(JSON.stringify({ success: false, error: 'Acceso denegado. Permisos de Admin requeridos.' }), { status: 403 });
+            return new Response(JSON.stringify({ success: false, error: 'Acceso denegado. Permisos requeridos.' }), { status: 403 });
         }
 
-        const payload = await context.request.json();
-        const { title, date, time, location, flyerUrl, actionUrl, actionText, orden } = payload;
+        // 1. Extraer los datos y el archivo binario del FormData
+        const formData = await context.request.formData();
+        const title = formData.get('title');
+        const date = formData.get('date');
+        const time = formData.get('time');
+        const location = formData.get('location');
+        const actionUrl = formData.get('actionUrl');
+        const actionText = formData.get('actionText') || '+ Info';
+        const file = formData.get('flyerImage');
 
+        if (!file || !(file instanceof File)) {
+            return new Response(JSON.stringify({ success: false, error: 'El archivo de imagen es obligatorio.' }), { status: 400 });
+        }
+
+        // 2. Crear nombre único y subir a Cloudflare R2 por Streaming (Costo Cero en Memoria)
+        const fileExtension = file.name.split('.').pop() || 'webp';
+        // Genera "flyers/1709420000-myevent.webp" para evitar colisiones
+        const uniqueFileName = `flyers/${Date.now()}-${title.replace(/[^a-z0-9]/gi, '').toLowerCase()}.${fileExtension}`;
+        
+        await context.env.BUCKET_ASSETS.put(uniqueFileName, file.stream(), {
+            httpMetadata: { contentType: file.type }
+        });
+
+        // 3. Ensamblar la URL pública utilizando la variable de entorno
+        // Fallback robusto en caso de que falte la barra al final
+        const baseUrl = context.env.R2_PUBLIC_URL.replace(/\/$/, ""); 
+        const publicFlyerUrl = `${baseUrl}/${uniqueFileName}`;
+
+        // 4. Guardar en Base de Datos D1
         await db.prepare(`
             INSERT INTO eventos (title, date, time, location, flyerUrl, actionUrl, actionText, orden)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `).bind(
-            title, date, time, location, flyerUrl, actionUrl, actionText || '+ Info', orden || 0
+            title, date, time, location, publicFlyerUrl, actionUrl, actionText, 0
         ).run();
 
         return new Response(JSON.stringify({ success: true, message: 'Evento publicado exitosamente.' }), { status: 201 });
@@ -80,37 +106,65 @@ export async function onRequestPost(context) {
 }
 
 // ============================================================================
-// [PUT] /api/gigs - ADMIN: Actualizar evento y limpiar R2
+// [PUT] /api/gigs - ADMIN: Actualizar evento y limpiar R2 (Soporta Multipart)
 // ============================================================================
 export async function onRequestPut(context) {
     try {
-        const db = getDB(context.env);
+        const db = getDB(context.env); // Conexión centralizada a D1
         const user = context.data.user;
 
         if (!user || !user.isAdmin) {
             return new Response(JSON.stringify({ success: false, error: 'Acceso denegado. Permisos de Admin requeridos.' }), { status: 403 });
         }
 
-        const payload = await context.request.json();
-        const { id, title, date, time, location, flyerUrl, actionUrl, actionText, orden } = payload;
+        // 1. Extraer los datos mediante formData en lugar de JSON
+        const formData = await context.request.formData();
+        const id = formData.get('id');
+        const title = formData.get('title');
+        const date = formData.get('date');
+        const time = formData.get('time');
+        const location = formData.get('location');
+        const actionUrl = formData.get('actionUrl');
+        const actionText = formData.get('actionText') || '+ Info';
+        const orden = formData.get('orden') || 0;
+        const file = formData.get('flyerImage'); // El archivo es opcional en la edición
 
         if (!id) return new Response(JSON.stringify({ success: false, error: 'ID del evento requerido.' }), { status: 400 });
 
-        // 1. Consultar el evento anterior para comparar la URL de la imagen
+        // 2. Obtener el evento actual para saber qué flyerUrl tiene asignado
         const oldEvent = await db.prepare('SELECT flyerUrl FROM eventos WHERE id = ?').bind(id).first();
+        if (!oldEvent) return new Response(JSON.stringify({ success: false, error: 'Evento no encontrado.' }), { status: 404 });
 
-        // 2. Si la imagen cambió, disparamos la orden de destrucción al Bucket R2
-        if (oldEvent && oldEvent.flyerUrl && oldEvent.flyerUrl !== flyerUrl) {
-            await deleteImageFromR2(context.env, oldEvent.flyerUrl);
+        let finalFlyerUrl = oldEvent.flyerUrl; // Por defecto conservamos el viejo
+
+        // 3. Si el administrador subió una NUEVA imagen, la procesamos
+        if (file && file instanceof File && file.size > 0) {
+            
+            // 3.A: Borrar imagen vieja en R2 para ahorrar almacenamiento
+            if (oldEvent.flyerUrl) {
+                await deleteImageFromR2(context.env, oldEvent.flyerUrl);
+            }
+
+            // 3.B: Subir la imagen nueva por streaming
+            const fileExtension = file.name.split('.').pop() || 'webp';
+            const uniqueFileName = `flyers/${Date.now()}-${title.replace(/[^a-z0-9]/gi, '').toLowerCase()}.${fileExtension}`;
+            
+            await context.env.BUCKET_ASSETS.put(uniqueFileName, file.stream(), {
+                httpMetadata: { contentType: file.type }
+            });
+
+            // 3.C: Generar la nueva URL pública
+            const baseUrl = context.env.R2_PUBLIC_URL.replace(/\/$/, ""); 
+            finalFlyerUrl = `${baseUrl}/${uniqueFileName}`;
         }
 
-        // 3. Actualizar el registro en la BD
+        // 4. Actualizar el registro en la BD
         await db.prepare(`
             UPDATE eventos 
             SET title = ?, date = ?, time = ?, location = ?, flyerUrl = ?, actionUrl = ?, actionText = ?, orden = ?
             WHERE id = ?
         `).bind(
-            title, date, time, location, flyerUrl, actionUrl, actionText, orden, id
+            title, date, time, location, finalFlyerUrl, actionUrl, actionText, orden, id
         ).run();
 
         return new Response(JSON.stringify({ success: true, message: 'Evento actualizado correctamente.' }), { status: 200 });
@@ -147,7 +201,7 @@ export async function onRequestDelete(context) {
         // 3. Eliminar definitivamente el evento de Cloudflare D1
         await db.prepare(`DELETE FROM eventos WHERE id = ?`).bind(id).run();
 
-        return new Response(JSON.stringify({ success: true, message: 'Evento y archivo multimedia eliminados.' }), { status: 200 });
+        return new Response(JSON.stringify({ success: true, message: 'Evento y flyer eliminados de la plataforma.' }), { status: 200 });
     } catch (error) {
         return new Response(JSON.stringify({ success: false, error: error.message }), { status: 500 });
     }

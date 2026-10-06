@@ -92,7 +92,12 @@
                         <input type="text" id="ev-time" placeholder="Hora (Ej: 21:00 Hrs)" class="w-1/2 bg-zinc-950 border border-zinc-800 rounded p-3 text-xs text-white focus:border-[#e3bb3e] outline-none" required>
                     </div>
                     <input type="text" id="ev-location" placeholder="Ubicación (Ej: Buenos Aires, CABA)" class="w-full bg-zinc-950 border border-zinc-800 rounded p-3 text-xs text-white focus:border-[#e3bb3e] outline-none" required>
-                    <input type="text" id="ev-flyer" placeholder="URL del Flyer (R2)" class="w-full bg-zinc-950 border border-zinc-800 rounded p-3 text-xs text-white focus:border-[#e3bb3e] outline-none" required>
+                    
+                    <div class="w-full bg-zinc-950 border border-zinc-800 rounded p-3 focus-within:border-[#e3bb3e] transition-colors">
+                        <label for="ev-flyer" class="block text-[10px] text-zinc-500 uppercase tracking-widest mb-2">Flyer del Evento (Max 2MB)</label>
+                        <input type="file" id="ev-flyer" accept="image/webp, image/jpeg, image/png" class="w-full text-xs text-zinc-300 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-[10px] file:font-black file:uppercase file:tracking-wider file:bg-[#e3bb3e] file:text-black hover:file:bg-yellow-500 hover:file:scale-95 transition-all outline-none" required>
+                    </div>
+                    
                     <input type="url" id="ev-action" placeholder="Link de Acción (Instagram/Tickets)" class="w-full bg-zinc-950 border border-zinc-800 rounded p-3 text-xs text-white focus:border-[#e3bb3e] outline-none" required>
                     
                     <button type="submit" class="mt-2 bg-white text-black font-black uppercase text-xs tracking-wider p-3 rounded active:scale-95 transition-transform">

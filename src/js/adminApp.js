@@ -242,30 +242,41 @@ class AdminApp {
     }
 
     async createEvento() {
-        const payload = {
-            title: document.getElementById('ev-title').value,
-            date: document.getElementById('ev-date').value,
-            time: document.getElementById('ev-time').value,
-            location: document.getElementById('ev-location').value,
-            flyerUrl: document.getElementById('ev-flyer').value,
-            actionUrl: document.getElementById('ev-action').value,
-            actionText: '+ Info'
-        };
+        const fileInput = document.getElementById('ev-flyer');
+        const file = fileInput.files[0];
+
+        if (!file) {
+            alert('Por favor, selecciona una imagen para el flyer.');
+            return;
+        }
+
+        // Usamos FormData para empaquetar el archivo binario junto al texto
+        const formData = new FormData();
+        formData.append('title', document.getElementById('ev-title').value);
+        formData.append('date', document.getElementById('ev-date').value);
+        formData.append('time', document.getElementById('ev-time').value);
+        formData.append('location', document.getElementById('ev-location').value);
+        formData.append('actionUrl', document.getElementById('ev-action').value);
+        formData.append('actionText', '+ Info');
+        formData.append('flyerImage', file); // Inyectamos el archivo binario
 
         try {
+            // NOTA CLAVE: ¡NUNCA definas 'Content-Type': 'multipart/form-data' manualmente! 
+            // El navegador debe calcular el Boundary (límite) automáticamente.
             const res = await fetch('/api/gigs', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${this.token}` },
-                body: JSON.stringify(payload)
+                headers: { 'Authorization': `Bearer ${this.token}` },
+                body: formData
             });
 
             if (!this.handleApiError(res)) {
-                this.eventoForm.reset(); // Limpiamos el form
-                this.fetchEventos(); // Actualizamos lista
+                this.eventoForm.reset();
+                this.fetchEventos(); 
                 alert('Fecha publicada con éxito.');
             }
         } catch (error) {
             console.error('Error creando evento:', error);
+            alert('Hubo un error de conexión al subir el evento.');
         }
     }
 
