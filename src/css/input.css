@@ -324,3 +324,115 @@
     0% { opacity: 0; transform: translateY(15px); }
     100% { opacity: 1; transform: translateY(0); }
 }
+
+/* =========================================
+   DYNAMIC FLOATING NAVBAR
+   ========================================= */
+
+/* Motor de Enmascarado SVG Multi-Navegador (Safari/Chrome/Firefox) */
+.nav-logo-mask {
+    -webkit-mask-image: url('/img/djt-logo-amarillo.svg');
+    mask-image: url('/img/djt-logo-amarillo.svg');
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+
+/* 1. Animación del Logo (Bordes al Centro) */
+.logo-hover-clip {
+    clip-path: inset(0 0 0 0); /* Visible al 100% */
+    will-change: clip-path;
+}
+
+/* Al pasar el mouse, el color amarillo se contrae al 50% exacto (desapareciendo), 
+   revelando mágicamente la capa naranja subyacente de afuera hacia adentro */
+.nav-logo:hover .logo-hover-clip {
+    clip-path: inset(50% 50% 50% 50%);
+}
+
+/* 2. Estados Físicos del Navbar (Cuadrado a la derecha al hacer scroll) */
+#main-nav {
+    max-width: 100%;
+}
+
+/* ESTADO: Scrolled -> Se contrae a un cuadrado perfecto pegado a la derecha */
+#nav-wrapper.is-scrolled #main-nav {
+    max-width: 5rem; /* 80px (Equivalente a h-20) */
+    background-color: rgba(9, 9, 11, 0.95);
+}
+
+@media (min-width: 768px) {
+    #nav-wrapper.is-scrolled #main-nav {
+        max-width: 6rem; /* 96px (Equivalente a h-24 en PC) */
+    }
+}
+
+/* Al encogerse el navbar, también reducimos el tamaño del logo */
+#nav-wrapper.is-scrolled #nav-logo-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+@media (min-width: 768px) {
+    #nav-wrapper.is-scrolled #nav-logo-btn {
+        width: 3rem;
+        height: 3rem;
+    }
+}
+
+/* 3. Dinámica del Menú Desplegable (Dropdown Full-Width) */
+/* Al gatillar .is-expanded (clic en el logo), se despliega la cortina */
+#nav-wrapper.is-expanded #nav-dropdown {
+    max-height: 400px; /* Altura suficiente para albergar los enlaces */
+    opacity: 1;
+}
+
+/* Rotación sutil del logo al abrir el menú para dar feedback visual */
+#nav-wrapper.is-expanded #nav-logo-btn {
+    transform: scale(0.9) rotate(5deg);
+}
+
+/* =========================================
+   MUTACIÓN GEOMÉTRICA (DROPDOWN A LA DERECHA)
+   ========================================= */
+
+/* Cuando hacemos scroll y el logo es un cuadrado a la derecha, 
+   el menú deja de ser w-full y se acopla a la derecha */
+#nav-wrapper.is-scrolled #nav-dropdown {
+    width: 280px; 
+    left: auto;
+    right: 0;
+    border: none;
+    border-radius: 0 0 0 1.5rem; /* Esquina inferior izquierda redondeada para fluidez */
+}
+
+/* Alineamos los elementos internos a la derecha para coincidir con la ancla */
+#nav-wrapper.is-scrolled #nav-dropdown .flex-col {
+    align-items: flex-end;
+    padding-right: 2.5rem;
+}
+
+/* =========================================
+   COREOGRAFÍA PREMIUM: ENLACES MAGNÉTICOS
+   ========================================= */
+
+/* Transición base súper fluida en la CPU */
+.nav-link {
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform, color, letter-spacing;
+}
+
+/* 1. Comportamiento Centro (Top de la web): Empuja a la derecha suavemente */
+.nav-link:hover {
+    transform: translateX(12px);
+    letter-spacing: 0.25em; /* Aumenta el kerning */
+}
+
+/* 2. Comportamiento Derecha (Scrolleado): Invierte la polaridad y empuja a la izquierda */
+#nav-wrapper.is-scrolled .nav-link:hover {
+    transform: translateX(-12px);
+    letter-spacing: 0.25em;
+}

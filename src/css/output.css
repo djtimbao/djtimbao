@@ -72,6 +72,7 @@
     --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     --blur-sm: 8px;
     --blur-md: 12px;
+    --blur-xl: 24px;
     --default-transition-duration: 150ms;
     --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     --default-font-family: var(--font-sans);
@@ -227,6 +228,9 @@
   }
 }
 @layer utilities {
+  .pointer-events-auto {
+    pointer-events: auto;
+  }
   .pointer-events-none {
     pointer-events: none;
   }
@@ -334,6 +338,9 @@
   }
   .z-\[-1\] {
     z-index: -1;
+  }
+  .z-\[100\] {
+    z-index: 100;
   }
   .z-\[9998\] {
     z-index: 9998;
@@ -482,6 +489,12 @@
   .h-14 {
     height: calc(var(--spacing) * 14);
   }
+  .h-16 {
+    height: calc(var(--spacing) * 16);
+  }
+  .h-20 {
+    height: calc(var(--spacing) * 20);
+  }
   .h-40 {
     height: calc(var(--spacing) * 40);
   }
@@ -514,6 +527,9 @@
   }
   .h-screen {
     height: 100vh;
+  }
+  .max-h-0 {
+    max-height: 0px;
   }
   .max-h-\[40vh\] {
     max-height: 40vh;
@@ -931,6 +947,9 @@
   .bg-\[\#e3bb3e\] {
     background-color: #e3bb3e;
   }
+  .bg-\[\#e26118\] {
+    background-color: #e26118;
+  }
   .bg-black\/30 {
     background-color: color-mix(in srgb, #000 30%, transparent);
     @supports (color: color-mix(in lab, red, red)) {
@@ -972,6 +991,12 @@
   }
   .bg-zinc-950 {
     background-color: var(--color-zinc-950);
+  }
+  .bg-zinc-950\/70 {
+    background-color: color-mix(in srgb, oklch(14.1% 0.005 285.823) 70%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      background-color: color-mix(in oklab, var(--color-zinc-950) 70%, transparent);
+    }
   }
   .bg-zinc-950\/75 {
     background-color: color-mix(in srgb, oklch(14.1% 0.005 285.823) 75%, transparent);
@@ -1162,6 +1187,9 @@
   }
   .py-20 {
     padding-block: calc(var(--spacing) * 20);
+  }
+  .pt-10 {
+    padding-top: calc(var(--spacing) * 10);
   }
   .pt-12 {
     padding-top: calc(var(--spacing) * 12);
@@ -1494,6 +1522,11 @@
     -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
     backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
   }
+  .backdrop-blur-xl {
+    --tw-backdrop-blur: blur(var(--blur-xl));
+    -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+    backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+  }
   .transition-\[flex-grow\,background-color\] {
     transition-property: flex-grow,background-color;
     transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
@@ -1562,6 +1595,10 @@
   .ease-\[cubic-bezier\(0\.25\,1\,0\.5\,1\)\] {
     --tw-ease: cubic-bezier(0.25,1,0.5,1);
     transition-timing-function: cubic-bezier(0.25,1,0.5,1);
+  }
+  .ease-\[cubic-bezier\(0\.68\,-0\.6\,0\.32\,1\.6\)\] {
+    --tw-ease: cubic-bezier(0.68,-0.6,0.32,1.6);
+    transition-timing-function: cubic-bezier(0.68,-0.6,0.32,1.6);
   }
   .ease-in-out {
     --tw-ease: var(--ease-in-out);
@@ -1845,6 +1882,9 @@
         background-color: color-mix(in oklab, var(--color-zinc-900) 40%, transparent);
       }
     }
+    .hover\:text-\[\#e3bb3e\]:hover {
+      color: #e3bb3e;
+    }
     .hover\:text-black:hover {
       color: var(--color-black);
     }
@@ -1976,6 +2016,12 @@
     .md\:h-14 {
       height: calc(var(--spacing) * 14);
     }
+    .md\:h-20 {
+      height: calc(var(--spacing) * 20);
+    }
+    .md\:h-24 {
+      height: calc(var(--spacing) * 24);
+    }
     .md\:h-48 {
       height: calc(var(--spacing) * 48);
     }
@@ -2005,6 +2051,9 @@
     }
     .md\:w-14 {
       width: calc(var(--spacing) * 14);
+    }
+    .md\:w-20 {
+      width: calc(var(--spacing) * 20);
     }
     .md\:w-24 {
       width: calc(var(--spacing) * 24);
@@ -2051,6 +2100,9 @@
     .md\:justify-start {
       justify-content: flex-start;
     }
+    .md\:gap-5 {
+      gap: calc(var(--spacing) * 5);
+    }
     .md\:gap-6 {
       gap: calc(var(--spacing) * 6);
     }
@@ -2082,6 +2134,9 @@
     }
     .md\:py-4 {
       padding-block: calc(var(--spacing) * 4);
+    }
+    .md\:py-8 {
+      padding-block: calc(var(--spacing) * 8);
     }
     .md\:py-16 {
       padding-block: calc(var(--spacing) * 16);
@@ -2592,6 +2647,75 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+.nav-logo-mask {
+  -webkit-mask-image: url('/img/djt-logo-amarillo.svg');
+  mask-image: url('/img/djt-logo-amarillo.svg');
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+.logo-hover-clip {
+  clip-path: inset(0 0 0 0);
+  will-change: clip-path;
+}
+.nav-logo:hover .logo-hover-clip {
+  clip-path: inset(50% 50% 50% 50%);
+}
+#main-nav {
+  max-width: 100%;
+}
+#nav-wrapper.is-scrolled #main-nav {
+  max-width: 5rem;
+  background-color: rgba(9, 9, 11, 0.95);
+}
+@media (min-width: 768px) {
+  #nav-wrapper.is-scrolled #main-nav {
+    max-width: 6rem;
+  }
+}
+#nav-wrapper.is-scrolled #nav-logo-btn {
+  width: 2.5rem;
+  height: 2.5rem;
+}
+@media (min-width: 768px) {
+  #nav-wrapper.is-scrolled #nav-logo-btn {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+#nav-wrapper.is-expanded #nav-dropdown {
+  max-height: 400px;
+  opacity: 1;
+}
+#nav-wrapper.is-expanded #nav-logo-btn {
+  transform: scale(0.9) rotate(5deg);
+}
+#nav-wrapper.is-scrolled #nav-dropdown {
+  width: 280px;
+  left: auto;
+  right: 0;
+  border: none;
+  border-radius: 0 0 0 1.5rem;
+}
+#nav-wrapper.is-scrolled #nav-dropdown .flex-col {
+  align-items: flex-end;
+  padding-right: 2.5rem;
+}
+.nav-link {
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform, color, letter-spacing;
+}
+.nav-link:hover {
+  transform: translateX(12px);
+  letter-spacing: 0.25em;
+}
+#nav-wrapper.is-scrolled .nav-link:hover {
+  transform: translateX(-12px);
+  letter-spacing: 0.25em;
 }
 @property --tw-translate-x {
   syntax: "*";

@@ -10,6 +10,7 @@
 import { GlobalLoader } from './components/Loader.js';
 import { HeroParallax } from './components/Hero.js';
 import { GlobeViewer } from './components/Globe.js';
+import { Navbar } from './components/Navbar.js';
 import { EVENTS_DATA } from './config/events.js';
 import { OdometerEffect } from './components/Odometer.js';
 import { ASSETS, ICONS } from './config/assets.js';
@@ -46,6 +47,7 @@ class TimbaoEngine {
     }
 
     init() {
+        this.navbar = new Navbar();
         this.buildCursor();
         this.setupStickers();
         this.renderEvents();
