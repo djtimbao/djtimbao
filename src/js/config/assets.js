@@ -26,6 +26,9 @@ export const ASSETS = {
     // Portada de Reseña | Presskit
     PRESSKIT_COVER: `${BUCKET}/assets/djtimbao-album-cover.webp`,
 
+    // Ruta dinámica para el PDF descargable
+    PRESSKIT_PDF: `${BUCKET}/assets/presskit.pdf`,
+
     // Mapa vectorial SVG para la textura interactiva principal
     GLOBE_SVG_MAP: '/img/dj-timbao-world-map.svg',
 

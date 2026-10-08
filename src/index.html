@@ -216,22 +216,23 @@
         <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center z-10">
             
             <div class="lg:col-span-7 flex flex-col items-center lg:items-start justify-center w-full overflow-hidden">
+                
                 <div class="relative overflow-hidden w-fit block-reveal-group pt-12 pb-4 px-2" style="--reveal-delay: 0.2s;">
                     <h2 class="font-['Finger_Paint'] text-[90px] md:text-[100px] lg:text-[100px] leading-normal tracking-normal text-[#e3bb3e] uppercase ease-out opacity-0 block-reveal-text cursor-default select-none scale-y-[1.2] origin-bottom">
                         RESEÑA
                     </h2>
                     <div class="absolute inset-0 bg-[#e3bb3e] z-20 block-reveal-solid"></div>
+                </div>
+                
+                <div class="relative overflow-hidden w-fit mt-4 md:mt-6 px-6 py-3 md:px-8 md:py-4">
+                    <div class="absolute inset-0 bg-[#e3bb3e] cinematic-bg z-0"></div>
+                    <p class="relative z-10 text-black text-sm md:text-base font-bold tracking-widest uppercase text-center cinematic-text">
+                        Un vistazo a la experiencia de Dj Timbao a traves del tiempo.
+                    </p>
+                </div>
+
             </div>
             
-            <div class="relative overflow-hidden w-fit mt-4 md:mt-6 px-6 py-3 md:px-8 md:py-4">
-                <div class="absolute inset-0 bg-[#e3bb3e] cinematic-bg z-0"></div>
-                
-                <p class="relative z-10 text-black text-sm md:text-base font-bold tracking-widest uppercase text-center cinematic-text">
-                    Un vistazo a la experiencia de Dj Timbao a traves del tiempo.
-                </p>
-            </div>
-        </div>
-
             <div class="lg:col-span-5 flex items-center justify-center lg:justify-end perspective-[1200px]">
                 
                 <a href="#" id="presskit-card" download="DJ_Timbao_Presskit.pdf" target="_blank" rel="noopener noreferrer" class="group relative flex items-center justify-center w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 cursor-pointer mt-8 lg:mt-0" aria-label="Descargar Presskit de DJ Timbao">
@@ -239,33 +240,35 @@
                     <div class="absolute w-[95%] h-[95%] rounded-full shadow-[20px_0_30px_rgba(0,0,0,0.8)] transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-x-[55%] md:group-hover:-translate-x-[65%] group-[.is-active]:-translate-x-[55%] md:group-[.is-active]:-translate-x-[65%] group-hover:-rotate-[180deg] group-[.is-active]:-rotate-[180deg] z-0 flex items-center justify-center border border-black/50 will-change-transform" style="background: repeating-radial-gradient(circle, #09090b 0, #09090b 2px, #18181b 3px, #09090b 4px);">
                         
                         <div class="w-[35%] h-[35%] rounded-full bg-[#e3bb3e] flex flex-col items-center justify-center shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] relative overflow-hidden">
-                            <div class="absolute w-[90%] h-[90%] border-[2px] border-black/10 rounded-full pointer-events-none"></div>
                             
-                            <span class="absolute top-2 text-[5px] md:text-[6px] font-black uppercase text-black tracking-widest leading-none">Timbao</span>
+                            <div class="absolute w-[90%] h-[90%] border-[2px] border-black/10 rounded-full pointer-events-none z-20"></div>
                             
-                            <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-zinc-950 shadow-inner z-10 my-auto"></div>
+                            <span class="absolute top-2 text-[5px] md:text-[6px] font-black uppercase text-black tracking-widest leading-none z-20">Timbao</span>
                             
-                            <span class="absolute bottom-2 text-[4px] md:text-[5px] font-bold uppercase text-black tracking-widest leading-none">Presskit</span>
+                            <div id="vinyl-center-logo" class="absolute w-[65%] h-[65%] text-black fill-current flex items-center justify-center z-10 opacity-90"></div>
+                            
+                            <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-zinc-950 shadow-inner z-30 my-auto relative"></div>
+                            
+                            <span class="absolute bottom-2 text-[4px] md:text-[5px] font-bold uppercase text-black tracking-widest leading-none z-20">Presskit</span>
                         </div>
                     </div>
 
                     <div class="absolute inset-0 bg-[#e3bb3e] shadow-[10px_10px_30px_rgba(0,0,0,0.9)] flex flex-col items-center justify-center p-4 md:p-6 z-10 transition-transform duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:translate-x-2 md:group-hover:translate-x-4 group-[.is-active]:translate-x-2 md:group-[.is-active]:translate-x-4 will-change-transform overflow-hidden">
                         
-                        <img id="img-presskit-cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Portada Presskit" class="absolute inset-0 w-full h-full object-cover z-0 opacity-40 mix-blend-multiply" onerror="this.style.display='none'">
+                        <img id="img-presskit-cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Portada Presskit" class="absolute inset-0 w-full h-full object-cover z-0 opacity-100" onerror="this.style.display='none'">
                         
                         <div class="absolute inset-[3px] md:inset-[4px] border border-black/15 pointer-events-none rounded-[1px] z-10"></div>
                         
-                        <div id="presskit-logo-container" class="w-full max-w-[100px] md:max-w-[120px] flex items-center justify-center text-black drop-shadow-md fill-current z-10">
-                        </div>
+                        <div id="presskit-logo-container" class="w-full max-w-[100px] md:max-w-[120px] flex items-center justify-center text-black drop-shadow-md fill-current z-10"></div>
 
-                        <span class="absolute bottom-4 md:bottom-5 font-black tracking-[0.4em] text-[8px] md:text-[10px] text-black uppercase z-10">
-                            Presskit
+                        <span class="absolute bottom-4 md:bottom-5 font-black tracking-[0.4em] text-[8px] md:text-[10px] text-white uppercase z-10">
+                            Descargar
                         </span>
 
                         <div class="absolute inset-0 bg-gradient-to-tr from-black/5 via-transparent to-white/20 pointer-events-none z-10"></div>
                     </div>
-
                 </a>
+
             </div>
 
         </div>

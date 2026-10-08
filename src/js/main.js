@@ -85,16 +85,20 @@ class TimbaoEngine {
         // Inyección dinámica de la portada de reseña/presskit
         const imgPresskit = document.getElementById('img-presskit-cover');
         if (imgPresskit) imgPresskit.src = ASSETS.PRESSKIT_COVER;
+    
+        // Inyección dinámica del centro del Vinilo (Isotipo Corto DJT)
+        const vinylLogo = document.getElementById('vinyl-center-logo');
+        if (vinylLogo && typeof ASSETS !== 'undefined' && ASSETS.LOGO_SHORT_PATH) {
+            vinylLogo.innerHTML = `<svg viewBox="0 0 1605 965" class="w-full h-full fill-current rotate-180"><path d="${ASSETS.LOGO_SHORT_PATH}"/></svg>`;
+        }
     }
 
     setupDynamicLinks() {
         const presskitCard = document.getElementById('presskit-card');
         
-        if (presskitCard) {
-            // Obtenemos el bucket dinámico (detecta automáticamente Dev, Staging o Prod)
+        if (presskitCard && typeof ASSETS !== 'undefined' && ASSETS.PRESSKIT_PDF) {
             const bucketUrl = getBucketUrl();
-            // Inyectamos la URL absoluta construida en tiempo de ejecución
-            presskitCard.href = `${bucketUrl}/presskit.pdf`;
+            presskitCard.href = ASSETS.PRESSKIT_PDF;
         }
     }
 
