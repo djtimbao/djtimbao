@@ -81,6 +81,10 @@ class TimbaoEngine {
         
         const sRequests = document.getElementById('img-sticker-requests');
         if (sRequests) sRequests.src = ASSETS.STICKER_REQUESTS;
+
+        // Inyección dinámica de la portada de reseña/presskit
+        const imgPresskit = document.getElementById('img-presskit-cover');
+        if (imgPresskit) imgPresskit.src = ASSETS.PRESSKIT_COVER;
     }
 
     setupDynamicLinks() {

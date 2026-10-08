@@ -23,6 +23,9 @@ export const ASSETS = {
     STICKER_RADIO: `${BUCKET}/assets/sticker-radio.webp`,
     STICKER_REQUESTS: `${BUCKET}/assets/sticker-pedidos.webp`,
 
+    // Portada de Reseña | Presskit
+    PRESSKIT_COVER: `${BUCKET}/assets/djtimbao-album-cover.webp`,
+
     // Mapa vectorial SVG para la textura interactiva principal
     GLOBE_SVG_MAP: '/img/dj-timbao-world-map.svg',
 
