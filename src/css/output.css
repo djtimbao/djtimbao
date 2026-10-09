@@ -727,6 +727,10 @@
     --tw-scale-z: 110%;
     scale: var(--tw-scale-x) var(--tw-scale-y);
   }
+  .scale-x-\[-1\] {
+    --tw-scale-x: -1;
+    scale: var(--tw-scale-x) var(--tw-scale-y);
+  }
   .scale-y-\[-1\] {
     --tw-scale-y: -1;
     scale: var(--tw-scale-x) var(--tw-scale-y);
@@ -1306,8 +1310,8 @@
   .text-\[42px\] {
     font-size: 42px;
   }
-  .text-\[90px\] {
-    font-size: 90px;
+  .text-\[70px\] {
+    font-size: 70px;
   }
   .leading-none {
     --tw-leading: 1;
@@ -1433,8 +1437,17 @@
   .opacity-10 {
     opacity: 10%;
   }
+  .opacity-15 {
+    opacity: 15%;
+  }
+  .opacity-20 {
+    opacity: 20%;
+  }
   .opacity-25 {
     opacity: 25%;
+  }
+  .opacity-30 {
+    opacity: 30%;
   }
   .opacity-50 {
     opacity: 50%;

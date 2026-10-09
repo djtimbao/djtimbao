@@ -77,6 +77,16 @@ class TimbaoEngine {
         if (div1 && typeof DIVIDERS !== 'undefined' && DIVIDERS.divResenia) {
             div1.innerHTML = DIVIDERS.divResenia;
         }
+
+        const bgTrayectoria = document.getElementById('bg-trayectoria');
+        if (bgTrayectoria && typeof DIVIDERS !== 'undefined' && DIVIDERS.divStickers) {
+            bgTrayectoria.innerHTML = DIVIDERS.divStickers;
+        }
+
+        const bgStickers = document.getElementById('bg-stickers');
+        if (bgStickers && typeof DIVIDERS !== 'undefined' && DIVIDERS.divStickers) {
+            bgStickers.innerHTML = DIVIDERS.divStickers;
+        }
     }
 
     setupStickers() {

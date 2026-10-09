@@ -76,8 +76,14 @@
     </section>
 
     <!-- NAVEGACIÓN STICKERS -->
-    <section id="stickers-nav" class="relative w-full py-16 px-4 md:px-12 lg:px-24 flex flex-col items-center justify-center bg-zinc-950 z-30 border-t border-zinc-900/50">
-        <div class="w-full grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-8 items-center justify-items-center">
+    <section id="stickers-nav" class="relative w-full py-16 px-4 md:px-12 lg:px-24 flex flex-col items-center justify-center bg-zinc-950 z-30 border-t border-zinc-900/50 overflow-hidden">
+        
+        <div class="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-20">
+            <div id="bg-stickers" class="w-full h-full flex items-center justify-center">
+            </div>
+        </div>
+
+        <div class="relative w-full grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-8 items-center justify-items-center z-10">
             
             <!-- Sticker 1: Menciones (Microfono) -->
             <a href="https://music.youtube.com/playlist?list=PLWi7tUtohZLKGTjyfyC7bOCsHoP3Cwc01&si=cqeC-iOijaKWoPdI" target="_blank" rel="noopener noreferrer" class="sticker-card group flex flex-col items-center cursor-pointer">
@@ -165,8 +171,13 @@
     <!-- SECCIÓN: TRAYECTORIA -->
     <section id="trayectoria" class="relative w-full min-h-[70vh] py-16 sm:py-24 px-4 sm:px-6 md:px-12 lg:px-24 flex flex-col items-center justify-center bg-zinc-950 overflow-hidden border-t border-zinc-900/50">
         
-        <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center z-10">
-            
+        <div class="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-20">
+            <div id="bg-trayectoria" class="w-full h-full flex items-center justify-center scale-y-[-1] scale-x-[-1]">
+            </div>
+        </div>
+
+        <div class="relative w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center z-10">
+
             <div class="lg:col-span-7 flex flex-col gap-6 text-center lg:text-left">
                 
                 <div class="relative overflow-hidden w-fit mx-auto lg:mx-0 block-reveal-group" style="--reveal-delay: 0s;">
@@ -223,7 +234,7 @@
             <div class="lg:col-span-7 flex flex-col items-center lg:items-start justify-center w-full overflow-hidden">
                 
                 <div class="relative overflow-hidden w-fit block-reveal-group pt-6 pb-2 px-2" style="--reveal-delay: 0.2s;">
-                    <h2 class="font-['Vast_Shadow'] text-[90px] md:text-[100px] lg:text-[100px] leading-normal tracking-tighter text-black uppercase ease-out opacity-0 block-reveal-text cursor-default select-none scale-y-[1.2] origin-bottom">
+                    <h2 class="font-['Vast_Shadow'] text-[70px] md:text-[100px] lg:text-[100px] leading-normal tracking-tighter text-black uppercase ease-out opacity-0 block-reveal-text cursor-default select-none scale-y-[1.2] origin-bottom">
                         RESEÑA
                     </h2>
                     <div class="absolute inset-0 bg-black z-20 block-reveal-solid"></div>
