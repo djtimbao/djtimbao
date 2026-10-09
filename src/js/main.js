@@ -87,6 +87,11 @@ class TimbaoEngine {
         if (bgStickers && typeof DIVIDERS !== 'undefined' && DIVIDERS.divStickers) {
             bgStickers.innerHTML = DIVIDERS.divStickers;
         }
+
+        const bgGigs = document.getElementById('bg-gigs');
+        if (bgGigs && typeof DIVIDERS !== 'undefined' && DIVIDERS.divEventos) {
+            bgGigs.innerHTML = DIVIDERS.divEventos;
+        }
     }
 
     setupStickers() {
