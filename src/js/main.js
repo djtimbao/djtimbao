@@ -13,7 +13,7 @@ import { GlobeViewer } from './components/Globe.js';
 import { Navbar } from './components/Navbar.js';
 import { EVENTS_DATA } from './config/events.js';
 import { OdometerEffect } from './components/Odometer.js';
-import { ASSETS, ICONS } from './config/assets.js';
+import { ASSETS, ICONS, DIVIDERS } from './config/assets.js';
 import { getBucketUrl } from './config/env.js';
 
 class TimbaoEngine {
@@ -50,6 +50,7 @@ class TimbaoEngine {
         this.navbar = new Navbar();
         this.buildCursor();
         this.setupStickers();
+        this.setupDividers();
         this.renderEvents();
         this.renderGigs();
         this.globe = new GlobeViewer('globe-container');
@@ -69,6 +70,13 @@ class TimbaoEngine {
         // Añadimos 'will-change-transform' para que la GPU se prepare, y quitamos las transiciones CSS
         this.cursorEl.className = 'fixed top-0 left-0 w-4 h-4 bg-[#e3bb3e] rounded-full pointer-events-none z-[9998] mix-blend-difference hidden md:block will-change-transform';
         document.body.appendChild(this.cursorEl);
+    }
+
+    setupDividers() {
+        const div1 = document.getElementById('divider-resenia');
+        if (div1 && typeof DIVIDERS !== 'undefined' && DIVIDERS.divResenia) {
+            div1.innerHTML = DIVIDERS.divResenia;
+        }
     }
 
     setupStickers() {

@@ -53,7 +53,6 @@
     --font-weight-bold: 700;
     --font-weight-black: 900;
     --tracking-tighter: -0.05em;
-    --tracking-normal: 0em;
     --tracking-wide: 0.025em;
     --tracking-wider: 0.05em;
     --tracking-widest: 0.1em;
@@ -728,6 +727,10 @@
     --tw-scale-z: 110%;
     scale: var(--tw-scale-x) var(--tw-scale-y);
   }
+  .scale-y-\[-1\] {
+    --tw-scale-y: -1;
+    scale: var(--tw-scale-x) var(--tw-scale-y);
+  }
   .scale-y-\[1\.2\] {
     --tw-scale-y: 1.2;
     scale: var(--tw-scale-x) var(--tw-scale-y);
@@ -958,6 +961,9 @@
   }
   .bg-\[\#e26118\] {
     background-color: #e26118;
+  }
+  .bg-black {
+    background-color: var(--color-black);
   }
   .bg-black\/30 {
     background-color: color-mix(in srgb, #000 30%, transparent);
@@ -1197,11 +1203,11 @@
   .py-20 {
     padding-block: calc(var(--spacing) * 20);
   }
+  .pt-6 {
+    padding-top: calc(var(--spacing) * 6);
+  }
   .pt-10 {
     padding-top: calc(var(--spacing) * 10);
-  }
-  .pt-12 {
-    padding-top: calc(var(--spacing) * 12);
   }
   .pt-32 {
     padding-top: calc(var(--spacing) * 32);
@@ -1215,9 +1221,6 @@
   .pb-2 {
     padding-bottom: calc(var(--spacing) * 2);
   }
-  .pb-4 {
-    padding-bottom: calc(var(--spacing) * 4);
-  }
   .pb-20 {
     padding-bottom: calc(var(--spacing) * 20);
   }
@@ -1229,9 +1232,6 @@
   }
   .text-right {
     text-align: right;
-  }
-  .font-\[\'Finger_Paint\'\] {
-    font-family: 'Finger Paint';
   }
   .font-\[\'Luckiest_Guy\'\] {
     font-family: 'Luckiest Guy';
@@ -1349,10 +1349,6 @@
     --tw-tracking: 0.4em;
     letter-spacing: 0.4em;
   }
-  .tracking-normal {
-    --tw-tracking: var(--tracking-normal);
-    letter-spacing: var(--tracking-normal);
-  }
   .tracking-tighter {
     --tw-tracking: var(--tracking-tighter);
     letter-spacing: var(--tracking-tighter);
@@ -1440,9 +1436,6 @@
   .opacity-25 {
     opacity: 25%;
   }
-  .opacity-40 {
-    opacity: 40%;
-  }
   .opacity-50 {
     opacity: 50%;
   }
@@ -1466,9 +1459,6 @@
   }
   .mix-blend-difference {
     mix-blend-mode: difference;
-  }
-  .mix-blend-multiply {
-    mix-blend-mode: multiply;
   }
   .shadow-2xl {
     --tw-shadow: 0 25px 50px -12px var(--tw-shadow-color, rgb(0 0 0 / 0.25));
@@ -2001,9 +1991,6 @@
     .md\:mt-2 {
       margin-top: calc(var(--spacing) * 2);
     }
-    .md\:mt-6 {
-      margin-top: calc(var(--spacing) * 6);
-    }
     .md\:mb-2 {
       margin-bottom: calc(var(--spacing) * 2);
     }
@@ -2135,9 +2122,6 @@
     .md\:p-8 {
       padding: calc(var(--spacing) * 8);
     }
-    .md\:px-8 {
-      padding-inline: calc(var(--spacing) * 8);
-    }
     .md\:px-12 {
       padding-inline: calc(var(--spacing) * 12);
     }
@@ -2146,6 +2130,9 @@
     }
     .md\:py-4 {
       padding-block: calc(var(--spacing) * 4);
+    }
+    .md\:py-5 {
+      padding-block: calc(var(--spacing) * 5);
     }
     .md\:py-8 {
       padding-block: calc(var(--spacing) * 8);
