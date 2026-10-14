@@ -1310,8 +1310,14 @@
   .text-\[42px\] {
     font-size: 42px;
   }
+  .text-\[60px\] {
+    font-size: 60px;
+  }
   .text-\[70px\] {
     font-size: 70px;
+  }
+  .text-\[80px\] {
+    font-size: 80px;
   }
   .leading-none {
     --tw-leading: 1;
