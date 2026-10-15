@@ -436,3 +436,13 @@
     transform: translateX(-12px);
     letter-spacing: 0.25em;
 }
+
+/* =========================================
+   ANIMACIONES EDICIONES MUSICALES (CASSETE)
+   ========================================= */
+.magnetic-tape {
+    /* Preparamos la GPU para animar el trazo vectorial a costo cero */
+    will-change: stroke-dashoffset;
+    filter: drop-shadow(0 0 10px rgba(227, 187, 62, 0.8));
+    transition: stroke-dashoffset 0.1s linear;
+}

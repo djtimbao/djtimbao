@@ -102,5 +102,9 @@ export const DIVIDERS = {
         </defs>
         <!-- Lienzo que pinta toda la pantalla con el patrón -->
         <rect width="100%" height="100%" fill="url(#uv-pattern)"></rect>
+    </svg>`,
+    divEdiciones: `
+    <svg viewBox="0 0 1876.19 856.22" class="w-[400vw] md:w-[180vw] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-zinc-600 opacity-5 fill-current pointer-events-none">
+        <path d="${ASSETS.LOGO_PATH}"></path>
     </svg>`
 };

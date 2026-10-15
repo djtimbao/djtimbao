@@ -92,6 +92,11 @@ class TimbaoEngine {
         if (bgGigs && typeof DIVIDERS !== 'undefined' && DIVIDERS.divEventos) {
             bgGigs.innerHTML = DIVIDERS.divEventos;
         }
+
+        const bgEdiciones = document.getElementById('bg-ediciones-logo');
+        if (bgEdiciones && typeof DIVIDERS !== 'undefined' && DIVIDERS.divEdiciones) {
+            bgEdiciones.innerHTML = DIVIDERS.divEdiciones;
+        }
     }
 
     setupStickers() {
@@ -126,9 +131,11 @@ class TimbaoEngine {
     }
 
     setupScrollAnimations() {
-        // 1. Capturamos ambas secciones independientes
-        const trayectoriaSec = document.getElementById('trayectoria');
-        const presskitSec = document.getElementById('presskit');
+        // 1. Array con las secciones que usan Block Reveal
+        const seccionesAObservar = [
+            document.getElementById('trayectoria'), 
+            document.getElementById('ediciones')
+        ];
 
         // Observador nativo unificado y de alto rendimiento
         const observer = new IntersectionObserver((entries, observerInstance) => {
@@ -156,9 +163,10 @@ class TimbaoEngine {
             });
         }, { threshold: 0.2 }); // Umbral de 20% de visibilidad
 
-        // 5. Iniciar la observación
-        if (trayectoriaSec) observer.observe(trayectoriaSec);
-        if (presskitSec) observer.observe(presskitSec);
+        // 5. Iniciar la observación iterando el array
+        seccionesAObservar.forEach(sec => {
+            if (sec) observer.observe(sec);
+        });
     }
 
     setupPresskitAnimation() {
@@ -709,6 +717,7 @@ class TimbaoEngine {
 
             // FASE 1 (0.0 -> 0.5): Implosión Espacial (Zoom de Globo y Opacidad)
             const globeProgress = Math.min(segment1Progress / 0.5, 1);
+            
             if (this.globe) {
                 this.globe.updateScroll(globeProgress);
             }
@@ -782,7 +791,51 @@ class TimbaoEngine {
             }
         }
 
-        // --- 3. LÓGICA MARQUEE INFINITO Y TARJETAS 3D ---
+        // --- 3. LÓGICA DE EDICIONES COREOGRÁFICAS (CASSETE Y CINTA MAGNÉTICA) ---
+        
+        // A. Rotación permanente de los carretes (Giran ininterrumpidamente a 60 FPS)
+        const spoolL = document.getElementById('spool-left');
+        const spoolR = document.getElementById('spool-right');
+        if (spoolL && spoolR) {
+            this.cassetteRotation = (this.cassetteRotation || 0) + 1.2; // Aumentar este valor para girar más rápido
+            spoolL.style.transform = `rotate(${this.cassetteRotation}deg)`;
+            spoolR.style.transform = `rotate(${this.cassetteRotation}deg)`;
+        }
+
+        // B. Efecto de Trazado de la Cinta Magnética (Atado al nivel de Scroll)
+        const studioSec = document.getElementById('ediciones');
+        if (studioSec) {
+            const rect = studioSec.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+            
+            // Verificamos si la sección intersecta con el puerto de visión
+            if (rect.top < windowHeight && rect.bottom > 0) {
+                let progress = 1 - (rect.bottom / (windowHeight + rect.height));
+                progress = Math.max(0, Math.min(1, progress));
+
+                const tape = document.getElementById('magnetic-tape');
+                if (tape) {
+                    if (tape.classList.contains('opacity-0')) {
+                        tape.classList.remove('opacity-0');
+                    }
+                    
+                    // Cálculo matemático crítico para SVG Dash Array (requiere dos valores)
+                    if (!tape._totalLength) {
+                        tape._totalLength = tape.getTotalLength();
+                        tape.style.strokeDasharray = `${tape._totalLength} ${tape._totalLength}`;
+                    }
+                    
+                    // Mapeo condensado: Animamos la cinta cuando el usuario transita del 20% al 80% de la sección
+                    let drawProgress = (progress - 0.2) / 0.6;
+                    drawProgress = Math.max(0, Math.min(1, drawProgress));
+                    
+                    // Actualización de Hardware (stroke-dashoffset)
+                    tape.style.strokeDashoffset = tape._totalLength * (1 - drawProgress);
+                }
+            }
+        }
+
+        // --- 4. LÓGICA MARQUEE INFINITO Y TARJETAS 3D ---
         // Ahora dependemos de la cantidad real de eventos (originalCount) rescatada de la BD
         if (this.gigsTrack && this.gigCards && this.gigsState.originalCount) {
             // Calculamos con precisión el ancho de un bloque original para efectuar el teletransporte perfecto
@@ -802,7 +855,6 @@ class TimbaoEngine {
                 // Forzamos freno absoluto en Hover (PC)
                 let currentTargetSpeed = this.gigsState.isHovered ? 0 : this.gigsState.targetSpeed;
                 this.gigsState.speed += (currentTargetSpeed - this.gigsState.speed) * 0.1;
-
                 this.gigsState.position += this.gigsState.speed;
             }
 
@@ -824,7 +876,6 @@ class TimbaoEngine {
             this.gigCards.forEach(card => {
                 const rect = card.getBoundingClientRect();
                 const cardCenter = rect.left + rect.width / 2;
-                
                 const distance = (cardCenter - viewportCenter) / (window.innerWidth / 2);
                 const clampedDistance = Math.max(-1, Math.min(1, distance));
                 
@@ -840,7 +891,7 @@ class TimbaoEngine {
                     card.classList.add('is-active');
                 } else {
                     // Tarjetas en estado de rotación natural por la pista
-                    targetScale = 1 - Math.abs(clampedDistance) * 0.2; 
+                    targetScale = 1 - (Math.abs(clampedDistance) * 0.2); 
                     targetRotateY = clampedDistance * -45;
                     targetRotateX = 0;
                     targetZ = 0;
