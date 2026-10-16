@@ -180,7 +180,7 @@ export async function onRequestPatch(context) {
 }
 
 // ============================================================================
-// [DELETE] /api/requests - (ADMIN ONLY) Limpiar toda la cola de reproducción
+// [DELETE] /api/requests - (ADMIN ONLY) Limpiar toda la cola de reproducción de un evento
 // ============================================================================
 export async function onRequestDelete(context) {
     try {
@@ -193,10 +193,18 @@ export async function onRequestDelete(context) {
             });
         }
 
-        // Ejecuta el borrado total de la tabla de solicitudes
-        await db.prepare(`DELETE FROM solicitudes`).run();
+        // Extraer el ID del evento a limpiar
+        const url = new URL(context.request.url);
+        const eventoId = url.searchParams.get('evento_id');
 
-        return new Response(JSON.stringify({ success: true, message: 'La lista de pedidos ha sido limpiada.' }), { 
+        if (!eventoId) {
+            return new Response(JSON.stringify({ success: false, error: 'Falta el ID del evento para limpiar la cola.' }), { status: 400 });
+        }
+
+        // Ejecuta el borrado SOLAMENTE para las solicitudes del evento especificado
+        await db.prepare(`DELETE FROM solicitudes WHERE evento_id = ?`).bind(eventoId).run();
+
+        return new Response(JSON.stringify({ success: true, message: 'La lista de pedidos del evento ha sido limpiada.' }), { 
             status: 200, headers: { 'Content-Type': 'application/json' } 
         });
 

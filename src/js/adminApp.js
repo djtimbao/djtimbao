@@ -3,13 +3,16 @@
  * • Que es: Controlador Frontend del Panel de Administración (DJ Panel).
  * • Responsabilidades:
  * 1. Validar autenticación de Google y verificar acceso de nivel Admin.
- * 2. Interfaz de Pedidos Live: Marcar como reproducida, separar historial o limpiar base de datos.
+ * 2. Interfaz de Pedidos Live: Swappear entre eventos, marcar como reproducida, limpiar base.
  * 3. Interfaz de Eventos (CRUD): Crear, listar, editar y eliminar próximos eventos.
  */
 
 class AdminApp {
     constructor() {
         this.token = sessionStorage.getItem('djtimbao_admin_jwt') || null;
+        
+        // Estado Multi-Evento
+        this.activeEventId = null;
 
         // Nodos del DOM
         this.authSection = document.getElementById('auth-section');
@@ -24,6 +27,7 @@ class AdminApp {
         this.viewEventos = document.getElementById('view-eventos');
 
         // Listas Pedidos y Controles
+        this.adminEventSelect = document.getElementById('admin-event-select');
         this.queueList = document.getElementById('admin-queue-list');
         this.historyList = document.getElementById('admin-history-list');
         this.refreshPedidosBtn = document.getElementById('refresh-pedidos');
@@ -46,20 +50,32 @@ class AdminApp {
         // Auto-login si hay token
         if (this.token) {
             this.showApp();
-            this.fetchPedidos();
+            this.loadInitialData();
         }
     }
 
     // ==========================================
-    // AUTENTICACIÓN
+    // AUTENTICACIÓN Y ARRANQUE
     // ==========================================
     handleAuthResponse(response) {
         if (response.credential) {
             this.token = response.credential;
             sessionStorage.setItem('djtimbao_admin_jwt', this.token);
             
-            // Validamos contra la API para ver si tiene rol de ADMIN
-            this.fetchPedidos(); 
+            this.showApp();
+            this.loadInitialData(); 
+        }
+    }
+
+    // Método maestro de arranque: Carga las fiestas primero, luego los pedidos
+    async loadInitialData() {
+        await this.fetchEventos(); // Poblamos la vista de Gestión y el Select
+        
+        if (this.adminEventSelect.options.length > 0) {
+            this.activeEventId = this.adminEventSelect.value;
+            this.fetchPedidos();
+        } else {
+            this.queueList.innerHTML = '<p class="text-xs text-zinc-500 py-2 text-center">Debes crear al menos una fiesta en la pestaña "Eventos" para recibir pedidos.</p>';
         }
     }
 
@@ -95,6 +111,12 @@ class AdminApp {
         this.logoutBtn.addEventListener('click', () => this.logout());
         this.refreshPedidosBtn.addEventListener('click', () => this.fetchPedidos());
         this.clearPedidosBtn.addEventListener('click', () => this.clearPedidos());
+
+        // Control de Swapping del Evento Activo (DJ Selecciona la fiesta en curso)
+        this.adminEventSelect.addEventListener('change', (e) => {
+            this.activeEventId = e.target.value;
+            this.fetchPedidos(); // Refrescamos las canciones al cambiar de fiesta
+        });
 
         // Control de Tabs
         this.tabPedidos.addEventListener('click', () => {
@@ -134,8 +156,13 @@ class AdminApp {
     // MÓDULO: PEDIDOS LIVE
     // ==========================================
     async fetchPedidos() {
+        if (!this.activeEventId) return; // Blindaje: Si no hay evento, no hay peticiones
+
         try {
-            const res = await fetch('/api/requests', {
+            this.queueList.innerHTML = '<p class="text-xs text-[#e3bb3e] animate-pulse py-2 text-center">Cargando...</p>';
+            
+            // Inyectamos el ID de la fiesta seleccionada
+            const res = await fetch(`/api/requests?evento_id=${this.activeEventId}`, {
                 headers: { 'Authorization': `Bearer ${this.token}` }
             });
 
@@ -143,8 +170,6 @@ class AdminApp {
             const data = await res.json();
             
             if (data.success && data.isAdmin) {
-                this.showApp();
-                
                 // Filtros estructurados para separar la cola del historial
                 const pendientes = data.data.filter(s => s.estado === 'pendiente');
                 const reproducidas = data.data.filter(s => s.estado === 'reproducida');
@@ -156,6 +181,7 @@ class AdminApp {
             }
         } catch (error) {
             console.error('Error:', error);
+            this.queueList.innerHTML = '<p class="text-xs text-red-400 py-2 text-center">Error al conectar con la base de datos.</p>';
         }
     }
 
@@ -172,7 +198,7 @@ class AdminApp {
             
             li.innerHTML = `
                 <div class="flex items-center gap-3">
-                    <img src="${song.miniatura || '/img/djt-logo.jpg'}" class="w-12 h-12 rounded object-cover">
+                    <img src="${song.miniatura || '/img/djt-logo.jpg'}" class="w-12 h-12 rounded object-cover bg-black">
                     <div class="flex-1 min-w-0">
                         <h3 class="text-sm font-bold text-white truncate">${song.titulo}</h3>
                         <p class="text-[10px] text-zinc-400 truncate">${song.artista || 'Desconocido'}</p>
@@ -181,8 +207,8 @@ class AdminApp {
                 </div>
                 ${isPending ? `
                 <div class="flex gap-2">
-                    <a href="${song.url_original}" target="_blank" class="flex-1 py-2 bg-zinc-800 text-white text-[10px] font-bold uppercase tracking-wider text-center rounded">Pre-escucha</a>
-                    <button data-id="${song.id}" class="btn-play flex-1 py-2 bg-[#e3bb3e] text-black text-[10px] font-black uppercase tracking-wider rounded active:scale-95">Ya Sonó</button>
+                    <a href="${song.url_original}" target="_blank" class="flex-1 py-2 bg-zinc-800 hover:bg-zinc-700 text-white text-[10px] font-bold uppercase tracking-wider text-center rounded transition-colors">Pre-escucha</a>
+                    <button data-id="${song.id}" class="btn-play flex-1 py-2 bg-[#e3bb3e] text-black text-[10px] font-black uppercase tracking-wider rounded active:scale-95 transition-transform">Ya Sonó</button>
                 </div>` : ''}
             `;
             
@@ -213,10 +239,13 @@ class AdminApp {
     }
 
     async clearPedidos() {
-        if(!confirm('¿Estás seguro de que deseas eliminar TODAS las canciones de la base de datos? Esto vaciará la cola y el historial.')) return;
+        if (!this.activeEventId) return; // Prevención: no hacer nada si no hay evento activo
+
+        if(!confirm('¿Estás seguro de que deseas eliminar TODAS las canciones de ESTA fiesta? Esto vaciará la cola y el historial del evento seleccionado.')) return;
 
         try {
-            const res = await fetch('/api/requests', {
+            // Modificamos la URL para incluir el evento_id
+            const res = await fetch(`/api/requests?evento_id=${this.activeEventId}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${this.token}` }
             });
@@ -240,7 +269,34 @@ class AdminApp {
             const data = await res.json();
             
             if (data.success) {
+                // Poblamos la lista de edición (VISTA 2)
                 this.renderEventos(data.data);
+                
+                // POBLADO DINÁMICO DEL SELECTOR (VISTA 1)
+                const currentSelection = this.adminEventSelect.value;
+                this.adminEventSelect.innerHTML = ''; // Limpiamos opciones
+                
+                if (data.data.length === 0) {
+                    this.adminEventSelect.innerHTML = '<option value="" disabled selected>No hay fiestas creadas</option>';
+                    this.activeEventId = null;
+                } else {
+                    data.data.forEach(gig => {
+                        const opt = document.createElement('option');
+                        opt.value = gig.id;
+                        opt.textContent = `${gig.date} - ${gig.title}`;
+                        opt.className = "bg-zinc-900 text-white"; // Estilo Tailwind para los items del dropdown
+                        this.adminEventSelect.appendChild(opt);
+                    });
+                    
+                    // Restauramos la selección si el evento sigue existiendo, si no, tomamos el primero
+                    if (currentSelection && data.data.some(g => g.id.toString() === currentSelection.toString())) {
+                        this.adminEventSelect.value = currentSelection;
+                    } else {
+                        this.adminEventSelect.value = data.data[0].id;
+                        this.activeEventId = data.data[0].id; // Si se carga por primera vez, el ID activo es el primero de la lista
+                    }
+                }
+
             }
         } catch (error) {
             console.error('Error fetching eventos:', error);

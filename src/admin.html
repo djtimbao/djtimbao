@@ -67,9 +67,25 @@
 
         <!-- VISTA 1: PEDIDOS LIVE -->
         <section id="view-pedidos" class="flex-1 p-4 flex flex-col gap-4">
+            
+            <!-- Selector Inteligente de Fiestas para DJ -->
+            <div class="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-3 mb-2 flex items-center gap-3">
+                <svg class="w-5 h-5 fill-current text-[#e3bb3e] shrink-0" viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                <div class="flex-1 flex flex-col min-w-0">
+                    <label for="admin-event-select" class="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">Fiesta Activa:</label>
+                    <select id="admin-event-select" class="w-full bg-transparent text-white text-xs font-black uppercase tracking-wider appearance-none outline-none mt-0.5 cursor-pointer">
+                        <option value="" disabled selected>Cargando eventos...</option>
+                    </select>
+                </div>
+                <!-- Flecha personalizada para el select -->
+                <div class="shrink-0 text-zinc-500 pointer-events-none">
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                </div>
+            </div>
+
             <div class="flex justify-between items-end border-b border-zinc-900 pb-2">
                 <h2 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> Pista Actual
+                    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span> En Cola
                 </h2>
                 <div class="flex gap-3">
                     <button id="refresh-pedidos" class="text-[10px] uppercase font-bold text-zinc-400 flex items-center gap-1 hover:text-white transition-colors">
