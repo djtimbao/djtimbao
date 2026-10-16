@@ -8,7 +8,7 @@ import { getDB } from '../_shared/db.js';
 import { extractMetadata } from '../_shared/metadata.js';
 
 // ============================================================================
-// [GET] /api/requests - Obtener la lista de canciones
+// [GET] /api/requests - Obtener la lista de canciones de un Evento Específico
 // ============================================================================
 export async function onRequestGet(context) {
     try {
@@ -16,17 +16,26 @@ export async function onRequestGet(context) {
         const user = context.data.user;
         const isAdmin = user && user.isAdmin;
 
+        // 1. Extraer el evento_id de la URL (Ej: /api/requests?evento_id=5)
+        const url = new URL(context.request.url);
+        const eventoId = url.searchParams.get('evento_id');
+
+        if (!eventoId) {
+            return new Response(JSON.stringify({ success: false, error: 'Falta el ID del evento.' }), { status: 400 });
+        }
+
         const { results } = await db.prepare(`
             SELECT s.id, s.plataforma, s.url_original, s.titulo, s.artista, s.miniatura, s.estado, 
-                   s.fecha_solicitud, s.hora_reproduccion,
-                   u.nombre as solicitante_nombre, u.foto as solicitante_foto
+            s.fecha_solicitud, s.hora_reproduccion,
+            u.nombre as solicitante_nombre, u.foto as solicitante_foto
             FROM solicitudes s
             LEFT JOIN usuarios u ON s.usuario_id = u.google_id
+            WHERE s.evento_id = ?
             ORDER BY 
-                CASE WHEN s.estado = 'pendiente' THEN 0 ELSE 1 END,
-                s.orden ASC, 
-                s.fecha_solicitud ASC
-        `).all();
+            CASE WHEN s.estado = 'pendiente' THEN 0 ELSE 1 END,
+            s.orden ASC, 
+            s.fecha_solicitud ASC
+        `).bind(eventoId).all();
 
         // SEGURIDAD PÚBLICA: Si no es Admin, borramos los nombres/fotos por privacidad
         const sanitizedResults = results.map(row => {
@@ -50,7 +59,7 @@ export async function onRequestGet(context) {
 }
 
 // ============================================================================
-// [POST] /api/requests - Agregar una nueva canción a la cola
+// [POST] /api/requests - Agregar una nueva canción a la cola de un Evento
 // ============================================================================
 export async function onRequestPost(context) {
     try {
@@ -67,17 +76,22 @@ export async function onRequestPost(context) {
             });
         }
 
+        // Se requiere saber a qué evento va la canción
+        if (!payload.evento_id) {
+            return new Response(JSON.stringify({ success: false, error: 'Falta el evento de destino.' }), { status: 400 });
+        }
+
         const metadatos = await extractMetadata(payload);
 
-        // 🛡️ MOTOR ANTI-DUPLICADOS: Busca por Huella Digital en lugar de URL
+        // MOTOR ANTI-DUPLICADOS: Busca por Huella Digital DENTRO del mismo evento
         const existingRequest = await db.prepare(
-            `SELECT estado FROM solicitudes WHERE huella_unica = ?`
-        ).bind(metadatos.huella_unica).first();
+            `SELECT estado FROM solicitudes WHERE huella_unica = ? AND evento_id = ?`
+        ).bind(metadatos.huella_unica, payload.evento_id).first();
 
         if (existingRequest) {
             const mensaje = existingRequest.estado === 'pendiente' 
-                ? `¡Alguien más ya pidió "${metadatos.titulo}"! Está en la cola.`
-                : `"${metadatos.titulo}" ya sonó en la fiesta. ¡Pide otra!`;
+                ? `¡Alguien más ya pidió "${metadatos.titulo}" para esta fiesta!`
+                : `"${metadatos.titulo}" ya sonó en esta fiesta. ¡Pide otra!`;
             
             return new Response(JSON.stringify({ success: false, error: mensaje }), {
                 status: 409,
@@ -87,10 +101,11 @@ export async function onRequestPost(context) {
 
         // Inserción en Cloudflare D1
         await db.prepare(`
-            INSERT INTO solicitudes (usuario_id, plataforma, url_original, titulo, artista, miniatura, huella_unica)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO solicitudes (usuario_id, evento_id, plataforma, url_original, titulo, artista, miniatura, huella_unica)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `).bind(
             user.google_id, 
+            payload.evento_id,
             metadatos.plataforma, 
             metadatos.url_original, 
             metadatos.titulo, 
@@ -99,7 +114,7 @@ export async function onRequestPost(context) {
             metadatos.huella_unica
         ).run();
 
-        return new Response(JSON.stringify({ success: true, message: '¡Canción agregada a la cola!' }), {
+        return new Response(JSON.stringify({ success: true, message: '¡Canción agregada a la cola de la fiesta!' }), {
             status: 201,
             headers: { 'Content-Type': 'application/json' }
         });

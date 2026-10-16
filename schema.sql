@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
 CREATE TABLE IF NOT EXISTS solicitudes (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     usuario_id TEXT NOT NULL,
+    evento_id INTEGER NOT NULL,
     plataforma TEXT CHECK(plataforma IN ('youtube', 'spotify', 'ytmusic')) NOT NULL,
     url_original TEXT NOT NULL,
     titulo TEXT NOT NULL,
@@ -20,12 +21,13 @@ CREATE TABLE IF NOT EXISTS solicitudes (
     estado TEXT CHECK(estado IN ('pendiente', 'reproducida')) DEFAULT 'pendiente', -- 'pendiente', 'reproducida', 'en_reproduccion'
     orden INTEGER DEFAULT 0,
     fecha_solicitud DATETIME DEFAULT CURRENT_TIMESTAMP,
-    hora_reproduccion DATETIME, -- (UTC0)
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(google_id) ON DELETE CASCADE
+    hora_reproduccion DATETIME, -- UTC0
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(google_id) ON DELETE CASCADE,
+    FOREIGN KEY (evento_id) REFERENCES eventos(id) ON DELETE CASCADE -- Borrado en cascada si el Admin elimina el evento
 );
 
--- Índice para optimizar el filtrado de la cola activa en tiempo real
-CREATE INDEX IF NOT EXISTS idx_solicitudes_estado ON solicitudes(estado);
+-- Índice compuesto para acelerar búsquedas masivas por evento + estado
+CREATE INDEX IF NOT EXISTS idx_solicitudes_evento_estado ON solicitudes(evento_id, estado);
 
 -- Tabla de Próximas Fechas (Gigs)
 CREATE TABLE IF NOT EXISTS eventos (

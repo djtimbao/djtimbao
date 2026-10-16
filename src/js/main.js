@@ -371,7 +371,7 @@ class TimbaoEngine {
 
             // Separamos el símbolo '@' (&#64;) para romper escaneos de expresiones regulares simples.
             contactContainer.innerHTML = `
-                <span onclick="window.location.href=atob('${mailHash}')" class="cursor-pointer hover:opacity-60 transition-opacity">contacto<span class="inline-block">&#64;</span>djtimbao.com</span>
+                <span onclick="window.location.href=atob('${mailHash}')" class="cursor-pointer hover:opacity-60 transition-opacity">hablame<span class="inline-block">&#64;</span>djtimbao.com</span>
                 
                 <span onclick="window.open(atob('${tgHash}'), '_blank')" class="cursor-pointer hover:opacity-60 transition-opacity flex items-center gap-2">
                     <span class="w-5 h-5 shrink-0 text-black fill-current">${ICONS.telegram}</span> Telegram
