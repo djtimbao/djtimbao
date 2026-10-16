@@ -22,6 +22,11 @@ class TimbaoEngine {
         this.cursor = { x: 0, y: 0, targetX: 0, targetY: 0, scale: 1, targetScale: 1 };
         // Motor de inercia para la progresión del scroll
         this.scrollProgress = 0; 
+        
+        // --- Físicas autónomas de Eventos (Globo 3D y Textos) ---
+        this.eventsSectionVisible = false;
+        this.eventsAnimationProgress = 0; // Valor interpolado actual
+        this.eventsTargetProgress = 0; // Valor objetivo (0 o 1)
 
         // Estado del motor matemático para el Carrusel Marquee 3D Infinito (Swipe & Inercia)
         this.gigsState = {
@@ -134,7 +139,8 @@ class TimbaoEngine {
         // 1. Array con las secciones que usan Block Reveal
         const seccionesAObservar = [
             document.getElementById('trayectoria'), 
-            document.getElementById('ediciones')
+            document.getElementById('ediciones'),
+            document.getElementById('presskit')
         ];
 
         // Observador nativo unificado y de alto rendimiento
@@ -167,6 +173,23 @@ class TimbaoEngine {
         seccionesAObservar.forEach(sec => {
             if (sec) observer.observe(sec);
         });
+
+        // --- Observador Exclusivo para el Globo 3D Autónomo y Textos ---
+        const eventsSection = document.getElementById('events');
+        if (eventsSection && this.globe) {
+            const globeObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        this.globe.triggerEntrance();
+                        this.eventsTargetProgress = 1.0; // Inicia expansión de textos
+                    } else {
+                        this.globe.triggerExit();
+                        this.eventsTargetProgress = 0.0; // Inicia repliegue de textos
+                    }
+                });
+            }, { threshold: 0.25 }); // 25% In/Out
+            globeObserver.observe(eventsSection);
+        }
     }
 
     setupPresskitAnimation() {
@@ -689,50 +712,27 @@ class TimbaoEngine {
             this.hero.render(this.cursor.x, this.cursor.y);
         }
 
-        // --- 2. LÓGICA DE TRACK HORIZONTAL (Efecto Serpiente) Y ONDA DOPPLER ---
+        // --- 2. LÓGICA DE TRACK HORIZONTAL Y ONDA DOPPLER DE TEXTOS ---
         const trackSec = document.getElementById('horizontal-scroll-track');
         if (trackSec) {
             const rect = trackSec.getBoundingClientRect();
             const windowHeight = window.innerHeight;
-            
-            // Calculamos el scroll total disponible (400vh totales - 100vh cámara = 300vh scrolleables)
             const maxScroll = rect.height - windowHeight;
             
-            // Progreso general recalculado para 3 fases: 0.0 al 3.0
             let rawProgress = 0;
             if (rect.top <= 0) {
                 rawProgress = (-rect.top / (maxScroll / 3));
             }
             rawProgress = Math.max(0, Math.min(3, rawProgress));
 
-            // Aplicar inercia para evitar tirones (Damping)
             this.scrollProgress += (rawProgress - this.scrollProgress) * 0.08;
 
-            // -----------------------------------------------------------
-            // SEGMENTO 1 (Progreso 0.0 a 1.0): Freno de Salida (Esfera y Textos)
-            // -----------------------------------------------------------
-            // Al usar Math.min(this.scrollProgress, 1), el progreso se bloquea en 1.0 
-            // cuando seguimos bajando, eliminando la animación de salida.
-            const segment1Progress = Math.min(this.scrollProgress, 1);
-
-            // FASE 1 (0.0 -> 0.5): Implosión Espacial (Zoom de Globo y Opacidad)
-            const globeProgress = Math.min(segment1Progress / 0.5, 1);
+            // --- FASE 2: Onda Expansiva de Textos (Animación Autónoma) ---
+            // Interpolación matemática fluida hacia el valor objetivo (0.0 o 1.0)
+            this.eventsAnimationProgress += (this.eventsTargetProgress - this.eventsAnimationProgress) * 0.08;
             
-            if (this.globe) {
-                this.globe.updateScroll(globeProgress);
-            }
-
-            // Glow: Sincronizado a escala y expulsa el "Pulso" Doppler
-            const glowContainer = document.getElementById('globe-container');
-            if (glowContainer) {
-                const pulse = Math.sin(globeProgress * Math.PI) * 0.15;
-                const glowScale = 0.3 + (0.7 * globeProgress) + pulse;
-                glowContainer.style.setProperty('--glow-scale', glowScale);
-                glowContainer.style.setProperty('--glow-op', globeProgress);
-            }
-
-            // FASE 2 (0.5 -> 1.0): Onda Expansiva de Textos
-            const textProgress = Math.max(0, (segment1Progress - 0.5) / 0.5);
+            // Usamos directamente el progreso interpolado en lugar del scroll
+            const textProgress = Math.max(0, Math.min(1, this.eventsAnimationProgress));
             const isDesktop = window.innerWidth >= 1024;
             
             // CONFIGURACIÓN DE LA CURVATURA DE LOS TEXTOS DEL GLOBO CON MATEMÁTICA RESPONSIVA
@@ -855,6 +855,7 @@ class TimbaoEngine {
                 // Forzamos freno absoluto en Hover (PC)
                 let currentTargetSpeed = this.gigsState.isHovered ? 0 : this.gigsState.targetSpeed;
                 this.gigsState.speed += (currentTargetSpeed - this.gigsState.speed) * 0.1;
+
                 this.gigsState.position += this.gigsState.speed;
             }
 

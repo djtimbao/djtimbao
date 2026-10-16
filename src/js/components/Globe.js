@@ -22,6 +22,15 @@ export class GlobeViewer {
         this.isFocused = false;
         this.previousMousePosition = { x: 0, y: 0 };
         this.isVisible = false;
+        
+        // --- Variables de Estado Autónomo ---
+        // Establecemos los valores en 0 para que empiece invisible y pequeño
+        this.scale = 0; 
+        this.targetScale = 0;
+        this.opacity = 0;
+        this.targetOpacity = 0;
+        this.cameraZ = 6.0;
+        this.targetCameraZ = 6.0;
 
         // Variables para el motor de Textura SVG Dinámica
         this.svgDoc = null;
@@ -65,7 +74,10 @@ export class GlobeViewer {
         this.bindEvents();
         this.setupIntersectionObserver();
         
-        this.updateScroll(0);
+        // Inicializamos los valores base en 0
+        this.globe.scale.set(0, 0, 0);
+        this.material.opacity = 0;
+        
         this.animate();
     }
 
@@ -123,7 +135,7 @@ export class GlobeViewer {
         
         // Limpiamos focos anteriores silenciosamente
         this.resetHighlight(false); 
-        
+
         const el = this.svgDoc.getElementById(countryId);
         if (el) {
             this.activeCountryEl = el;
@@ -175,20 +187,22 @@ export class GlobeViewer {
         this.targetRotation.y = this.rotation.y + diff;
     }
 
-    updateScroll(progress) {
-        if (!this.globe) return;
+    // --- MÉTODOS DE ANIMACIÓN AUTÓNOMA ---
+    triggerEntrance() {
+        // Fijamos los valores objetivo a su estado máximo de "Entrada"
+        this.targetScale = 1.0;
+        this.targetOpacity = 1.0;
+        this.targetCameraZ = 3.6; // Acercamiento suave (6.0 - 2.4)
         
-        const scale = 0.3 + (0.7 * progress);
-        this.globe.scale.set(scale, scale, scale);
-        
-        this.camera.position.z = 6.0 - (2.4 * progress);
-        this.material.opacity = progress;
+        // Disparamos el impulso "Tornado" por única vez
+        this.targetRotation.y += 2.5; 
+    }
 
-        // EFECTO TORNADO: Aceleración extrema que decae al llegar a progress = 1.0
-        if (progress < 1.0) {
-            const tornadoIntensity = Math.pow(1.0 - progress, 3);
-            this.targetRotation.y += tornadoIntensity * 0.5;
-        }
+    triggerExit() {
+        // Fijamos los valores objetivo a su estado mínimo de "Salida"
+        this.targetScale = 0.0;
+        this.targetOpacity = 0.0;
+        this.targetCameraZ = 6.0; // Alejamiento hacia el vacío
     }
 
     bindEvents() {
@@ -254,18 +268,44 @@ export class GlobeViewer {
 
         if (!this.isVisible) return;
 
-        // Si no lo estamos arrastrando ni el ratón está haciendo foco en un evento, gira suavemente
+        // 1. Rotación Constante Automática (Si no arrastra ni hace foco)
         if (!this.isDragging && !this.isFocused) {
             this.targetRotation.y += 0.0015;
         }
 
-        // Interpolación inercial (Damping)
+        // 2. Interpolación inercial (Damping) de Rotación
         this.rotation.x += (this.targetRotation.x - this.rotation.x) * 0.08;
         this.rotation.y += (this.targetRotation.y - this.rotation.y) * 0.08;
 
         if (this.globe) {
             this.globe.rotation.x = this.rotation.x;
             this.globe.rotation.y = this.rotation.y;
+        }
+
+        // --- 3. INTERPOLACIÓN LERP AUTÓNOMA ---
+        // Lerp Escala
+        this.scale += (this.targetScale - this.scale) * 0.08;
+        if (this.globe) {
+            this.globe.scale.set(this.scale, this.scale, this.scale);
+        }
+
+        // Lerp Opacidad
+        this.opacity += (this.targetOpacity - this.opacity) * 0.08;
+        if (this.material) {
+            this.material.opacity = Math.max(0, Math.min(1, this.opacity));
+        }
+
+        // Lerp Cámara (Zoom In/Out)
+        this.cameraZ += (this.targetCameraZ - this.cameraZ) * 0.08;
+        this.camera.position.z = this.cameraZ;
+
+        // 4. Integración del "Glow" Doppler sincronizado con el modelo matemático
+        // Multiplicamos la escala interna (0.0 a 1.0) para sacar un valor proporcional
+        if (this.container) {
+            const pulse = Math.sin(this.scale * Math.PI) * 0.15;
+            const glowScale = 0.3 + (0.7 * this.scale) + pulse;
+            this.container.style.setProperty('--glow-scale', glowScale);
+            this.container.style.setProperty('--glow-op', this.opacity);
         }
 
         this.renderer.render(this.scene, this.camera);
