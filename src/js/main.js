@@ -78,11 +78,6 @@ class TimbaoEngine {
     }
 
     setupDividers() {
-        const div1 = document.getElementById('divider-resenia');
-        if (div1 && typeof DIVIDERS !== 'undefined' && DIVIDERS.divResenia) {
-            div1.innerHTML = DIVIDERS.divResenia;
-        }
-
         const bgDoodleWrapper = document.getElementById('bg-doodle-wrapper');
         if (bgDoodleWrapper && typeof DIVIDERS !== 'undefined' && DIVIDERS.divDoodleDj) {
             bgDoodleWrapper.innerHTML = DIVIDERS.divDoodleDj;
