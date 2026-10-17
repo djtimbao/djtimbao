@@ -59,6 +59,7 @@
     --font-weight-bold: 700;
     --font-weight-black: 900;
     --tracking-tighter: -0.05em;
+    --tracking-normal: 0em;
     --tracking-wide: 0.025em;
     --tracking-wider: 0.05em;
     --tracking-widest: 0.1em;
@@ -1303,6 +1304,9 @@
   .pt-6 {
     padding-top: calc(var(--spacing) * 6);
   }
+  .pt-8 {
+    padding-top: calc(var(--spacing) * 8);
+  }
   .pt-10 {
     padding-top: calc(var(--spacing) * 10);
   }
@@ -1318,6 +1322,9 @@
   .pb-2 {
     padding-bottom: calc(var(--spacing) * 2);
   }
+  .pb-16 {
+    padding-bottom: calc(var(--spacing) * 16);
+  }
   .pb-20 {
     padding-bottom: calc(var(--spacing) * 20);
   }
@@ -1329,6 +1336,9 @@
   }
   .text-right {
     text-align: right;
+  }
+  .font-\[\'Finger_Paint\'\] {
+    font-family: 'Finger Paint';
   }
   .font-\[\'Luckiest_Guy\'\] {
     font-family: 'Luckiest Guy';
@@ -1410,6 +1420,13 @@
   .text-\[70px\] {
     font-size: 70px;
   }
+  .text-\[100px\] {
+    font-size: 100px;
+  }
+  .leading-\[1\] {
+    --tw-leading: 1;
+    line-height: 1;
+  }
   .leading-none {
     --tw-leading: 1;
     line-height: 1;
@@ -1445,6 +1462,10 @@
   .tracking-\[0\.4em\] {
     --tw-tracking: 0.4em;
     letter-spacing: 0.4em;
+  }
+  .tracking-normal {
+    --tw-tracking: var(--tracking-normal);
+    letter-spacing: var(--tracking-normal);
   }
   .tracking-tighter {
     --tw-tracking: var(--tracking-tighter);
@@ -1557,8 +1578,14 @@
   .opacity-100 {
     opacity: 100%;
   }
+  .opacity-\[0\.03\] {
+    opacity: 0.03;
+  }
   .mix-blend-difference {
     mix-blend-mode: difference;
+  }
+  .mix-blend-screen {
+    mix-blend-mode: screen;
   }
   .shadow-2xl {
     --tw-shadow: 0 25px 50px -12px var(--tw-shadow-color, rgb(0 0 0 / 0.25));
@@ -2098,6 +2125,9 @@
     .sm\:py-32 {
       padding-block: calc(var(--spacing) * 32);
     }
+    .sm\:pb-24 {
+      padding-bottom: calc(var(--spacing) * 24);
+    }
     .sm\:text-3xl {
       font-size: var(--text-3xl);
       line-height: var(--tw-leading, var(--text-3xl--line-height));
@@ -2132,6 +2162,9 @@
     }
     .md\:mt-2 {
       margin-top: calc(var(--spacing) * 2);
+    }
+    .md\:mt-12 {
+      margin-top: calc(var(--spacing) * 12);
     }
     .md\:mb-2 {
       margin-bottom: calc(var(--spacing) * 2);
@@ -2351,6 +2384,12 @@
     .md\:text-\[80px\] {
       font-size: 80px;
     }
+    .md\:text-\[100px\] {
+      font-size: 100px;
+    }
+    .md\:opacity-5 {
+      opacity: 5%;
+    }
     @media (hover: hover) {
       .md\:group-hover\:-translate-x-\[65\%\]:is(:where(.group):hover *) {
         --tw-translate-x: calc(65% * -1);
@@ -2521,6 +2560,9 @@
     }
     .lg\:text-\[90px\] {
       font-size: 90px;
+    }
+    .lg\:text-\[100px\] {
+      font-size: 100px;
     }
     @media (hover: hover) {
       .lg\:group-hover\:-translate-y-2:is(:where(.group):hover *) {

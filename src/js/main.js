@@ -83,16 +83,11 @@ class TimbaoEngine {
             div1.innerHTML = DIVIDERS.divResenia;
         }
 
-        const bgTrayectoria = document.getElementById('bg-trayectoria');
-        if (bgTrayectoria && typeof DIVIDERS !== 'undefined' && DIVIDERS.divStickers) {
-            bgTrayectoria.innerHTML = DIVIDERS.divStickers;
+        const bgDoodleWrapper = document.getElementById('bg-doodle-wrapper');
+        if (bgDoodleWrapper && typeof DIVIDERS !== 'undefined' && DIVIDERS.divDoodleDj) {
+            bgDoodleWrapper.innerHTML = DIVIDERS.divDoodleDj;
         }
-
-        const bgStickers = document.getElementById('bg-stickers');
-        if (bgStickers && typeof DIVIDERS !== 'undefined' && DIVIDERS.divStickers) {
-            bgStickers.innerHTML = DIVIDERS.divStickers;
-        }
-
+        
         const bgGigs = document.getElementById('bg-gigs');
         if (bgGigs && typeof DIVIDERS !== 'undefined' && DIVIDERS.divEventos) {
             bgGigs.innerHTML = DIVIDERS.divEventos;

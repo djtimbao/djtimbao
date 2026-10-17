@@ -37,6 +37,7 @@
                 <a href="#" class="nav-link text-right text-sm md:text-base font-black uppercase tracking-[0.2em] text-zinc-300 hover:text-[#e3bb3e] transition-colors">Radio Timbao</a>
                 <a href="#trayectoria" class="nav-link text-right text-sm md:text-base font-black uppercase tracking-[0.2em] text-zinc-300 hover:text-[#e3bb3e] transition-colors">Trayectoria</a>
                 <a href="#presskit" class="nav-link text-right text-sm md:text-base font-black uppercase tracking-[0.2em] text-zinc-300 hover:text-[#e3bb3e] transition-colors">Reseña</a>
+                <a href="#ediciones" class="nav-link text-right text-sm md:text-base font-black uppercase tracking-[0.2em] text-zinc-300 hover:text-[#e3bb3e] transition-colors">Ediciones musicales</a>
                 <a href="#events" class="nav-link text-right text-sm md:text-base font-black uppercase tracking-[0.2em] text-zinc-300 hover:text-[#e3bb3e] transition-colors">Experiencias</a>
                 <a href="#gigs" class="nav-link text-right text-sm md:text-base font-black uppercase tracking-[0.2em] text-zinc-300 hover:text-[#e3bb3e] transition-colors">Eventos</a>
                 <a href="#" onclick="window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); return false;" class="nav-link text-right text-sm md:text-base font-black uppercase tracking-[0.2em] text-zinc-300 hover:text-[#e3bb3e] transition-colors">Contacto</a>
@@ -75,206 +76,195 @@
 
     </section>
 
-    <!-- NAVEGACIÓN STICKERS -->
-    <section id="stickers-nav" class="relative w-full py-16 px-4 md:px-12 lg:px-24 flex flex-col items-center justify-center bg-zinc-950 z-30 border-t border-zinc-900/50 overflow-hidden">
+    <!-- SECCIÓN STICKERS -->
+    <div class="relative w-full bg-zinc-950">
         
-        <div class="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-20">
-            <div id="bg-stickers" class="w-full h-full flex items-center justify-center">
-            </div>
-        </div>
+        <!-- ÚNICO CONTENEDOR DEL FONDO DOODLE -->
+        <div id="bg-doodle-wrapper" class="absolute inset-0 w-full h-full z-0 pointer-events-none flex items-center justify-center"></div>
 
-        <div class="relative w-full grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-8 items-center justify-items-center z-10">
+        <!-- NAVEGACIÓN STICKERS -->
+        <section id="stickers-nav" class="relative w-full py-16 px-4 md:px-12 lg:px-24 flex flex-col items-center justify-center z-30">
             
-            <!-- Sticker 1: Menciones (Microfono) -->
-            <a href="https://music.youtube.com/playlist?list=PLWi7tUtohZLKGTjyfyC7bOCsHoP3Cwc01&si=cqeC-iOijaKWoPdI" target="_blank" rel="noopener noreferrer" class="sticker-card group flex flex-col items-center cursor-pointer">
+            <!-- Elevamos el grid por encima del fondo -->
+            <div class="relative z-10 w-full grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-8 items-center justify-items-center">
                 
-                <svg viewBox="0 0 320 110" class="w-full max-w-[260px] lg:max-w-[320px] overflow-visible -mb-6 lg:-mb-10 z-10 transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-2 lg:group-hover:-translate-y-2 pointer-events-none">
-                    <path id="arc-mentions-top" d="M 10,60 A 180,60 0 0,1 310,60" fill="transparent" />
-                    <path id="arc-mentions-bottom" d="M 10,95 A 180,60 0 0,1 310,95" fill="transparent" />
-                    
-                    <text class="text-[22px] lg:text-[22px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
-                        <textPath href="#arc-mentions-top" startOffset="50%" text-anchor="middle">Timbao en</textPath>
-                    </text>
+                <!-- Sticker 1: Menciones (Microfono) -->
+                <a href="https://music.youtube.com/playlist?list=PLWi7tUtohZLKGTjyfyC7bOCsHoP3Cwc01&si=cqeC-iOijaKWoPdI" target="_blank" rel="noopener noreferrer" class="sticker-card group flex flex-col items-center cursor-pointer">
+                    <svg viewBox="0 0 320 110" class="w-full max-w-[260px] lg:max-w-[320px] overflow-visible -mb-6 lg:-mb-10 z-10 transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-2 lg:group-hover:-translate-y-2 pointer-events-none">
+                        <path id="arc-mentions-top" d="M 10,60 A 180,60 0 0,1 310,60" fill="transparent" />
+                        <path id="arc-mentions-bottom" d="M 10,95 A 180,60 0 0,1 310,95" fill="transparent" />
+                        
+                        <text class="text-[22px] lg:text-[22px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
+                            <textPath href="#arc-mentions-top" startOffset="50%" text-anchor="middle">Timbao en</textPath>
+                        </text>
 
-                    <text class="text-[36px] lg:text-[36px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
-                        <textPath href="#arc-mentions-bottom" startOffset="50%" text-anchor="middle">Canciones</textPath>
-                    </text>
-                </svg>
+                        <text class="text-[36px] lg:text-[36px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
+                            <textPath href="#arc-mentions-bottom" startOffset="50%" text-anchor="middle">Canciones</textPath>
+                        </text>
+                    </svg>
 
-                <div class="animate-idle-float float-delay-1 w-full max-w-[320px] lg:max-w-[280px] relative aspect-square mb-4 z-20">
-                    <img id="img-sticker-mentions" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" loading="eager" decoding="async" alt="Menciones a DJ Timbao" class="w-full h-full object-contain sticker-hover">
-                    
-                    <div class="sticker-text-wrapper absolute bottom-6 right-2 lg:bottom-2 lg:right-8 flex flex-col items-center rotate-[-5deg] z-40 pointer-events-none">
-                        <span class="sticker-text-cutout font-['Luckiest_Guy'] text-[22px] lg:text-2xl leading-none tracking-wide" data-text="CANCIONES DONDE">CANCIONES DONDE</span>
-                        <span class="sticker-text-cutout font-['Luckiest_Guy'] text-[22px] lg:text-2xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="MENCIONAN A">MENCIONAN A</span>
-                        <span class="sticker-text-cutout font-['Luckiest_Guy'] text-[22px] lg:text-2xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="DJ TIMBAO">DJ TIMBAO</span>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Sticker 2: Radio -->
-            <a href="/radio.html" class="sticker-card group flex flex-col items-center cursor-pointer">
-                
-                <svg viewBox="0 0 320 110" class="w-full max-w-[300px] lg:max-w-[360px] overflow-visible -mb-12 lg:-mb-16 z-10 transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-2 lg:group-hover:-translate-y-2 pointer-events-none">
-                    <path id="arc-radio-top" d="M 10,60 A 180,60 0 0,1 310,60" fill="transparent" />
-                    <path id="arc-radio-bottom" d="M 10,95 A 180,60 0 0,1 310,95" fill="transparent" />
-                    
-                    <text class="text-[22px] lg:text-[22px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
-                        <textPath href="#arc-radio-top" startOffset="50%" text-anchor="middle">Radio</textPath>
-                    </text>
-
-                    <text class="text-[36px] lg:text-[36px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
-                        <textPath href="#arc-radio-bottom" startOffset="50%" text-anchor="middle">Timbao</textPath>
-                    </text>
-                </svg>
-
-                <div class="animate-idle-float float-delay-2 w-full max-w-[320px] lg:max-w-[400px] relative aspect-square mb-4 z-20">
-                    <img id="img-sticker-radio" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" loading="eager" decoding="async" alt="Radio DJ Timbao 24/7" class="w-full h-full object-contain sticker-hover">
-                    
-                    <div class="sticker-text-wrapper absolute bottom-12 right-2 lg:bottom-14 lg:right-8 flex flex-col items-center rotate-[-5deg] z-40 pointer-events-none">
-                        <span class="sticker-text-cutout font-['Luckiest_Guy'] text-2xl lg:text-3xl leading-none tracking-wide" data-text="MÚSICA CUBANA">MÚSICA CUBANA</span>
-                        <span class="sticker-text-cutout font-['Luckiest_Guy'] text-3xl lg:text-4xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="24/7">24/7</span>
-                    </div>
-                </div>
-            </a>
-
-            <!-- Sticker 3: Pedidos -->
-            <a href="/pedidos.html" class="sticker-card group flex flex-col items-center cursor-pointer">
-                
-                <svg viewBox="0 0 320 110" class="w-full max-w-[260px] lg:max-w-[320px] overflow-visible -mb-6 lg:-mb-10 z-10 transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-2 lg:group-hover:-translate-y-2 pointer-events-none">
-                    <path id="arc-pedidos-top" d="M 10,60 A 180,60 0 0,1 310,60" fill="transparent" />
-                    <path id="arc-pedidos-bottom" d="M 10,95 A 180,60 0 0,1 310,95" fill="transparent" />
-                    
-                    <text class="text-[28px] lg:text-[28px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
-                        <textPath href="#arc-pedidos-top" startOffset="50%" text-anchor="middle">Pídele al</textPath>
-                    </text>
-
-                    <text class="text-[42px] lg:text-[42px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
-                        <textPath href="#arc-pedidos-bottom" startOffset="50%" text-anchor="middle">DJ</textPath>
-                    </text>
-                </svg>
-
-                <div class="animate-idle-float float-delay-3 w-full max-w-[320px] lg:max-w-[280px] relative aspect-square mb-4 z-20">
-                    <img id="img-sticker-requests" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" loading="eager" decoding="async" alt="Pide tu canción" class="w-full h-full object-contain sticker-hover">
-                    
-                    <div class="sticker-text-wrapper absolute bottom-8 right-2 lg:bottom-2 lg:right-8 flex flex-col items-center rotate-[-5deg] z-40 pointer-events-none">
-                        <span class="sticker-text-cutout font-['Luckiest_Guy'] text-xl lg:text-2xl leading-none tracking-wide" data-text="CANCIONES PARA">CANCIONES PARA</span>
-                        <span class="sticker-text-cutout font-['Luckiest_Guy'] text-xl lg:text-2xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="BAILAR EN">BAILAR EN</span>
-                        <span class="sticker-text-cutout font-['Luckiest_Guy'] text-xl lg:text-2xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="LA FIESTA">LA FIESTA</span>
-                    </div>
-                </div>
-            </a>
-
-        </div>
-    </section>
-    
-    <!-- SECCIÓN: TRAYECTORIA -->
-    <section id="trayectoria" class="relative w-full min-h-[70vh] py-16 sm:py-24 px-4 sm:px-6 md:px-12 lg:px-24 flex flex-col items-center justify-center bg-zinc-950 overflow-hidden border-t border-zinc-900/50">
-        
-        <div class="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-20">
-            <div id="bg-trayectoria" class="w-full h-full flex items-center justify-center scale-y-[-1] scale-x-[-1]">
-            </div>
-        </div>
-
-        <div class="relative w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center z-10">
-
-            <div class="lg:col-span-7 flex flex-col gap-6 text-center lg:text-left">
-                
-                <div class="relative overflow-hidden w-fit mx-auto lg:mx-0 block-reveal-group" style="--reveal-delay: 0s;">
-                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-wider text-[#e3bb3e] uppercase opacity-0 block-reveal-text">
-                        Trayectoria
-                    </h2>
-                    <div class="absolute inset-0 bg-[#e3bb3e] z-20 block-reveal-solid"></div>
-                </div>
-
-                <div class="text-zinc-300 text-sm md:text-base leading-relaxed space-y-4 flex flex-col items-center lg:items-start">
-                    
-                    <div class="relative overflow-hidden w-fit block-reveal-group text-left" style="--reveal-delay: 0.2s;">
-                        <p class="opacity-0 block-reveal-text">
-                            De Venezuela, pero radicado en Argentina, DJ Timbao ha dedicado más de dos décadas a perfeccionar el arte de la selección de música popular bailable cubana. Especialista en Timba, salsa y son, pero moviéndose por todos los ritmos de la música cubana, su estilo es reconocido por ser alegre, potente, pero, sobre todo, altamente bailable.
-                        </p>
-                        <div class="absolute inset-0 bg-[#e3bb3e] z-20 block-reveal-solid"></div>
-                    </div>
-                    
-                    <div class="relative overflow-hidden w-fit block-reveal-group text-left" style="--reveal-delay: 0.4s;">
-                        <p class="opacity-0 block-reveal-text">
-                            Organizador de diferentes eventos, fiestas, festivales y conciertos que tienen como fuerte el baile de casino, Timbao no solo mezcla música, también es un talentoso y reconocido editor de piezas musicales para bailarines de diferentes categorías que interpretan coreografías para shows y competencias de baile profesional.
-                        </p>
-                        <div class="absolute inset-0 bg-[#e3bb3e] z-20 block-reveal-solid"></div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="lg:col-span-5 flex flex-col items-center justify-center select-none">
-                <div id="odometer-container" class="relative flex items-center justify-center mt-8 lg:mt-0 opacity-0 translate-y-10 transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform">
-                    <span id="experience-years" class="text-[8rem] md:text-[11rem] lg:text-[8rem] leading-none text-transparent bg-clip-text bg-gradient-to-b from-[#e3bb3e] to-yellow-700 will-change-contents font-['Vast_Shadow'] tabular-nums tracking-tighter cursor-default transition-transform duration-300">
-                        00
-                    </span>
-                    <div class="absolute -bottom-8 md:-bottom-12 flex flex-col items-center pointer-events-none">
-                        <span class="text-[10px] md:text-xs font-bold tracking-[0.4em] uppercase text-zinc-500 mb-1">Años de</span>
-                        <span class="text-base md:text-xl font-black tracking-[0.2em] uppercase text-zinc-100">Experiencia</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-    
-    <!-- SECCIÓN: PRESSKIT (Background Split) -->
-    <section id="presskit" class="relative w-full py-1 md:py-5 flex flex-col items-center justify-center overflow-hidden bg-zinc-950">
-        
-        <div class="absolute inset-0 w-full h-full z-0 pointer-events-none opacity-20">
-            <div id="divider-resenia" class="w-full h-full flex items-center justify-center text-[#e3bb3e]">
-            </div>
-        </div>
-
-        <div class="relative w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center px-4 sm:px-6 md:px-12 lg:px-24 z-10">
-            
-            <div class="lg:col-span-7 flex flex-col items-center lg:items-start justify-center w-full overflow-hidden relative z-20">
-                
-                <div class="relative overflow-hidden w-fit block-reveal-group pt-6 pb-2 px-2" style="--reveal-delay: 0.2s;">
-                    <h2 class="font-black text-[70px] md:text-[80px] lg:text-[90px] leading-none tracking-wider text-[#e3bb3e] uppercase ease-out block-reveal-text cursor-default select-none scale-y-[1.2] origin-bottom">
-                        RESEÑA
-                    </h2>
-                    <div class="absolute inset-0 bg-black z-20 block-reveal-solid"></div>
-                </div>
-                
-                <div class="relative overflow-hidden w-fit mt-4 md:mt-2 px-4 py-1 block-reveal-group" style="--reveal-delay: 0.4s;">
-                    <p class="relative z-10 text-[#e3bb3e] text-sm md:text-base font-bold tracking-widest uppercase text-center lg:text-left block-reveal-text">
-                        Descarga el PDF para obtener un vistazo a la experiencia de Dj Timbao a través del tiempo.
-                    </p>
-                    <div class="absolute inset-0 bg-black z-20 block-reveal-solid"></div>
-                </div>
-
-            </div>
-            
-            <div class="lg:col-span-5 flex items-center justify-center lg:justify-end perspective-[1200px]">
-                
-                <a href="#" id="presskit-card" download="presskit.pdf" target="_blank" rel="noopener noreferrer" class="group relative flex items-center justify-center w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 cursor-pointer mt-8 lg:mt-0" aria-label="Descargar Presskit de DJ Timbao">
-                    
-                    <div class="absolute w-[95%] h-[95%] rounded-full shadow-[20px_0_30px_rgba(0,0,0,0.8)] transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-x-[55%] md:group-hover:-translate-x-[65%] group-[.is-active]:-translate-x-[55%] md:group-[.is-active]:-translate-x-[65%] group-hover:-rotate-[180deg] group-[.is-active]:-rotate-[180deg] z-0 flex items-center justify-center border border-black/50 will-change-transform" style="background: repeating-radial-gradient(circle, #09090b 0, #09090b 2px, #18181b 3px, #09090b 4px);">
-                        <div class="w-[35%] h-[35%] rounded-full bg-[#e3bb3e] flex flex-col items-center justify-center shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] relative overflow-hidden">
-                            <div class="absolute w-[90%] h-[90%] border-[2px] border-black/10 rounded-full pointer-events-none z-20"></div>
-                            <span class="absolute top-2 text-[5px] md:text-[6px] font-black uppercase text-black tracking-widest leading-none z-20 rotate-180">DJ</span>
-                            <div id="vinyl-center-logo" class="absolute w-[65%] h-[65%] text-black fill-current flex items-center justify-center z-10 opacity-90"></div>
-                            <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-zinc-950 shadow-inner z-30 my-auto relative"></div>
-                            <span class="absolute bottom-2 text-[4px] md:text-[5px] font-bold uppercase text-black tracking-widest leading-none z-20 rotate-180">TIMBAO</span>
+                    <div class="animate-idle-float float-delay-1 w-full max-w-[320px] lg:max-w-[280px] relative aspect-square mb-4 z-20">
+                        <img id="img-sticker-mentions" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" loading="eager" decoding="async" alt="Menciones a DJ Timbao" class="w-full h-full object-contain sticker-hover">
+                        
+                        <div class="sticker-text-wrapper absolute bottom-6 right-2 lg:bottom-2 lg:right-8 flex flex-col items-center rotate-[-5deg] z-40 pointer-events-none">
+                            <span class="sticker-text-cutout font-['Luckiest_Guy'] text-[22px] lg:text-2xl leading-none tracking-wide" data-text="CANCIONES DONDE">CANCIONES DONDE</span>
+                            <span class="sticker-text-cutout font-['Luckiest_Guy'] text-[22px] lg:text-2xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="MENCIONAN A">MENCIONAN A</span>
+                            <span class="sticker-text-cutout font-['Luckiest_Guy'] text-[22px] lg:text-2xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="DJ TIMBAO">DJ TIMBAO</span>
                         </div>
                     </div>
+                </a>
 
-                    <div class="absolute inset-0 bg-[#e3bb3e] shadow-[10px_10px_30px_rgba(0,0,0,0.9)] flex flex-col items-center justify-center p-4 md:p-6 z-10 transition-transform duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:translate-x-2 md:group-hover:translate-x-4 group-[.is-active]:translate-x-2 md:group-[.is-active]:translate-x-4 will-change-transform overflow-hidden">
-                        <img id="img-presskit-cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Portada Presskit" class="absolute inset-0 w-full h-full object-cover z-0 opacity-100" onerror="this.style.display='none'">
-                        <div class="absolute inset-[3px] md:inset-[4px] border border-black/15 pointer-events-none rounded-[1px] z-10"></div>
-                        <div id="presskit-logo-container" class="w-full max-w-[100px] md:max-w-[120px] flex items-center justify-center text-black drop-shadow-md fill-current z-10"></div>
-                        <span class="absolute bottom-4 md:bottom-5 font-black tracking-[0.4em] text-[8px] md:text-[10px] text-white uppercase z-10">Descargar</span>
-                        <div class="absolute inset-0 bg-gradient-to-tr from-black/5 via-transparent to-white/20 pointer-events-none z-10"></div>
+                <!-- Sticker 2: Radio -->
+                <a href="/radio.html" class="sticker-card group flex flex-col items-center cursor-pointer">
+                    <svg viewBox="0 0 320 110" class="w-full max-w-[300px] lg:max-w-[360px] overflow-visible -mb-12 lg:-mb-16 z-10 transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-2 lg:group-hover:-translate-y-2 pointer-events-none">
+                        <path id="arc-radio-top" d="M 10,60 A 180,60 0 0,1 310,60" fill="transparent" />
+                        <path id="arc-radio-bottom" d="M 10,95 A 180,60 0 0,1 310,95" fill="transparent" />
+                        
+                        <text class="text-[22px] lg:text-[22px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
+                            <textPath href="#arc-radio-top" startOffset="50%" text-anchor="middle">Radio</textPath>
+                        </text>
+
+                        <text class="text-[36px] lg:text-[36px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
+                            <textPath href="#arc-radio-bottom" startOffset="50%" text-anchor="middle">Timbao</textPath>
+                        </text>
+                    </svg>
+
+                    <div class="animate-idle-float float-delay-2 w-full max-w-[320px] lg:max-w-[400px] relative aspect-square mb-4 z-20">
+                        <img id="img-sticker-radio" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" loading="eager" decoding="async" alt="Radio DJ Timbao 24/7" class="w-full h-full object-contain sticker-hover">
+                        
+                        <div class="sticker-text-wrapper absolute bottom-12 right-2 lg:bottom-14 lg:right-8 flex flex-col items-center rotate-[-5deg] z-40 pointer-events-none">
+                            <span class="sticker-text-cutout font-['Luckiest_Guy'] text-2xl lg:text-3xl leading-none tracking-wide" data-text="MÚSICA CUBANA">MÚSICA CUBANA</span>
+                            <span class="sticker-text-cutout font-['Luckiest_Guy'] text-3xl lg:text-4xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="24/7">24/7</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Sticker 3: Pedidos -->
+                <a href="/pedidos.html" class="sticker-card group flex flex-col items-center cursor-pointer">
+                    <svg viewBox="0 0 320 110" class="w-full max-w-[260px] lg:max-w-[320px] overflow-visible -mb-6 lg:-mb-10 z-10 transition-transform duration-300 group-hover:scale-105 group-hover:-translate-y-2 lg:group-hover:-translate-y-2 pointer-events-none">
+                        <path id="arc-pedidos-top" d="M 10,60 A 180,60 0 0,1 310,60" fill="transparent" />
+                        <path id="arc-pedidos-bottom" d="M 10,95 A 180,60 0 0,1 310,95" fill="transparent" />
+                        
+                        <text class="text-[28px] lg:text-[28px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
+                            <textPath href="#arc-pedidos-top" startOffset="50%" text-anchor="middle">Pídele al</textPath>
+                        </text>
+
+                        <text class="text-[42px] lg:text-[42px] font-black uppercase tracking-tighter fill-white stroke-transparent stroke-[6px] lg:stroke-[6px] [paint-order:stroke_fill] transition-all duration-300 group-hover:fill-[#e3bb3e] group-hover:stroke-black">
+                            <textPath href="#arc-pedidos-bottom" startOffset="50%" text-anchor="middle">DJ</textPath>
+                        </text>
+                    </svg>
+
+                    <div class="animate-idle-float float-delay-3 w-full max-w-[320px] lg:max-w-[280px] relative aspect-square mb-4 z-20">
+                        <img id="img-sticker-requests" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" loading="eager" decoding="async" alt="Pide tu canción" class="w-full h-full object-contain sticker-hover">
+                        
+                        <div class="sticker-text-wrapper absolute bottom-8 right-2 lg:bottom-2 lg:right-8 flex flex-col items-center rotate-[-5deg] z-40 pointer-events-none">
+                            <span class="sticker-text-cutout font-['Luckiest_Guy'] text-xl lg:text-2xl leading-none tracking-wide" data-text="CANCIONES PARA">CANCIONES PARA</span>
+                            <span class="sticker-text-cutout font-['Luckiest_Guy'] text-xl lg:text-2xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="BAILAR EN">BAILAR EN</span>
+                            <span class="sticker-text-cutout font-['Luckiest_Guy'] text-xl lg:text-2xl leading-none tracking-wide -mt-1 lg:-mt-0.5" data-text="LA FIESTA">LA FIESTA</span>
+                        </div>
                     </div>
                 </a>
 
             </div>
+        </section>
+
+        <!-- SECCIÓN: TRAYECTORIA -->
+        <section id="trayectoria" class="relative w-full min-h-[70vh] pb-16 pt-8 sm:pb-24 px-4 sm:px-6 md:px-12 lg:px-24 flex flex-col items-center justify-center">
+            
+            <!-- Elevamos el grid por encima del fondo -->
+            <div class="relative z-10 w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                
+                <div class="lg:col-span-7 flex flex-col gap-6 text-center lg:text-left">
+                    
+                    <div class="relative overflow-hidden w-fit mx-auto lg:mx-0 block-reveal-group" style="--reveal-delay: 0s;">
+                        <h2 class="text-2xl sm:text-3xl md:text-4xl font-black tracking-wider text-[#e3bb3e] uppercase opacity-0 block-reveal-text">
+                            Trayectoria
+                        </h2>
+                        <div class="absolute inset-0 bg-[#e3bb3e] z-20 block-reveal-solid"></div>
+                    </div>
+
+                    <div class="text-zinc-300 text-sm md:text-base leading-relaxed space-y-4 flex flex-col items-center lg:items-start">
+                        
+                        <div class="relative overflow-hidden w-fit block-reveal-group text-left" style="--reveal-delay: 0.2s;">
+                            <p class="opacity-0 block-reveal-text">
+                                De Venezuela, pero radicado en Argentina, DJ Timbao ha dedicado más de dos décadas a perfeccionar el arte de la selección de música popular bailable cubana. Especialista en Timba, salsa y son, pero moviéndose por todos los ritmos de la música cubana, su estilo es reconocido por ser alegre, potente, pero, sobre todo, altamente bailable.
+                            </p>
+                            <div class="absolute inset-0 bg-[#e3bb3e] z-20 block-reveal-solid"></div>
+                        </div>
+                        
+                        <div class="relative overflow-hidden w-fit block-reveal-group text-left" style="--reveal-delay: 0.4s;">
+                            <p class="opacity-0 block-reveal-text">
+                                Organizador de diferentes eventos, fiestas, festivales y conciertos que tienen como fuerte el baile de casino, Timbao no solo mezcla música, también es un talentoso y reconocido editor de piezas musicales para bailarines de diferentes categorías que interpretan coreografías para shows y competencias de baile profesional.
+                            </p>
+                            <div class="absolute inset-0 bg-[#e3bb3e] z-20 block-reveal-solid"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 flex flex-col items-center justify-center select-none">
+                    <div id="odometer-container" class="relative flex items-center justify-center mt-8 lg:mt-0 opacity-0 translate-y-10 transition-all duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform">
+                        <span id="experience-years" class="text-[8rem] md:text-[11rem] lg:text-[8rem] leading-none text-transparent bg-clip-text bg-gradient-to-b from-[#e3bb3e] to-yellow-700 will-change-contents font-['Vast_Shadow'] tabular-nums tracking-tighter cursor-default transition-transform duration-300">
+                            00
+                        </span>
+                        <div class="absolute -bottom-8 md:-bottom-12 flex flex-col items-center pointer-events-none">
+                            <span class="text-[10px] md:text-xs font-bold tracking-[0.4em] uppercase text-zinc-500 mb-1">Años de</span>
+                            <span class="text-base md:text-xl font-black tracking-[0.2em] uppercase text-zinc-100">Experiencia</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- PRESSKIT -->
+                <div class="w-full mt-8 md:mt-12 pt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center px-4 sm:px-6 md:px-12 lg:px-24 z-10">
+                    
+                    <div class="lg:col-span-7 flex flex-col items-center lg:items-start justify-center w-full overflow-hidden relative z-20">
+                        
+                        <div class="relative overflow-hidden w-fit block-reveal-group pt-6 pb-2 px-2" style="--reveal-delay: 0.2s;">
+                            <h2 class="font-black text-[70px] md:text-[80px] lg:text-[90px] leading-none tracking-wider text-[#e3bb3e] uppercase ease-out block-reveal-text cursor-default select-none scale-y-[1.2] origin-bottom">
+                                RESEÑA
+                            </h2>
+                            <div class="absolute inset-0 bg-black z-20 block-reveal-solid"></div>
+                        </div>
+                        
+                        <div class="relative overflow-hidden w-fit mt-4 md:mt-2 px-4 py-1 block-reveal-group" style="--reveal-delay: 0.4s;">
+                            <p class="relative z-10 text-[#e3bb3e] text-sm md:text-base font-bold tracking-widest uppercase text-center lg:text-left block-reveal-text">
+                                Descarga el PDF para obtener un vistazo a la experiencia de Dj Timbao a través del tiempo.
+                            </p>
+                            <div class="absolute inset-0 bg-black z-20 block-reveal-solid"></div>
+                        </div>
+
+                    </div>
+                    
+                    <div class="lg:col-span-5 flex items-center justify-center lg:justify-end perspective-[1200px]">
+                        
+                        <a href="#" id="presskit-card" download="presskit.pdf" target="_blank" rel="noopener noreferrer" class="group relative flex items-center justify-center w-40 h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 cursor-pointer mt-8 lg:mt-0" aria-label="Descargar Presskit de DJ Timbao">
+                            
+                            <div class="absolute w-[95%] h-[95%] rounded-full shadow-[20px_0_30px_rgba(0,0,0,0.8)] transition-all duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-translate-x-[55%] md:group-hover:-translate-x-[65%] group-[.is-active]:-translate-x-[55%] md:group-[.is-active]:-translate-x-[65%] group-hover:-rotate-[180deg] group-[.is-active]:-rotate-[180deg] z-0 flex items-center justify-center border border-black/50 will-change-transform" style="background: repeating-radial-gradient(circle, #09090b 0, #09090b 2px, #18181b 3px, #09090b 4px);">
+                                <div class="w-[35%] h-[35%] rounded-full bg-[#e3bb3e] flex flex-col items-center justify-center shadow-[inset_0_0_10px_rgba(0,0,0,0.5)] relative overflow-hidden">
+                                    <div class="absolute w-[90%] h-[90%] border-[2px] border-black/10 rounded-full pointer-events-none z-20"></div>
+                                    <span class="absolute top-2 text-[5px] md:text-[6px] font-black uppercase text-black tracking-widest leading-none z-20 rotate-180">DJ</span>
+                                    <div id="vinyl-center-logo" class="absolute w-[65%] h-[65%] text-black fill-current flex items-center justify-center z-10 opacity-90"></div>
+                                    <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-zinc-950 shadow-inner z-30 my-auto relative"></div>
+                                    <span class="absolute bottom-2 text-[4px] md:text-[5px] font-bold uppercase text-black tracking-widest leading-none z-20 rotate-180">TIMBAO</span>
+                                </div>
+                            </div>
+
+                            <div class="absolute inset-0 bg-[#e3bb3e] shadow-[10px_10px_30px_rgba(0,0,0,0.9)] flex flex-col items-center justify-center p-4 md:p-6 z-10 transition-transform duration-[800ms] ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:translate-x-2 md:group-hover:translate-x-4 group-[.is-active]:translate-x-2 md:group-[.is-active]:translate-x-4 will-change-transform overflow-hidden">
+                                <img id="img-presskit-cover" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Portada Presskit" class="absolute inset-0 w-full h-full object-cover z-0 opacity-100" onerror="this.style.display='none'">
+                                <div class="absolute inset-[3px] md:inset-[4px] border border-black/15 pointer-events-none rounded-[1px] z-10"></div>
+                                <div id="presskit-logo-container" class="w-full max-w-[100px] md:max-w-[120px] flex items-center justify-center text-black drop-shadow-md fill-current z-10"></div>
+                                <span class="absolute bottom-4 md:bottom-5 font-black tracking-[0.4em] text-[8px] md:text-[10px] text-white uppercase z-10">Descargar</span>
+                                <div class="absolute inset-0 bg-gradient-to-tr from-black/5 via-transparent to-white/20 pointer-events-none z-10"></div>
+                            </div>
+                        </a>
+
+                    </div>
+                </div>
 
         </section>
+    </div>
 
     <div id="horizontal-scroll-track" class="relative w-full h-[400vh] bg-zinc-950">
         
