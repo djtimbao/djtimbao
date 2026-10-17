@@ -66,7 +66,7 @@ export const DIVIDERS = {
     divDoodleDj: `
         <img src="${ASSETS.BG_DOODLE}" 
              alt="Doodle Background" 
-             class="absolute inset-0 w-full h-full object-cover opacity-[0.03] md:opacity-5 pointer-events-none mix-blend-screen" 
+             class="absolute inset-0 w-full h-full object-cover opacity-[0.06] md:opacity-5 pointer-events-none mix-blend-screen" 
              style="-webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%); mask-image: linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%);"
              loading="lazy" 
              decoding="async">`,

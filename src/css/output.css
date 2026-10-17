@@ -1581,6 +1581,12 @@
   .opacity-\[0\.03\] {
     opacity: 0.03;
   }
+  .opacity-\[0\.05\] {
+    opacity: 0.05;
+  }
+  .opacity-\[0\.06\] {
+    opacity: 0.06;
+  }
   .mix-blend-difference {
     mix-blend-mode: difference;
   }
