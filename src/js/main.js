@@ -730,7 +730,7 @@ class TimbaoEngine {
             const curveSettings = {
                 rotationIntensity: 4,                   // Grados de inclinación (Ajusta si quieres más o menos rotación)
                 depthIntensity: isUltraWide ? 14 : 16,   // Fuerza de la curva (Hace el paréntesis más profundo) | monitores : laptops
-                basePush: isUltraWide ? 90 : -30        // Distancia general hacia el centro del globo | monitores : laptops
+                basePush: isUltraWide ? 50 : 15        // Distancia general hacia el centro del globo | monitores : laptops
             };
 
             // Animación coreografiada
