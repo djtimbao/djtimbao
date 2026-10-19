@@ -13,7 +13,7 @@ const BUCKET = getBucketUrl();
 
 export const ASSETS = {
     // Rutas dinámicas para la multimedia
-    HERO_VIDEO: `${BUCKET}/hero-bg.mp4`,
+    HERO_VIDEO: `${BUCKET}/assets/hero-djtimbao.mp4`,
     YT_MUSIC_VIDEO: `${BUCKET}/assets/card-yt-music.mp4`,
     SPOTIFY_VIDEO: `${BUCKET}/assets/card-spotify.mp4`,
     YT_VIDEO: `${BUCKET}/assets/card-youtube.mp4`,

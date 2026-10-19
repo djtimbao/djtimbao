@@ -123,8 +123,31 @@ class TimbaoEngine {
             const bucketUrl = getBucketUrl();
             presskitCard.href = ASSETS.PRESSKIT_PDF;
         }
-    }
 
+        // Inyección dinámica del video del Hero desde R2
+        const heroMedia = document.getElementById('hero-media');
+        const heroSource = document.getElementById('hero-source');
+        
+        if (heroMedia && heroSource && typeof ASSETS !== 'undefined' && ASSETS.HERO_VIDEO) {
+            heroSource.src = ASSETS.HERO_VIDEO;
+            // Forzamos la carga manual del video para asegurar que el DOM refresque el source
+            heroMedia.load(); 
+            
+            // Silenciamiento implacable y autoplay robusto para navegadores móviles restrictivos
+            heroMedia.muted = true;
+            heroMedia.defaultMuted = true;
+            heroMedia.setAttribute('playsinline', '');
+            
+            // Intentamos reproducir de forma segura para evitar el DOMException en móviles
+            const playPromise = heroMedia.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.warn("Autoplay prevenido por el navegador, esperando interacción.", error);
+                });
+            }
+        }
+    }
+        
     setupScrollAnimations() {
         // 1. Array con las secciones que usan Block Reveal
         const seccionesAObservar = [
