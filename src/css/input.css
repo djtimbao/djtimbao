@@ -1,0 +1,448 @@
+/*
+ * • La ruta: src/css/input.css
+ * • Que es: Archivo principal y único de estilos donde se importa el motor de Tailwind v4 y se declaran las animaciones nativas personalizadas.
+ * • Responsabilidades:
+ * 1. Importar las utilidades de Tailwind CSS v4.
+ * 2. Definir estilos globales básicos (como ocultar el cursor nativo).
+ * 3. Declarar los fotogramas clave (@keyframes) y clases para las animaciones puras (loader, fill, scale).
+ */
+
+@import "tailwindcss";
+
+:root {
+    color-scheme: dark;
+    forced-color-adjust: none;
+    -webkit-text-size-adjust: 100%;
+}
+
+/* Ocultar el cursor nativo en toda la página */
+*, *::before, *::after {
+    cursor: none !important;
+}
+
+/* Animación nativa de llenado para el Loader */
+.logo-fill {
+    clip-path: inset(0 100% 0 0); /* Oculta todo hacia la izquierda al inicio */
+    animation: fillLogo 1.5s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+    animation-delay: 0.3s;
+}
+
+/* Animación nativa de escala (Desde el centro hacia afuera) */
+.logo-scale {
+    transform: scale(0.7);
+    animation: scaleUp 1.8s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+}
+
+@keyframes fillLogo {
+    to { clip-path: inset(0 0 0 0); } /* Revela el logo completo */
+}
+
+@keyframes scaleUp {
+    to { transform: scale(1); }
+}
+
+/* =========================================
+   ANIMACIONES HERO SECTION
+   ========================================= */
+
+/* Estado inicial oculto y animación de revelado fluido */
+.clip-hidden {
+    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+}
+
+.reveal-text {
+    animation: textReveal 1.2s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+}
+
+@keyframes textReveal {
+    to { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+}
+
+/* Indicador animado de scroll infinito */
+@keyframes scrollLine {
+    0% { transform: translateY(-100%); }
+    50% { transform: translateY(0); }
+    100% { transform: translateY(100%); }
+}
+
+.animate-scroll-line {
+    animation: scrollLine 2s cubic-bezier(0.85, 0, 0.15, 1) infinite;
+}
+
+/* =========================================
+   ANIMACIONES STICKERS INTERACTIVOS
+   ========================================= */
+
+@keyframes idleFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.animate-idle-float {
+    animation: idleFloat 4s ease-in-out infinite;
+    will-change: transform;
+}
+
+/* Variaciones de retraso para que no floten sincronizados */
+.float-delay-1 { animation-delay: 0s; }
+.float-delay-2 { animation-delay: 0.8s; }
+.float-delay-3 { animation-delay: 1.6s; }
+
+/* Físicas del Hover Pop */
+.sticker-hover {
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: drop-shadow(0 0 0 rgba(227, 187, 62, 0));
+    will-change: transform, filter;
+}
+
+.sticker-card:hover .sticker-hover {
+    transform: scale(1.08) rotate(3deg);
+    filter: drop-shadow(0 5px 5px rgba(255, 255, 255, 0.2));
+}
+
+/* =========================================
+   ANIMACIONES Y FÍSICAS DE TEXTOS TROQUELADOS (STICKERS)
+   ========================================= */
+
+.sticker-text-cutout {
+    position: relative;
+    display: block;
+    color: transparent; /* Hace transparente el texto base para no interferir, pero mantiene sus proporciones */
+    z-index: 1; /* Crea un contexto de apilamiento blindado */
+    
+    /* Estado inicial para la animación (Oculto y desplazado hacia abajo) */
+    opacity: 0;
+    filter: blur(12px);
+    transform: translateY(20px) scale(0.8);
+    will-change: transform, opacity, filter;
+}
+
+/* Forzamos el contexto de apilamiento para que las líneas superiores solapen a las inferiores (como un sticker real) */
+.sticker-text-wrapper > .sticker-text-cutout:nth-child(1) { z-index: 3; }
+.sticker-text-wrapper > .sticker-text-cutout:nth-child(2) { z-index: 2; }
+.sticker-text-wrapper > .sticker-text-cutout:nth-child(3) { z-index: 1; }
+
+/* El borde masivo negro (Troquel) aislado en la capa posterior */
+.sticker-text-cutout::before {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    
+    -webkit-text-fill-color: #000;
+    color: #000;
+    -webkit-text-stroke: 8px #000;
+    text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 0 4px 0 #000, 0 6px 0 #000;
+    pointer-events: none;
+}
+
+/* El texto con degradado aislado en la capa frontal */
+.sticker-text-cutout::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    
+    /* Degradado interno sutil (Amarillo claro a dorado) */
+    background: linear-gradient(to bottom, #e95612, #e3bb3e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    pointer-events: none;
+}
+
+/* Coreografía de Animación Mobile-First */
+/* MÓVILES (Por defecto): La animación arranca automáticamente sin requerir interacción */
+.sticker-card .sticker-text-cutout {
+    animation: 
+        stickerTextPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+        stickerTextFloat 2.5s ease-in-out 0.4s infinite alternate;
+}
+
+/* Escalonamiento base para Móviles */
+.sticker-card .sticker-text-cutout:nth-child(1) { animation-delay: 0s, 0.4s; }
+.sticker-card .sticker-text-cutout:nth-child(2) { animation-delay: 0.08s, 0.48s; }
+.sticker-card .sticker-text-cutout:nth-child(3) { animation-delay: 0.16s, 0.56s; }
+
+/* ESCRITORIO (A partir de 1024px - Breakpoint 'lg' de Tailwind): 
+   Detenemos la animación automática y la anclamos estrictamente al Hover */
+@media (min-width: 1024px) {
+    /* 1. Apagamos la animación por defecto en PC y reseteamos variables */
+    .sticker-card .sticker-text-cutout {
+        animation: none;
+    }
+    
+    /* 2. La encendemos ÚNICAMENTE cuando se hace hover sobre el sticker */
+    .sticker-card:hover .sticker-text-cutout {
+        animation: 
+            stickerTextPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+            stickerTextFloat 2.5s ease-in-out 0.4s infinite alternate;
+    }
+
+    /* 3. Reasignamos el escalonamiento de la cascada al evento hover */
+    .sticker-card:hover .sticker-text-cutout:nth-child(1) { animation-delay: 0s, 0.4s; }
+    .sticker-card:hover .sticker-text-cutout:nth-child(2) { animation-delay: 0.08s, 0.48s; }
+    .sticker-card:hover .sticker-text-cutout:nth-child(3) { animation-delay: 0.16s, 0.56s; }
+}
+
+/* Fotogramas Clave: Entrada magnética con foco */
+@keyframes stickerTextPop {
+    0% {
+        opacity: 0;
+        filter: blur(12px);
+        transform: translateY(20px) scale(0.6);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0);
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Fotogramas Clave: Flotación asíncrona sutil en sentido opuesto a la imagen */
+@keyframes stickerTextFloat {
+    0% { transform: translateY(0) scale(1); }
+    100% { transform: translateY(5px) scale(1); }
+}
+
+/* =========================================
+   ANIMACIONES BLOCK REVEAL (TRAYECTORIA)
+   ========================================= */
+
+/* Estado inicial de la barra amarilla: Fuera de la vista hacia la izquierda */
+.block-reveal-solid {
+    transform: translateX(-101%);
+    will-change: transform;
+}
+
+/* Se inyecta la clase .is-revealed por JS (IntersectionObserver) */
+.is-revealed .block-reveal-solid {
+    /* Usamos el mismo easing del Hero para consistencia visual (Aceleración y freno nativo) */
+    animation: blockRevealSweep 1.2s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+    animation-delay: var(--reveal-delay, 0s);
+}
+
+/* Estado inicial del texto transparente y oculto */
+.block-reveal-text {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.is-revealed .block-reveal-text {
+    animation: textShowStep 1.2s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+    animation-delay: var(--reveal-delay, 0s);
+}
+
+/* Coreografía a prueba de fallos (Evita el bug de transform-origin cruzando el contenedor con Translate) */
+@keyframes blockRevealSweep {
+    0% { transform: translateX(-101%); }
+    50% { transform: translateX(0); } /* Cubre el texto exactamente a la mitad */
+    100% { transform: translateX(101%); } /* Se retira hacia la derecha */
+}
+
+/* El texto se hace visible instantáneamente cuando el bloque lo cubre (50%) */
+@keyframes textShowStep {
+    0%, 49% { opacity: 0; visibility: hidden; }
+    50%, 100% { opacity: 1; visibility: visible; }
+}
+
+/* =========================================
+   ANIMACIONES PLATAFORMAS (ACORDEÓN EXPANSIVO)
+   ========================================= */
+
+/* Animación de entrada: Efecto tren elástico de derecha a izquierda */
+.animate-elastic-train {
+    animation: elasticTrainIn 1.2s cubic-bezier(0.68, -0.6, 0.32, 1.6) forwards;
+}
+
+@keyframes elasticTrainIn {
+    0% { transform: translateX(100vw); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+}
+
+/* =========================================
+   CARRUSEL 3D (PRÓXIMAS FECHAS) - OPTIMIZACIÓN
+   ========================================= */
+
+/* Hardware acceleration y prevención de parpadeo (flickering) en Safari / iOS */
+.gig-card-inner {
+    transform-style: preserve-3d;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* Utilidad para ocultar barras de scroll en contenedores internos (Efecto serpiente en móvil) */
+.hide-scrollbar {
+    -ms-overflow-style: none;  /* IE y Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari y Opera */
+}
+
+/* =========================================
+   ANIMACIÓN CINEMÁTICA (SUBTÍTULO PRESSKIT)
+   ========================================= */
+
+/* 1. Fondo dorado: Comienza comprimido como una línea muy fina */
+.cinematic-bg {
+    transform: scaleX(0) scaleY(0.02);
+    will-change: transform;
+}
+
+/* El gatillo '.is-revealed' es inyectado por el IntersectionObserver en main.js */
+.is-revealed .cinematic-bg {
+    animation: cinematicBgExpand 1s cubic-bezier(0.85, 0, 0.15, 1) forwards;
+    animation-delay: 0.8s; /* Espera a que termine la entrada de la palabra principal */
+}
+
+@keyframes cinematicBgExpand {
+    0% { transform: scaleX(0) scaleY(0.02); }
+    40% { transform: scaleX(1) scaleY(0.02); } /* Expansión X: Forma la línea horizontal */
+    100% { transform: scaleX(1) scaleY(1); }   /* Expansión Y: Abre el rectángulo completo */
+}
+
+/* 2. Texto: Emerge suavemente hacia arriba revelándose */
+.cinematic-text {
+    opacity: 0;
+    transform: translateY(15px);
+    will-change: transform, opacity;
+}
+
+.is-revealed .cinematic-text {
+    animation: cinematicTextEmerge 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    animation-delay: 1.3s; /* Entra en escena justo cuando el rectángulo empieza a ganar altura */
+}
+
+@keyframes cinematicTextEmerge {
+    0% { opacity: 0; transform: translateY(15px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   DYNAMIC FLOATING NAVBAR
+   ========================================= */
+
+/* Motor de Enmascarado SVG Multi-Navegador (Safari/Chrome/Firefox) */
+.nav-logo-mask {
+    -webkit-mask-image: url('/img/djt-logo-amarillo.svg');
+    mask-image: url('/img/djt-logo-amarillo.svg');
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+}
+
+/* 1. Animación del Logo (Bordes al Centro) */
+.logo-hover-clip {
+    clip-path: inset(0 0 0 0); /* Visible al 100% */
+    will-change: clip-path;
+}
+
+/* Al pasar el mouse, el color amarillo se contrae al 50% exacto (desapareciendo), 
+   revelando mágicamente la capa naranja subyacente de afuera hacia adentro */
+.nav-logo:hover .logo-hover-clip {
+    clip-path: inset(50% 50% 50% 50%);
+}
+
+/* 2. Estados Físicos del Navbar (Cuadrado a la derecha al hacer scroll) */
+#main-nav {
+    max-width: 100%;
+}
+
+/* ESTADO: Scrolled -> Se contrae a un cuadrado perfecto pegado a la derecha */
+#nav-wrapper.is-scrolled #main-nav {
+    max-width: 5rem; /* 80px (Equivalente a h-20) */
+    background-color: rgba(9, 9, 11, 0.95);
+}
+
+@media (min-width: 768px) {
+    #nav-wrapper.is-scrolled #main-nav {
+        max-width: 6rem; /* 96px (Equivalente a h-24 en PC) */
+    }
+}
+
+/* Al encogerse el navbar, también reducimos el tamaño del logo */
+#nav-wrapper.is-scrolled #nav-logo-btn {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+@media (min-width: 768px) {
+    #nav-wrapper.is-scrolled #nav-logo-btn {
+        width: 3rem;
+        height: 3rem;
+    }
+}
+
+/* 3. Dinámica del Menú Desplegable (Dropdown Full-Width) */
+/* Al gatillar .is-expanded (clic en el logo), se despliega la cortina */
+#nav-wrapper.is-expanded #nav-dropdown {
+    max-height: 400px; /* Altura suficiente para albergar los enlaces */
+    opacity: 1;
+}
+
+/* Rotación sutil del logo al abrir el menú para dar feedback visual */
+#nav-wrapper.is-expanded #nav-logo-btn {
+    transform: scale(0.9) rotate(5deg);
+}
+
+/* =========================================
+   MUTACIÓN GEOMÉTRICA (DROPDOWN A LA DERECHA)
+   ========================================= */
+
+/* Cuando hacemos scroll y el logo es un cuadrado a la derecha, 
+   el menú deja de ser w-full y se acopla a la derecha */
+#nav-wrapper.is-scrolled #nav-dropdown {
+    width: 280px; 
+    left: auto;
+    right: 0;
+    border: none;
+    border-radius: 0 0 0 1.5rem; /* Esquina inferior izquierda redondeada para fluidez */
+}
+
+/* Alineamos los elementos internos a la derecha para coincidir con la ancla */
+#nav-wrapper.is-scrolled #nav-dropdown .flex-col {
+    align-items: flex-end;
+    padding-right: 2.5rem;
+}
+
+/* =========================================
+   COREOGRAFÍA PREMIUM: ENLACES MAGNÉTICOS
+   ========================================= */
+
+/* Transición base súper fluida en la CPU */
+.nav-link {
+    transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform, color, letter-spacing;
+}
+
+/* 1. Comportamiento Centro (Top de la web): Empuja a la derecha suavemente */
+.nav-link:hover {
+    transform: translateX(12px);
+    letter-spacing: 0.25em; /* Aumenta el kerning */
+}
+
+/* 2. Comportamiento Derecha (Scrolleado): Invierte la polaridad y empuja a la izquierda */
+#nav-wrapper.is-scrolled .nav-link:hover {
+    transform: translateX(-12px);
+    letter-spacing: 0.25em;
+}
+
+/* =========================================
+   ANIMACIONES EDICIONES MUSICALES (CASSETE)
+   ========================================= */
+.magnetic-tape {
+    /* Preparamos la GPU para animar el trazo vectorial a costo cero */
+    will-change: stroke-dashoffset;
+    filter: drop-shadow(0 0 10px rgba(227, 187, 62, 0.8));
+    transition: stroke-dashoffset 0.1s linear;
+}

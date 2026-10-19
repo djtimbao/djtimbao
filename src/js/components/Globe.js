@@ -1,0 +1,313 @@
+/**
+ * • La ruta: src/js/components/Globe.js
+ * • Que es: Controlador 3D WebGL del Globo Terráqueo interactivo.
+ * • Responsabilidades:
+ *   1. Generar la geometría esférica combinando una textura dinámica (SVG).
+ *   2. Manejar la inyección asíncrona del SVG en un Canvas de memoria para iluminar países específicos.
+ *   3. Gestionar la interacción de rotación 360°, foco por coordenadas (Lat/Lng) y efecto "Tornado".
+ *   4. Optimizar el ciclo de renderizado ejecutándolo solo cuando la sección es visible en el viewport.
+ */
+
+import * as THREE from 'https://esm.sh/three@0.160.0';
+import { ASSETS } from '../config/assets.js';
+
+export class GlobeViewer {
+    constructor(containerId = 'globe-container') {
+        this.container = document.getElementById(containerId);
+        if (!this.container) return;
+
+        this.rotation = { x: 0.2, y: -1.2 };
+        this.targetRotation = { x: 0.2, y: -1.2 };
+        this.isDragging = false;
+        this.isFocused = false;
+        this.previousMousePosition = { x: 0, y: 0 };
+        this.isVisible = false;
+        
+        // --- Variables de Estado Autónomo ---
+        // Establecemos los valores en 0 para que empiece invisible y pequeño
+        this.scale = 0; 
+        this.targetScale = 0;
+        this.opacity = 0;
+        this.targetOpacity = 0;
+        this.cameraZ = 6.0;
+        this.targetCameraZ = 6.0;
+
+        // Variables para el motor de Textura SVG Dinámica
+        this.svgDoc = null;
+        this.mapTexture = null;
+        this.canvas = document.createElement('canvas');
+        this.ctx = this.canvas.getContext('2d');
+        // Resolución Retina 2K para el mapa equirectangular
+        this.canvas.width = 2048; 
+        this.canvas.height = 1024;
+        
+        this.activeCountryEl = null;
+        this.originalFill = null;
+
+        this.init();
+    }
+
+    init() {
+        const width = this.container.clientWidth || 450;
+        const height = this.container.clientHeight || 450;
+
+        this.scene = new THREE.Scene();
+        this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+        this.camera.position.z = 6.0;
+
+        this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: 'high-performance' });
+        this.renderer.setSize(width, height);
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.container.appendChild(this.renderer.domElement);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+        this.scene.add(ambientLight);
+
+        // Luz principal para marcar el relieve
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        dirLight.position.set(5, 3, 5);
+        this.scene.add(dirLight);
+
+        this.createGlobeMesh();
+        this.loadSVGMap(); 
+
+        this.bindEvents();
+        this.setupIntersectionObserver();
+        
+        // Inicializamos los valores base en 0
+        this.globe.scale.set(0, 0, 0);
+        this.material.opacity = 0;
+        
+        this.animate();
+    }
+
+    createGlobeMesh() {
+        const geometry = new THREE.SphereGeometry(1, 64, 64);
+        
+        this.mapTexture = new THREE.CanvasTexture(this.canvas);
+        this.mapTexture.colorSpace = THREE.SRGBColorSpace;
+
+        this.material = new THREE.MeshStandardMaterial({
+            color: 0xf4f4f5,
+            map: this.mapTexture, 
+            roughness: 0.85, // Ajustado para potenciar el look Flat UI
+            metalness: 0.05,
+            transparent: true
+        });
+
+        this.globe = new THREE.Mesh(geometry, this.material);
+        this.scene.add(this.globe);
+    }
+
+    // --- MOTOR SVG & CANVAS ---
+    async loadSVGMap() {
+        try {
+            const response = await fetch(ASSETS.GLOBE_SVG_MAP);
+            const svgText = await response.text();
+            this.svgDoc = new DOMParser().parseFromString(svgText, 'image/svg+xml');
+            this.updateCanvasTexture();
+        } catch (error) {
+            console.error('🔥 Error parseando el mapa SVG:', error);
+        }
+    }
+
+    updateCanvasTexture() {
+        if (!this.svgDoc) return;
+        
+        // Serializamos el DOM virtual a un Blob nativo
+        const svgString = new XMLSerializer().serializeToString(this.svgDoc);
+        const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        
+        const img = new Image();
+        img.onload = () => {
+            // Dibujamos el SVG modificado en el lienzo oculto y avisamos a la GPU
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.drawImage(img, 0, 0, this.canvas.width, this.canvas.height);
+            this.mapTexture.needsUpdate = true;
+            URL.revokeObjectURL(url);
+        };
+        img.src = url;
+    }
+
+    highlightCountry(countryId) {
+        if (!this.svgDoc) return;
+        
+        // Limpiamos focos anteriores silenciosamente
+        this.resetHighlight(false); 
+
+        const el = this.svgDoc.getElementById(countryId);
+        if (el) {
+            this.activeCountryEl = el;
+            // Guardamos el color original (#e3bb3e) que definiste en Illustrator
+            this.originalFill = el.getAttribute('fill') || ''; 
+            // Inyectamos el nuevo color naranja de forma dinámica
+            el.setAttribute('fill', '#e26118'); 
+            this.updateCanvasTexture();
+        }
+    }
+
+    resetHighlight(updateTexture = true) {
+        if (this.activeCountryEl) {
+            if (this.originalFill) {
+                this.activeCountryEl.setAttribute('fill', this.originalFill);
+            } else {
+                this.activeCountryEl.removeAttribute('fill');
+            }
+            this.activeCountryEl = null;
+            if (updateTexture) this.updateCanvasTexture();
+        }
+        this.isFocused = false;
+    }
+
+    // --- TRIGONOMETRÍA ESFÉRICA ---
+    focusOnLocation(lat, lng) {
+        this.isFocused = true;
+        
+        // 1. CALIBRACIÓN VISUAL DE LATITUD (Eje X - Inclinación vertical)
+        // Compensamos la altura para que el país suba y se acerque al centro del viewport
+        const LAT_OFFSET_DEGREES = -15; // Ajusta este número (ej. -10, -25, o valores positivos) hasta lograr la altura perfecta
+        
+        this.targetRotation.x = (lat + LAT_OFFSET_DEGREES) * (Math.PI / 180);
+        
+        // 2. CALIBRACIÓN VISUAL DE LONGITUD (Eje Y)
+        // Compensamos el desvío natural del lienzo del SVG respecto a la geometría 3D
+        const MAP_OFFSET_DEGREES = -70; // Si necesitas ajuste fino, sube o baja este número
+        
+        const rawTargetY = (-lng + MAP_OFFSET_DEGREES) * (Math.PI / 180);
+        
+        // 3. ALGORITMO DE CAMINO MÁS CORTO (Módulo 2π)
+        // Evita el efecto trompo al buscar la ruta más directa
+        const PI2 = Math.PI * 2;
+        let diff = (rawTargetY - this.rotation.y) % PI2;
+        
+        if (diff > Math.PI) diff -= PI2;
+        if (diff < -Math.PI) diff += PI2;
+        
+        this.targetRotation.y = this.rotation.y + diff;
+    }
+
+    // --- MÉTODOS DE ANIMACIÓN AUTÓNOMA ---
+    triggerEntrance() {
+        // Fijamos los valores objetivo a su estado máximo de "Entrada"
+        this.targetScale = 1.0;
+        this.targetOpacity = 1.0;
+        this.targetCameraZ = 3.6; // Acercamiento suave (6.0 - 2.4)
+        
+        // Disparamos el impulso "Tornado" por única vez
+        this.targetRotation.y += 2.5; 
+    }
+
+    triggerExit() {
+        // Fijamos los valores objetivo a su estado mínimo de "Salida"
+        this.targetScale = 0.0;
+        this.targetOpacity = 0.0;
+        this.targetCameraZ = 6.0; // Alejamiento hacia el vacío
+    }
+
+    bindEvents() {
+        const onDown = (clientX, clientY) => {
+            this.isDragging = true;
+            this.isFocused = false; // Rompemos el foco de la UI si el usuario arrastra manualmente
+            this.previousMousePosition = { x: clientX, y: clientY };
+        };
+
+        const onMove = (clientX, clientY) => {
+            if (!this.isDragging) return;
+            const deltaX = clientX - this.previousMousePosition.x;
+            const deltaY = clientY - this.previousMousePosition.y;
+
+            this.targetRotation.y += deltaX * 0.007;
+            this.targetRotation.x += deltaY * 0.007;
+
+            // Limitar inclinación vertical para evitar giros descontrolados
+            this.targetRotation.x = Math.max(-0.8, Math.min(0.8, this.targetRotation.x));
+            this.previousMousePosition = { x: clientX, y: clientY };
+        };
+
+        const onUp = () => { this.isDragging = false; };
+
+        // Eventos de Mouse
+        this.container.addEventListener('mousedown', (e) => onDown(e.clientX, e.clientY));
+        window.addEventListener('mousemove', (e) => onMove(e.clientX, e.clientY));
+        window.addEventListener('mouseup', onUp);
+
+        // Eventos Táctiles (Móviles)
+        this.container.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) onDown(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length === 1) onMove(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+
+        window.addEventListener('touchend', onUp);
+
+        // Responsive Resize
+        window.addEventListener('resize', () => {
+            const width = this.container.clientWidth;
+            const height = this.container.clientHeight;
+            this.camera.aspect = width / height;
+            this.camera.updateProjectionMatrix();
+            this.renderer.setSize(width, height);
+        });
+    }
+
+    setupIntersectionObserver() {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                this.isVisible = entry.isIntersecting;
+            });
+        }, { threshold: 0.1 });
+
+        observer.observe(this.container);
+    }
+
+    animate() {
+        requestAnimationFrame(() => this.animate());
+
+        if (!this.isVisible) return;
+
+        // 1. Rotación Constante Automática (Si no arrastra ni hace foco)
+        if (!this.isDragging && !this.isFocused) {
+            this.targetRotation.y += 0.0015;
+        }
+
+        // 2. Interpolación inercial (Damping) de Rotación
+        this.rotation.x += (this.targetRotation.x - this.rotation.x) * 0.08;
+        this.rotation.y += (this.targetRotation.y - this.rotation.y) * 0.08;
+
+        if (this.globe) {
+            this.globe.rotation.x = this.rotation.x;
+            this.globe.rotation.y = this.rotation.y;
+        }
+
+        // --- 3. INTERPOLACIÓN LERP AUTÓNOMA ---
+        // Lerp Escala
+        this.scale += (this.targetScale - this.scale) * 0.08;
+        if (this.globe) {
+            this.globe.scale.set(this.scale, this.scale, this.scale);
+        }
+
+        // Lerp Opacidad
+        this.opacity += (this.targetOpacity - this.opacity) * 0.08;
+        if (this.material) {
+            this.material.opacity = Math.max(0, Math.min(1, this.opacity));
+        }
+
+        // Lerp Cámara (Zoom In/Out)
+        this.cameraZ += (this.targetCameraZ - this.cameraZ) * 0.08;
+        this.camera.position.z = this.cameraZ;
+
+        // 4. Integración del "Glow" Doppler sincronizado con el modelo matemático
+        // Multiplicamos la escala interna (0.0 a 1.0) para sacar un valor proporcional
+        if (this.container) {
+            const pulse = Math.sin(this.scale * Math.PI) * 0.15;
+            const glowScale = 0.3 + (0.7 * this.scale) + pulse;
+            this.container.style.setProperty('--glow-scale', glowScale);
+            this.container.style.setProperty('--glow-op', this.opacity);
+        }
+
+        this.renderer.render(this.scene, this.camera);
+    }
+}
