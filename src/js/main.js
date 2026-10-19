@@ -83,6 +83,11 @@ class TimbaoEngine {
             bgDoodleWrapper.innerHTML = DIVIDERS.divDoodleDj;
         }
         
+        const bgEventosWrapper = document.getElementById('bg-eventos-wrapper');
+        if (bgEventosWrapper && typeof DIVIDERS !== 'undefined' && DIVIDERS.divEventosBg) {
+            bgEventosWrapper.innerHTML = DIVIDERS.divEventosBg;
+        }
+
         const bgGigs = document.getElementById('bg-gigs');
         if (bgGigs && typeof DIVIDERS !== 'undefined' && DIVIDERS.divEventos) {
             bgGigs.innerHTML = DIVIDERS.divEventos;
