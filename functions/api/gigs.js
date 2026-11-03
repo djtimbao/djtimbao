@@ -78,9 +78,12 @@ export async function onRequestPost(context) {
         }
 
         // 2. Crear nombre único y subir a Cloudflare R2 por Streaming (Costo Cero en Memoria)
-        const fileExtension = file.name.split('.').pop() || 'webp';
-        // Genera "flyers/1709420000-myevent.webp" para evitar colisiones
-        const uniqueFileName = `flyers/${Date.now()}-${title.replace(/[^a-z0-9]/gi, '').toLowerCase()}.${fileExtension}`;
+        // PARCHE DE SEGURIDAD: Confiamos en el file.type (MIME), no en el nombre del archivo.
+        let validExtension = 'webp';
+        if (file.type === 'image/jpeg') validExtension = 'jpg';
+        else if (file.type === 'image/png') validExtension = 'png';
+        
+        const uniqueFileName = `flyers/${Date.now()}-${title.replace(/[^a-z0-9]/gi, '').toLowerCase()}.${validExtension}`;
         
         await context.env.BUCKET_ASSETS.put(uniqueFileName, file.stream(), {
             httpMetadata: { contentType: file.type }
@@ -146,8 +149,12 @@ export async function onRequestPut(context) {
             }
 
             // 3.B: Subir la imagen nueva por streaming
-            const fileExtension = file.name.split('.').pop() || 'webp';
-            const uniqueFileName = `flyers/${Date.now()}-${title.replace(/[^a-z0-9]/gi, '').toLowerCase()}.${fileExtension}`;
+            // PARCHE DE SEGURIDAD: Confiamos en el file.type (MIME), no en el nombre del archivo.
+            let validExtension = 'webp';
+            if (file.type === 'image/jpeg') validExtension = 'jpg';
+            else if (file.type === 'image/png') validExtension = 'png';
+            
+            const uniqueFileName = `flyers/${Date.now()}-${title.replace(/[^a-z0-9]/gi, '').toLowerCase()}.${validExtension}`;
             
             await context.env.BUCKET_ASSETS.put(uniqueFileName, file.stream(), {
                 httpMetadata: { contentType: file.type }
